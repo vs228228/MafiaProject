@@ -1,0 +1,6 @@
+@MafiaProject.Server_HostAddress = http://localhost:5110
+
+GET {{MafiaProject.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
