@@ -13,8 +13,8 @@ namespace MafiaProject.Server.Application.interfaces
         public Task DeleteUserAsync(int id);
 
         public Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO);
-        /// Todo #1.  Обсудить с Денисом обновление токенов 
-      //  public Task<> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO); 
+        
+       public Task<string> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO); 
 
 
 
