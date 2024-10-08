@@ -1,4 +1,4 @@
-﻿namespace MafiaProject.Server.Core.Pagination
+﻿namespace MafiaProject.Server.Application.Pagination
 {
     public class PagedResult<T>
     {

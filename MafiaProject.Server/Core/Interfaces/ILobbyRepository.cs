@@ -1,5 +1,5 @@
-﻿using MafiaProject.Server.Core.Entityes;
-using MafiaProject.Server.Core.Pagination;
+﻿using MafiaProject.Server.Application.Pagination;
+using MafiaProject.Server.Core.Entityes;
 
 namespace MafiaProject.Server.Core.Interfaces
 {
