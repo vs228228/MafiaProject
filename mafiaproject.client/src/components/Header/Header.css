@@ -1,0 +1,33 @@
+.header_links{
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    margin:2vw 5vw 0vw 5vw;
+    
+}
+
+.emblem_logo_link li a{
+    font-size: 6vw;
+    font-weight: 1000;
+    color:red;
+    text-decoration: none;
+}
+
+.pages_link nav{
+    margin-top: 3vw;
+    display:flex;
+    gap:3vw;
+}
+
+
+/* для активации ссылки */
+.header_links nav li a.active {
+    color: red;
+    text-decoration:underline;
+}
+
+.pages_link nav li a {
+    text-decoration: none;
+    color:rgb(158, 158, 158);
+    font-size: 1.2vw;
+}
