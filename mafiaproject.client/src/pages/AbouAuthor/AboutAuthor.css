@@ -1,0 +1,25 @@
+.developer_page{
+    margin:5vw;
+    
+
+}
+
+.developer_block_text-img{
+    display:flex;
+    justify-content: space-around;
+    margin-bottom: 5vw;
+    border:2px solid rgb(177, 58, 58);
+    
+}
+
+.developer_photo img{
+    width:20vw ;
+}
+
+.about_developer{
+    color:rgb(158, 158, 158);
+    font-size: 1.2vw;
+}
+h3{
+    color:red
+}
