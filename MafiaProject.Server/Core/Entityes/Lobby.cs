@@ -10,7 +10,6 @@
         public int CountOfPlayers { get; set; }
         public bool IsLobbyFull { get; set; }
         public bool IsLobbyActive { get; set; }
-        1
         public ICollection<Player> Players { get; set; }
     }
 }
