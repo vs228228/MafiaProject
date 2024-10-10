@@ -12,14 +12,14 @@ const Header = () => {
       <div className='header_links'>
         <div className="emblem_logo_link">
           <li>
-              <NavLink to='/home'>M</NavLink>
+              <NavLink to='/'>M</NavLink>
           </li>
         </div>
         
         <div className="pages_link">
           <nav>
             <li>
-              <NavLink to='/home' className={location.pathname === '/home ' ? 'active' : ''}>Главная</NavLink>
+              <NavLink to='/' exact className={location.pathname === '/home ' ? 'active' : ''}>Главная</NavLink>
             </li>
             <li>
               <NavLink to='/aboutGame' className={location.pathname === '/aboutGame ' ? 'active' : ''}>Об игре</NavLink>
