@@ -2,7 +2,6 @@
 {
     public class User
     {
-        // хранит только и нформацию о пользователе и не больше
         public int Id { get; set; }
         public string Nick { get; set; }
         public string Email { get; set; }

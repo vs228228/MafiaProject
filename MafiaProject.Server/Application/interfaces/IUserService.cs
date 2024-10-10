@@ -15,8 +15,7 @@ namespace MafiaProject.Server.Application.interfaces
         public Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO);
         
        public Task<string> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO); 
-        
-       
+
 
 
 
