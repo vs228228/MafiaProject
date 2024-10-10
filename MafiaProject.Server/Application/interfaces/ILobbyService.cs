@@ -4,10 +4,11 @@ namespace MafiaProject.Server.Application.interfaces
 {
     public  interface ILobbyService
     {
+
         public Task<LobbyDTO> GetLobbyByIdAsync(int id);
         public Task<IEnumerable<LobbyDTO>> GetAllLobbiesAsync();
         public Task CreateLobbyAsync(LobbyCreateDTO lobbyCreateDTO);
-        public Task UpdateLobbyAsync(LobbyUpdateDTO lobbyUpdateDTO);
+        public Task UpdateLobbyAsync(LobbyUpdateDTO lobbyUpdateDTO);Ы
         public Task DeleteLobbyAsync(int id);
         public Task StartGameAsync(int lobbyId);
     }
