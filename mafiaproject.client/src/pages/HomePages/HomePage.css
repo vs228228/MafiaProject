@@ -1,0 +1,38 @@
+.home_page {
+    display: inline;
+    align-items: center;
+}
+
+.page_mafia {
+    position: relative; 
+}
+
+.text_mafia {
+    position: absolute; 
+    bottom: 100px; 
+    right: -4.3vw; 
+    font-size: 4.3vw;
+    color: rgb(253, 0, 0);
+    font-weight: 900;
+}
+
+.emblem_page_text {
+    display: flex;
+    align-items: center;
+    justify-content: space-around; 
+    
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 200px;
+    gap:20px;
+    justify-content: flex-end;
+}
+
+/* фото */
+.page_mafia img{
+    width: 550px;
+}
