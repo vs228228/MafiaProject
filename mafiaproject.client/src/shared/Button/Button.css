@@ -1,0 +1,23 @@
+.contact-button {
+    color:rgb(0, 0, 0);
+    border: 3px solid black;
+    border-radius: 10px;
+    font-size: 1.5vw;
+    width: 240px;
+    height: 50px;
+}
+
+  .red {
+    background-color: #DA8080;
+  }
+  .white {
+    background-color: #FFFFFF;
+  }
+
+  .button-image {
+    width: 20px; 
+    height: 20px;
+    margin-left: 5px;
+  }
+  
+  
