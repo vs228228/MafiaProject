@@ -1,0 +1,71 @@
+.page_about_game {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3vw;;
+    /* height: 100vh;  */
+}
+.book_slider {
+    position: relative;
+    width: 900px; 
+    height: 500px; 
+    display: flex;
+    align-items: center;
+    background: url("../../photo/list.jpg");
+    background-size: cover; 
+    background-position: center; 
+    border-radius: 5px; 
+    overflow: hidden;
+}
+.left_button, .right_button {
+    cursor: pointer;
+    font-size: 24px; 
+    color: white; 
+    padding: 5px; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 5px; 
+    z-index: 2;
+}
+.left_button:active, .right_button:active{
+    background-color: rgba(255, 0, 0, 0.5); 
+}
+.book_content {
+    flex: 1; 
+    padding: 20px; 
+    color: rgb(99, 24, 24); 
+    font-size: 1.1vw;
+    text-align: center;
+    width: 20px;
+    z-index: 1; 
+    transition: transform 0.3s ease-in-out;
+}
+.slide-out-left {
+    transform: translateX(-100%);
+}
+.slide-out-right {
+    transform: translateX(100%);
+}
+.slide-in-left {
+    transform: translateX(-100%);
+    animation: slideInLeft 1s forwards;
+}
+.slide-in-right {
+    transform: translateX(100%);
+    animation: slideInRight 1s forwards;
+}
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
