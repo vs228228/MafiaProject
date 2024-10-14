@@ -3,7 +3,7 @@
     public class User
     {
         // хранит только и нформацию о пользователе и не больше
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Nick { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

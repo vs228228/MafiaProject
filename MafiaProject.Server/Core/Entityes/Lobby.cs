@@ -2,7 +2,7 @@
 {
     public class Lobby
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int CreatorId { get; set; }
         public string Name { get; set; }
         public string? Password { get; set; }
