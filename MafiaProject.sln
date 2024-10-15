@@ -3,9 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaProject.Server", "MafiaProject.Server\MafiaProject.Server.csproj", "{18A74245-B461-4398-9E1E-3952FDDB6B99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MafiaProject.Server", "MafiaProject.Server\MafiaProject.Server.csproj", "{18A74245-B461-4398-9E1E-3952FDDB6B99}"
+	ProjectSection(ProjectDependencies) = postProject
+		{74DB6CF6-088F-476A-943D-A34FB4DE5690} = {74DB6CF6-088F-476A-943D-A34FB4DE5690}
+		{775239E9-0D19-418C-BF00-A4115BD46824} = {775239E9-0D19-418C-BF00-A4115BD46824}
+		{C86D285B-8547-4049-9AAA-99ABE4139673} = {C86D285B-8547-4049-9AAA-99ABE4139673}
+	EndProjectSection
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "mafiaproject.client", "mafiaproject.client\mafiaproject.client.esproj", "{69E27C4A-B80D-4264-B917-D022043E48FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaProject.Core", "MafiaProject.Core\MafiaProject.Core.csproj", "{C86D285B-8547-4049-9AAA-99ABE4139673}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaProject.Application", "MafiaProject.Application\MafiaProject.Application.csproj", "{74DB6CF6-088F-476A-943D-A34FB4DE5690}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C86D285B-8547-4049-9AAA-99ABE4139673} = {C86D285B-8547-4049-9AAA-99ABE4139673}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaProject.Infrastructure", "MafiaProject.Infrastructure\MafiaProject.Infrastructure.csproj", "{775239E9-0D19-418C-BF00-A4115BD46824}"
+	ProjectSection(ProjectDependencies) = postProject
+		{74DB6CF6-088F-476A-943D-A34FB4DE5690} = {74DB6CF6-088F-476A-943D-A34FB4DE5690}
+		{C86D285B-8547-4049-9AAA-99ABE4139673} = {C86D285B-8547-4049-9AAA-99ABE4139673}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +41,18 @@ Global
 		{69E27C4A-B80D-4264-B917-D022043E48FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69E27C4A-B80D-4264-B917-D022043E48FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69E27C4A-B80D-4264-B917-D022043E48FB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C86D285B-8547-4049-9AAA-99ABE4139673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C86D285B-8547-4049-9AAA-99ABE4139673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C86D285B-8547-4049-9AAA-99ABE4139673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C86D285B-8547-4049-9AAA-99ABE4139673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74DB6CF6-088F-476A-943D-A34FB4DE5690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74DB6CF6-088F-476A-943D-A34FB4DE5690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74DB6CF6-088F-476A-943D-A34FB4DE5690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74DB6CF6-088F-476A-943D-A34FB4DE5690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{775239E9-0D19-418C-BF00-A4115BD46824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{775239E9-0D19-418C-BF00-A4115BD46824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{775239E9-0D19-418C-BF00-A4115BD46824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{775239E9-0D19-418C-BF00-A4115BD46824}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

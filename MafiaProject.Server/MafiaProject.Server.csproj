@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,6 +9,13 @@
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Presentation\**" />
+    <Content Remove="Presentation\**" />
+    <EmbeddedResource Remove="Presentation\**" />
+    <None Remove="Presentation\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\mafiaproject.client\mafiaproject.client.esproj">
@@ -24,12 +31,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Application\service\" />
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Presentation\" />
   </ItemGroup>
 
 </Project>
