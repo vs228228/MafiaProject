@@ -31,7 +31,7 @@ const Header = () => {
               <NavLink to='/profile' className={location.pathname === '/profile ' ? 'active' : ''}>Профиль</NavLink>
             </li>
             <li>
-              <NavLink to='/SignIn' className={location.pathname === '/SignIn ' ? 'active' : ''}>Регистрация</NavLink>
+              <NavLink to='/SignIn' className={location.pathname === '/SignIn ' ? 'active' : ''}>Войти</NavLink>
             </li>
           </nav>
         </div>
