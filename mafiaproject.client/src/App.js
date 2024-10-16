@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import HomePage from './pages/HomePages/HomePage';
 import AboutAuthor from './pages/AbouAuthor/AboutAuthor';
 import AboutGame from './pages/AboutGame/AboutGame.jsx';
+import SignIn from './pages/SignIn/SignIn.jsx'
 
 function App() {
   return (
@@ -30,6 +31,10 @@ function App() {
           path="/SignIn"
           element={<SignIn />}
         /> */}
+         <Route
+          path="/SignIn"
+          element={<SignIn />}
+        />
       </Routes>
     </Router>
   );
