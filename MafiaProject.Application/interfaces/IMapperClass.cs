@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MafiaProject.Application.interfaces
 {
-    public interface IMapper
+    public interface IMapperClass
     {
         Task<TDestination> Map<TSource, TDestination>(TSource source);
         Task<TDestination> Update<TSource, TDestination>(TSource source, TDestination destination);
