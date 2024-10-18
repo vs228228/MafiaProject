@@ -10,7 +10,7 @@ const AboutGame = () => {
 
   const nextPage = () => {
     if (currentPage < gameRules.length - 1) {
-      setAnimationClass('slide-out-left');
+        setAnimationClass('slide-out-left');
       setTimeout(() => {
         setCurrentPage(currentPage + 1);
         setAnimationClass('slide-in-right');
@@ -34,7 +34,7 @@ const AboutGame = () => {
         </div>
         
         <div className={`book_content ${animationClass}`}>
-        <p><i><b>{gameRules[currentPage].role}</b></i></p>
+          <p><i><b>{gameRules[currentPage].role}</b></i></p>
           <p>{gameRules[currentPage].content}</p>
           <p>{gameRules[currentPage].content2}<br/><br/>
           {gameRules[currentPage].content3}<br/><br/>

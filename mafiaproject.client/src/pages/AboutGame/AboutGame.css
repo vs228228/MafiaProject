@@ -16,11 +16,12 @@
     background-position: center; 
     border-radius: 5px; 
     overflow: hidden;
+    opacity: 0.7;
 }
 .left_button, .right_button {
     cursor: pointer;
     font-size: 24px; 
-    color: white; 
+    color: rgb(221, 219, 219); 
     padding: 5px; 
     background-color: rgba(0, 0, 0, 0.5); 
     border-radius: 5px; 
