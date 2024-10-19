@@ -1,3 +1,6 @@
+using MafiaProject.Application.interfaces;
+using MafiaProject.Application.Services;
+
 namespace MafiaProject.Server
 {
     public class Program
@@ -13,6 +16,8 @@ namespace MafiaProject.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // инъекция зависимостей
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 

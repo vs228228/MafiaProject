@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MafiaProject.Application\MafiaProject.Application.csproj" />
     <ProjectReference Include="..\mafiaproject.client\mafiaproject.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
