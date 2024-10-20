@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './SignIn.css';
 import Button from '../../shared/Button/Button'
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const SignIn = () => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -72,11 +73,11 @@ const SignIn = () => {
           text='Зарегистрироваться'
         />
       ) : (
-        <Button 
+        
+        <FaArrowLeftLong 
           onClick={handleLoginClick} 
-          className="login-button" 
-          text='Войти'
-        />
+          className="login-button" >
+        </FaArrowLeftLong>
       )}
     </div>
   );
