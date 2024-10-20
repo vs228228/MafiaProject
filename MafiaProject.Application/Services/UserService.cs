@@ -16,17 +16,18 @@ namespace MafiaProject.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapperClass _mapper;
+        private readonly PhotoService _photoService;
 
-        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper)
+        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper, PhotoService photoService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
-        public Task DeleteUserAsync(int id)
+        public async Task DeleteUserAsync(int id)
         {
-            _unitOfWork.Users.DeleteAsync(id);
-            throw new NotImplementedException(); // not ready
+            await _unitOfWork.Users.DeleteAsync(id);
         }
 
         public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
@@ -42,10 +43,8 @@ namespace MafiaProject.Application.Services
 
         public async Task<UserDTO> GetUserByEmailAsync(string email)
         {
-
             var ans = await _unitOfWork.Users.GetUserByEmailAsync(email);
             return await _mapper.Map<User, UserDTO>(ans);
-
         }
 
         public async Task<UserDTO> GetUserByIdAsync(int id)
@@ -59,19 +58,31 @@ namespace MafiaProject.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task TryAddUserAsync(UserCreateDTO userCreateDTO)
+        public async Task TryAddUserAsync(UserCreateDTO userCreateDTO)
         {
-            throw new NotImplementedException();
+            var ans = await _mapper.Map<UserCreateDTO, User>(userCreateDTO);
+            await _unitOfWork.Users.CreateAsync(ans); // needed to check
         }
 
         public Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO)
         {
+            //string email = authDTO.Email;
+            //var ans = _unitOfWork.Users.GetUserByEmailAsync(email);
+            //and then we should compare our passwords, and if they are the same, return TokenDTO
             throw new NotImplementedException();
         }
 
-        public Task UpdateUserAsync(UserUpdateDto userUpdateDTO, IFormFile photo)
+        public async Task UpdateUserAsync(UserUpdateDto userUpdateDTO, IFormFile photo)
         {
-            throw new NotImplementedException();
+            User user = new User();
+            var ans = await _mapper.Update<UserUpdateDto, User>(userUpdateDTO, user);
+            string id = user.Id.ToString();
+            if (photo != null)
+            {
+                string path = await _photoService.SaveUserProfilePhotoAsync(photo, id);
+                ans.pathToPic = path;
+            }
+            await _unitOfWork.Users.UpdateAsync(ans);
         }
     }
 }
