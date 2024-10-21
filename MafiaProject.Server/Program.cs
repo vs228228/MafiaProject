@@ -1,3 +1,9 @@
+using MafiaProject.Application.interfaces;
+using MafiaProject.Application.Services;
+using MafiaProject.Core.Interfaces;
+using MafiaProject.Infrastructure.Mapper;
+using MafiaProject.Server.middleware;
+
 namespace MafiaProject.Server
 {
     public class Program
@@ -12,6 +18,18 @@ namespace MafiaProject.Server
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
+
+            // репозитории
+            //   builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // маппер
+            builder.Services.AddScoped<IMapperClass, Mapper>();
+            builder.Services.AddAutoMapper(typeof(UserMappingProfile));
+
+            // инъекция зависимостей
+            builder.Services.AddScoped<IUserService, UserService>();
 
 
             var app = builder.Build();
@@ -34,7 +52,7 @@ namespace MafiaProject.Server
             });
 
 
-
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.MapControllers();
 

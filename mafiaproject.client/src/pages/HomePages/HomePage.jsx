@@ -2,9 +2,13 @@ import React from 'react'
 import MafiaPicture from '../../photo/person.png';
 import './HomePage.css';
 import Button from '../../shared/Button/Button.jsx'
+import { NavLink, useLocation } from 'react-router-dom';
 
 
 const HomePage = () => {
+  
+  const location = useLocation();
+
   return (
     <div className='home_page'>
 
@@ -17,7 +21,7 @@ const HomePage = () => {
       
         <div className="buttons">
           <Button text="Играть" colorClass="red" />
-          <Button text='Войти' colorClass="white"/>
+          <NavLink to='/SignIn' className={location.pathname === '/SignIn ' ? 'active' : ''}><Button text='Войти' colorClass="white"/></NavLink>
         </div>
 
       </div>
