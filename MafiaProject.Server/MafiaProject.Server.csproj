@@ -22,6 +22,7 @@
     <ProjectReference Include="..\mafiaproject.client\mafiaproject.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\MafiaProject.Infrastructure\MafiaProject.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

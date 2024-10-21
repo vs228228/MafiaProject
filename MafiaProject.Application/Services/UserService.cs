@@ -18,11 +18,11 @@ namespace MafiaProject.Application.Services
         private readonly IMapperClass _mapper;
         private readonly PhotoService _photoService;
 
-        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper, PhotoService photoService)
+        public UserService(/*IUnitOfWork unitOfWork,*/ IMapperClass mapper)
         {
-            _unitOfWork = unitOfWork;
+            //  _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _photoService = photoService;
+            _photoService = new PhotoService();
         }
 
         public async Task DeleteUserAsync(int id)
@@ -44,6 +44,10 @@ namespace MafiaProject.Application.Services
         public async Task<UserDTO> GetUserByEmailAsync(string email)
         {
             var ans = await _unitOfWork.Users.GetUserByEmailAsync(email);
+            if(ans == null)
+            {
+                throw new KeyNotFoundException();
+            }
             return await _mapper.Map<User, UserDTO>(ans);
         }
 
@@ -53,9 +57,9 @@ namespace MafiaProject.Application.Services
             return await _mapper.Map<User, UserDTO>(ans);
         }
 
-        public Task<string> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO)
+        public async Task<string> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO)
         {
-            throw new NotImplementedException();
+             throw new NotImplementedException();
         }
 
         public async Task TryAddUserAsync(UserCreateDTO userCreateDTO)

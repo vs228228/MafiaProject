@@ -11,10 +11,10 @@ namespace MafiaProject.Server.Controllers
     {
         private IUserService _userService;
 
-        /*public UserController(IUserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-        }*/
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetUsersAsync(int pageNumber, int pageSize)
