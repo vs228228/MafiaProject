@@ -63,11 +63,12 @@
 }
 
 button {
-    background: rgba(84, 84, 84, 0.5);
+    background: rgba(91, 91, 91, 0.5);
     border: none;
     transition: background-color 0.3s;
     margin-top: 20px;
     width: 100%;
+    cursor: pointer;
 }
 
 button:disabled {
@@ -87,5 +88,10 @@ button:hover {
     margin-top: 20px;
     width: 300px;
     height: 30px;
+    cursor: pointer;
 
+}
+
+.signIn_Block span{
+    color:red;
 }
