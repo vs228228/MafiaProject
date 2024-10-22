@@ -1,5 +1,5 @@
 .profile_page {
-    margin: 2vw;
+    margin: 1vw;
     display: block;
     justify-content: space-between; 
     padding: 20px;
@@ -24,13 +24,16 @@
 
 .edit_profile {
     position: absolute;
-    /* top: 20px; Adjust as needed */
     top:220px;
     margin-right: 5vw;
-    right: 20px; /* Adjust as needed */
+    right: 20px; 
     display: flex;
     align-items: center;
     justify-content: flex-end;
+}
+
+.edit_profile button:active{
+    color: red;
 }
 .edit_profile button{
     width: 200px;
@@ -46,4 +49,11 @@
     justify-content: center;
     align-items: center;
     margin-top: 7vw;
+}
+
+.info_about_user input{
+    margin-left: 55px;
+    color:white;
+    background: rgb(61, 61, 61);
+    /* background: none; */
 }
