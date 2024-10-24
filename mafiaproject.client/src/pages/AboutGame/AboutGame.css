@@ -3,42 +3,45 @@
     justify-content: center;
     align-items: center;
     margin-top: 3vw;;
-    /* height: 100vh;  */
+    font-family: 'MyFont';
 }
-.book_slider {
-    position: relative;
-    width: 900px; 
-    height: 500px; 
-    display: flex;
-    align-items: center;
-    background: url("../../photo/list.jpg");
-    background-size: cover; 
-    background-position: center; 
-    border-radius: 5px; 
-    overflow: hidden;
-    opacity: 0.7;
+.book_slider {    
+    position: relative;    
+    width: 900px;     
+    height: 500px;     
+    display: flex;    
+    align-items: center;    
+    background: url("../../photo/list.jpg");    
+    background-size: cover;     
+    background-position: center;     
+    border-radius: 5px;     
+    overflow: hidden;    
+    opacity: 0.6;    
+    z-index: 1;
 }
-.left_button, .right_button {
-    cursor: pointer;
-    font-size: 24px; 
-    color: rgb(221, 219, 219); 
-    padding: 5px; 
-    background-color: rgba(0, 0, 0, 0.5); 
-    border-radius: 5px; 
-    z-index: 2;
+
+.left_button, .right_button {    
+    cursor: pointer;    
+    font-size: 24px;     
+    color: rgb(221, 219, 219);     
+    padding: 5px;     
+    background-color: rgba(0, 0, 0, 0.5);     
+    border-radius: 5px;     
+    z-index: 2; 
 }
-.left_button:active, .right_button:active{
-    background-color: rgba(255, 0, 0, 0.5); 
+.left_button:active, .right_button:active {    
+    background-color: rgba(184, 33, 33, 0.5); 
 }
-.book_content {
-    flex: 1; 
-    padding: 20px; 
-    color: rgb(99, 24, 24); 
-    font-size: 1.1vw;
-    text-align: center;
-    width: 20px;
-    z-index: 1; 
-    transition: transform 0.3s ease-in-out;
+
+.book_content {    
+    flex: 1;     
+    padding: 20px;     
+    color: rgb(184, 28, 28);     
+    font-size: 1.4vw;    
+    text-align: center;    
+    z-index: 3; 
+    position: relative;    
+    transition: transform 0.3s ease-in-out; 
 }
 .slide-out-left {
     transform: translateX(-100%);

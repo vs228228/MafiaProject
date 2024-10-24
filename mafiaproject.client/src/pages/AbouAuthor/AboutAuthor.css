@@ -1,7 +1,7 @@
 .developer_page{
     margin:5vw;
     
-
+    font-family: 'MyFont', sans-serif;
 }
 
 .developer_block_text-img{
@@ -13,13 +13,15 @@
 }
 
 .developer_photo img{
-    width:20vw ;
+    width:22vw ;
 }
 
-.about_developer{
+.about_developer p{
     color:rgb(158, 158, 158);
-    font-size: 1.2vw;
+    font-size: 1.3vw;
+    font-family: 'MYfont_for_logo';
 }
-h3{
-    color:red
+.about_developer h3{
+    color:red;
+    font-size: 2.2vw;
 }

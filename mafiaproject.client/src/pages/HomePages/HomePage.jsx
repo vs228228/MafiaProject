@@ -11,6 +11,10 @@ const HomePage = () => {
         navigate('/SignIn');
     };
 
+    const handlePlayClick = () => {
+        navigate('/LobbyWin');
+    };
+
     return (
         <div className='home_page'>
             <div className="emblem_page_text">
@@ -19,7 +23,7 @@ const HomePage = () => {
                     <div className="text_mafia">MAFIA</div>
                 </div>
                 <div className="buttons">
-                    <Button text="Играть" colorClass="red" />
+                    <Button text="Играть" colorClass="red" onClick={handlePlayClick} />
                     <Button text="Войти" colorClass="white" onClick={handleSignInClick} />
                 </div>
             </div>
