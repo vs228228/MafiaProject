@@ -28,10 +28,7 @@ const LobbyWin = () => {
                         
               />
             </div>
-
-            <div className="list_of_lobby">
-
-            </div>
+            <div className="list_of_lobby"></div>
         </div>
     </div>
   )
