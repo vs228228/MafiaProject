@@ -2,10 +2,11 @@
     color:rgb(0, 0, 0);
     border: 3px solid black;
     border-radius: 10px;
-    font-size: 1.3vw;
+    font-size: 1.8vw;
     width: 240px;
-    height: 50px;
+    height: 55px;
     margin-left: 40px;
+    font-family: 'MyFont', sans-serif;
 }
 
   .red {
@@ -20,5 +21,4 @@
     height: 20px;
     margin-left: 5px;
   }
-  
   

@@ -3,7 +3,8 @@
     display: block;
     justify-content: space-between; 
     padding: 20px;
-    color:rgb(212, 210, 210);
+    color:rgb(145, 145, 145);
+    font-family: 'MYfont_for_logo';
 }
 
 .profile_page_change {
@@ -17,6 +18,7 @@
     flex-direction: column;
     font-size: 20px;
     gap: 10px; 
+    font-size: 1.5vw;
 }
 .info_about_user img{
     width: 25vw;
@@ -32,16 +34,19 @@
     justify-content: flex-end;
 }
 
-.edit_profile button:active{
+.edit_profile button:hover{
+    font-size: 1.1vw;
     color: red;
 }
 .edit_profile button{
-    width: 200px;
+    font-size: 1.3vw;
+    width: 250px;
     color: rgb(233, 231, 231);
     background-color: inherit;
     border: none; 
     border-bottom: 2px solid white; 
     cursor: pointer;
+    font-family: 'MYfont_for_logo';
     
 }
 .button_change_or_reset{
@@ -55,5 +60,10 @@
     margin-left: 55px;
     color:white;
     background: rgb(61, 61, 61);
-    /* background: none; */
+}
+
+.info_about_user button{
+    font-size: 1.5vw;
+    font-family: 'MYfont_for_logo';
+    color:rgb(145, 145, 145);
 }
