@@ -4,10 +4,12 @@ namespace MafiaProject.Core.Interfaces
 {
     public interface ILobbyRepository : IRepository<Lobby>
     {
-        public Task<IEnumerable<Lobby>> GetLobbiesAsync(int pageNumber, int pageSize);
+        public Task<KeyValuePair<IEnumerable<Lobby>, int>> GetLobbiesAsync(int pageNumber, int pageSize); 
+        // return array of lobby + all count lobbies
 
         public Task AddPlayerToLobbyAsync(Player player);
-        public Task RemovePlayerFromLobbyAsync(Player player);
+        // public Task RemovePlayerFromLobbyAsync(Player player);
+        public Task RemovePlayerFromLobbyAsync(int playerId);
         public Task<IEnumerable<Player>> GetAllPlayersAsync();
 
         public Task<bool> IsLobbyReadyForGameAsync(int lobbyId);

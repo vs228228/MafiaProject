@@ -9,8 +9,8 @@ namespace MafiaProject.Application.interfaces
         public Task<UserDTO> GetUserByEmailAsync(string email);
         public Task<UserDTO> GetUserByIdAsync(int id);
         public Task<IEnumerable<UserDTO>> GetAllUsersAsync();
-        public Task<PagedResult<UserDTO>> GetPaginatedUsersAsync(int pageNumber, int pageSize);
-        // public Task<StatisticDTO> GetStatisticForUserAsync(int userId); реализовать
+
+        public Task<StatisticDTO> GetStatisticForUserAsync(int userId);
 
         public Task TryAddUserAsync(UserCreateDTO userCreateDTO);
         public Task UpdateUserAsync(UserUpdateDto userUpdateDTO, IFormFile photo);

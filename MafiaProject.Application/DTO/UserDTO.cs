@@ -10,5 +10,6 @@ namespace MafiaProject.Application.DTO
         public string pathToPic { get; set; }
         public int CountOfGame { get; set; }
         public int Victories { get; set; }
+        public bool isPlayer { get; set; }
     }
 }
