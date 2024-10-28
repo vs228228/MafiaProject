@@ -28,13 +28,9 @@ const LobbyWin = () => {
                         
               />
             </div>
-
-            <div className="list_of_lobby">
-
-            </div>
-        </div>
-    </div>
+      </div>
+    </div> 
   )
 }
 
-export default LobbyWin
+export default LobbyWin;
