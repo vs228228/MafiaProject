@@ -36,9 +36,14 @@ namespace MafiaProject.Application.Services
             return await _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(ans);
         }
 
-        public Task<PagedResult<UserDTO>> GetPaginatedUsersAsync(int pageNumber, int pageSize)
+        public async Task<StatisticDTO> GetStatisticForUserAsync(int userId)
         {
-            throw new NotImplementedException();
+            var ans = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (ans == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            return await _mapper.Map<User, StatisticDTO>(ans);
         }
 
         public async Task<UserDTO> GetUserByEmailAsync(string email)
@@ -54,6 +59,10 @@ namespace MafiaProject.Application.Services
         public async Task<UserDTO> GetUserByIdAsync(int id)
         {
             var ans = await _unitOfWork.Users.GetByIdAsync(id);
+            if (ans == null)
+            {
+                throw new KeyNotFoundException();
+            }
             return await _mapper.Map<User, UserDTO>(ans);
         }
 
@@ -87,6 +96,7 @@ namespace MafiaProject.Application.Services
                 ans.pathToPic = path;
             }
             await _unitOfWork.Users.UpdateAsync(ans);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

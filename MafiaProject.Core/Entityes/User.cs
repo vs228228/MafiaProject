@@ -13,6 +13,7 @@
 
         public string RefreshToken { get; set; }
         public string AccessToken { get; set; }
+        public bool isPlayer { get; set; }
 
         public Player Player { get; set; }
 

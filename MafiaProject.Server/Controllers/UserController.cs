@@ -16,13 +16,6 @@ namespace MafiaProject.Server.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsersAsync(int pageNumber, int pageSize)
-        {
-            var users =  await _userService.GetPaginatedUsersAsync(pageNumber, pageSize);
-            return Ok(users);
-        }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserByIdAsync(int id)
