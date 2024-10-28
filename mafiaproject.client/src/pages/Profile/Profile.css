@@ -21,7 +21,7 @@
     font-size: 1.5vw;
 }
 .info_about_user img{
-    width: 25vw;
+    width: 26vw;
 }
 
 .edit_profile {
@@ -34,7 +34,8 @@
     justify-content: flex-end;
 }
 
-.edit_profile button:active{
+.edit_profile button:hover{
+    font-size: 1.1vw;
     color: red;
 }
 .edit_profile button{
@@ -59,5 +60,10 @@
     margin-left: 55px;
     color:white;
     background: rgb(61, 61, 61);
-    /* background: none; */
+}
+
+.info_about_user button{
+    font-size: 1.5vw;
+    font-family: 'MYfont_for_logo';
+    color:rgb(145, 145, 145);
 }
