@@ -75,7 +75,7 @@ const Profile = () => {
                     <div className="info_about_user">
                         <img src={profileImage} alt='User profile' className='profile_photo' />
                         <div>Имя пользователя: {username}</div>
-                        <div>Выигрыши:</div>
+                        <div>Победы:</div>
                         <div>Поражения:</div>
                     </div>
                 )}

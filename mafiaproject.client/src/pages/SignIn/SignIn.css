@@ -2,12 +2,13 @@
     position: relative;
     width: 400px;
     padding: 40px;
-    margin: 40px auto; /* Center the form */
+    margin: 40px auto; 
     background: rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
     border-radius: 10px;
     color: #fff;
+    font-family: 'MyFont', sans-serif;
 }
 
 .signIn_Block h2 {
@@ -15,69 +16,7 @@
     padding: 0;
     color: #fff;
     text-align: center;
-}
-
-.user-box {
-    position: relative;
-    margin-bottom: 30px;
-}
-
-.user-box input {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #fff;
-    margin-bottom: 30px;
-    border: none;
-    border-bottom: 1px solid  rgb(93, 7, 7);
-    outline: none;
-    background: rgb(8, 14, 20);
-}
-
-.user-box label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #fff;
-    pointer-events: none;
-    transition: 0.5s;
-    padding-left: 10px;
-}
-
-.user-box input:focus ~ label, 
-.user-box input:valid ~ label {
-    top: -30px;
-    left: 0;
-    color:  rgb(255, 255, 255);
-    font-size: 12px;
-}
-
-.checkbox-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 20px;
-    color: #fff;
-}
-
-button {
-    background: rgba(91, 91, 91, 0.5);
-    border: none;
-    transition: background-color 0.3s;
-    margin-top: 20px;
-    width: 100%;
-    cursor: pointer;
-}
-
-button:disabled {
-    background-color: gray; 
-    color:white;
-}
-
-button:hover {
-    background-color: rgb(93, 7, 7);
+    font-size: 3vw;;
 }
 
 .login-button {
@@ -89,9 +28,4 @@ button:hover {
     width: 300px;
     height: 30px;
     cursor: pointer;
-
-}
-
-.signIn_Block span{
-    color:red;
 }

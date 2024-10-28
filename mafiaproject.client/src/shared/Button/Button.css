@@ -1,24 +1,41 @@
 .contact-button {
-    color:rgb(0, 0, 0);
-    border: 3px solid black;
-    border-radius: 10px;
-    font-size: 1.8vw;
-    width: 240px;
-    height: 55px;
-    margin-left: 40px;
-    font-family: 'MyFont', sans-serif;
+  color:rgb(0, 0, 0);
+  border: 3px solid black;
+  border-radius: 20px;
+  font-size: 1.8vw;
+  width: 240px;
+  height: 55px;
+  margin-left: 40px;
+  font-family: 'MyFont', sans-serif;
 }
 
-  .red {
-    background-color: #DA8080;
-  }
-  .white {
-    background-color: #FFFFFF;
-  }
+.red {
+  background-color: #946c6c;
+}
+.white {
+  background-color: #FFFFFF;
+}
 
-  .button-image {
-    width: 20px; 
-    height: 20px;
-    margin-left: 5px;
-  }
-  
+.button-image {
+  width: 20px; 
+  height: 20px;
+  margin-left: 5px;
+}
+
+button {
+  background: rgba(91, 91, 91, 0.5);
+  border: none;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  width: 100%;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: gray; 
+  color:white;
+}
+
+button:hover {
+  background-color: rgb(104, 28, 28);
+}
