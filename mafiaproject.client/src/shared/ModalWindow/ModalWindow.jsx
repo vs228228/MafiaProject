@@ -26,16 +26,16 @@ const ModalWindow = ({ isOpen, onClose, modalType }) => {
                 <>
                     <Input type='text' name='roomId' label='ID комнаты' required={true} />
                    
-                   {/* <div className="input_with_button"> */}
+                   <div className="input_with_button">
                         <Input type={showPassword ? 'text' : 'password'}  name='password' label='Пароль' required={false} />
-                        {/* <button 
+                        <button 
                             type="button" 
                             className="toggle-password" 
                             onClick={togglePasswordVisibility}
                         >
                             {showPassword ?  <IoEyeSharp />: <FaEyeSlash />}
                         </button>
-                    </div>  */}
+                    </div> 
                     {/* <button 
                             type="button" 
                             className="toggle-password" 
