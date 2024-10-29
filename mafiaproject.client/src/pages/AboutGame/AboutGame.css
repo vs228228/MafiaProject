@@ -3,27 +3,37 @@
     justify-content: center;
     align-items: center;
     margin-top: 3vw;;
-    /* height: 100vh;  */
+    font-family: 'MyFont';
 }
-.book_slider {
-    position: relative;
-    width: 900px; 
-    height: 500px; 
-    display: flex;
-    align-items: center;
-    background: url("../../photo/list.jpg");
-    background-size: cover; 
-    background-position: center; 
-    border-radius: 5px; 
-    overflow: hidden;
-    opacity: 0.7;
+.book_slider {    
+    position: relative;    
+    width: 900px;     
+    height: 500px;     
+    display: flex;    
+    align-items: center;    
+    background: url("../../photo/list.jpg");    
+    background-size: cover;     
+    background-position: center;     
+    border-radius: 5px;     
+    overflow: hidden;    
+    z-index: 1; 
+}
+.book_slider::after {
+    content: ""; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: 0; 
 }
 .left_button, .right_button {
     cursor: pointer;
     font-size: 24px; 
     color: rgb(221, 219, 219); 
     padding: 5px; 
-    background-color: rgba(0, 0, 0, 0.5); 
+    background-color: rgba(0, 0, 0, 0.4); 
     border-radius: 5px; 
     z-index: 2;
 }
@@ -33,8 +43,8 @@
 .book_content {
     flex: 1; 
     padding: 20px; 
-    color: rgb(99, 24, 24); 
-    font-size: 1.1vw;
+    color: rgb(80, 23, 23); 
+    font-size: 1.4vw;
     text-align: center;
     width: 20px;
     z-index: 1; 

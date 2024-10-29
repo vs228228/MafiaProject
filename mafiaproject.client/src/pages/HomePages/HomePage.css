@@ -9,11 +9,12 @@
 
 .text_mafia {
     position: absolute; 
-    bottom: 100px; 
-    right: -4.3vw; 
-    font-size: 4.3vw;
+    bottom: 65px; 
+    right: -6vw; 
+    font-size: 8vw;
     color: rgb(253, 0, 0);
     font-weight: 900;
+    font-family: 'MYfont_for_logo', sans-serif;
 }
 
 .emblem_page_text {
