@@ -3,8 +3,6 @@ import './ModalWindow.css';
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import Button from '../Button/Button'
 import Input from '../Input/Input'
-import { IoEyeSharp } from "react-icons/io5";
-import { FaEyeSlash } from "react-icons/fa6";
 
 
 const ModalWindow = ({ isOpen, onClose, modalType }) => {
@@ -26,36 +24,27 @@ const ModalWindow = ({ isOpen, onClose, modalType }) => {
                 <>
                     <Input type='text' name='roomId' label='ID комнаты' required={true} />
                    
-                   <div className="input_with_button">
-                        <Input type={showPassword ? 'text' : 'password'}  name='password' label='Пароль' required={false} />
-                        <button 
-                            type="button" 
-                            className="toggle-password" 
-                            onClick={togglePasswordVisibility}
-                        >
-                            {showPassword ?  <IoEyeSharp />: <FaEyeSlash />}
-                        </button>
-                    </div> 
-                    {/* <button 
-                            type="button" 
-                            className="toggle-password" 
-                            onClick={togglePasswordVisibility}
-                        >
-                            {showPassword ?  <IoEyeSharp />: <FaEyeSlash />}
-                        </button> */}
+                    <Input 
+                        type={showPassword ? 'text' : 'password'} 
+                        name='password' 
+                        label='Пароль' 
+                        showToggleButton 
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        isPasswordVisible={showPassword}
+                    />
                 </>
                 )}
                 {modalType === 'create' && (
                     <>
                     <Input type='text' name='lobbyName' label='Название комнаты' required={true} />
-                    <Input  type={showPassword ? 'text' : 'password'} name='password' label='Пароль' />
-                    {/* <button 
-                            type="button" 
-                            className="toggle-password" 
-                            onClick={togglePasswordVisibility}
-                        >
-                            {showPassword ? <IoEyeSharp />: <FaEyeSlash />}
-                        </button> */}
+                    <Input 
+                        type={showPassword ? 'text' : 'password'} 
+                        name='password' 
+                        label='Пароль' 
+                        showToggleButton 
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        isPasswordVisible={showPassword}
+                    />
                 </>
                 )}
                 <div className="button_in_lobby">

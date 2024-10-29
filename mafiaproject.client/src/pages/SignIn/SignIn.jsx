@@ -5,11 +5,17 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import CheckBox from '../../shared/CheckBoxGroup/CheckBox';
 import Input from '../../shared/Input/Input';
 
-const SignIn = () => {
+const SignIn = ({showToggleButton }) => {
     const [isRegistering, setIsRegistering] = useState(false);
     const [siteRulesAccepted, setSiteRulesAccepted] = useState(false);
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(prev => !prev);
+    };
+    
     const handleRegisterClick = () => {
         setIsRegistering(true);
     };
@@ -35,7 +41,14 @@ const SignIn = () => {
             <h2>{isRegistering ? 'Регистрация' : 'Войти'}</h2>
             <form>
                 <Input type='text' name='username' label='Имя пользователя' required={true}/>
-                <Input type='password' name='password' label='Пароль' required={true} />
+                <Input 
+                    type={showPassword ? 'text' : 'password'} 
+                    name='password' 
+                    label='Пароль' 
+                    showToggleButton 
+                    togglePasswordVisibility={togglePasswordVisibility}
+                    isPasswordVisible={showPassword}
+                />
                
                 {isRegistering && (
                     <>
