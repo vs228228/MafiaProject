@@ -15,6 +15,7 @@
     border-bottom: 1px solid  rgb(93, 7, 7);
     outline: none;
     background: rgb(8, 14, 20);
+    font-family: 'MYfont_for_logo';
 }
 
 .user-box label {
