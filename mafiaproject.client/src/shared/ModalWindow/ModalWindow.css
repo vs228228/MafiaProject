@@ -72,3 +72,16 @@ h2 {
 .button_in_lobby{
     margin-right: 40px;
 }
+
+/* .input_with_button{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.input_with_button button{
+    background-color: inherit;
+    color:white;
+    width: 20px;
+    align-items: center;
+    margin-bottom: 70px;
+} */

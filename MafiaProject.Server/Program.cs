@@ -33,7 +33,20 @@ namespace MafiaProject.Server
             builder.Services.AddScoped<IUserService, UserService>();
 
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    policy => policy
+                        .WithOrigins("http://localhost:5173") // Укажите домен фронтенда
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                );
+            });
+
             var app = builder.Build();
+
+            // Применяем политику CORS
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

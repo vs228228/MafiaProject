@@ -1,15 +1,26 @@
 import React from 'react'
 import './Input.css'
+import { IoEyeSharp } from "react-icons/io5";
+import { FaEyeSlash } from "react-icons/fa6";
 
-const Input = ({ type, name, label, required }) => {
+const Input = ({ type, name, label, require, showToggleButton, togglePasswordVisibility, isPasswordVisible }) => {
     return (
         <div className='user-box'>
             <input
                 type={type}
                 name={name}
-                required={required}
+                required={require}
             />
-            <label>{label}<span>{required ? '*' : ''}</span></label>
+            <label>{label}<span>{require ? '*' : ''}</span></label>
+            {showToggleButton && (
+                <button 
+                type="button" 
+                className="toggle-password" 
+                onClick={togglePasswordVisibility}
+            >
+                {isPasswordVisible ? <IoEyeSharp /> : <FaEyeSlash />}
+            </button>
+            )}
         </div>
     );
 }

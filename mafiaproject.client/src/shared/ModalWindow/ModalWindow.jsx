@@ -1,11 +1,17 @@
-import React from 'react';
+import React,{useState} from 'react';
 import './ModalWindow.css';
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import Button from '../Button/Button'
 import Input from '../Input/Input'
 
+
 const ModalWindow = ({ isOpen, onClose, modalType }) => {
+    const [showPassword, setShowPassword] = useState(false);
     if (!isOpen) return null; 
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(prev => !prev);
+    };
 
     return (
         <div className='modalWin_'>
@@ -17,14 +23,28 @@ const ModalWindow = ({ isOpen, onClose, modalType }) => {
                 {modalType === 'entrance' && (
                 <>
                     <Input type='text' name='roomId' label='ID комнаты' required={true} />
-                    <Input type='text' name='username' label='Имя' required={true} />
-                    <Input type='password' name='password' label='Пароль' required={false} />
+                   
+                    <Input 
+                        type={showPassword ? 'text' : 'password'} 
+                        name='password' 
+                        label='Пароль' 
+                        showToggleButton 
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        isPasswordVisible={showPassword}
+                    />
                 </>
                 )}
                 {modalType === 'create' && (
                     <>
                     <Input type='text' name='lobbyName' label='Название комнаты' required={true} />
-                    <Input type='password' name='password' label='Пароль' />
+                    <Input 
+                        type={showPassword ? 'text' : 'password'} 
+                        name='password' 
+                        label='Пароль' 
+                        showToggleButton 
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        isPasswordVisible={showPassword}
+                    />
                 </>
                 )}
                 <div className="button_in_lobby">
