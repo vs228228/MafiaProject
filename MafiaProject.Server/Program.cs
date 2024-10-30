@@ -1,8 +1,9 @@
 using MafiaProject.Application.interfaces;
 using MafiaProject.Application.Services;
-using MafiaProject.Core.Interfaces;
 using MafiaProject.Infrastructure.Mapper;
 using MafiaProject.Server.middleware;
+using MafiaProject.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MafiaProject.Server
 {
@@ -33,11 +34,16 @@ namespace MafiaProject.Server
             builder.Services.AddScoped<IUserService, UserService>();
 
 
+            // настраивание бд
+            builder.Services.AddDbContext<ApplicationDbContext>(
+                o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     policy => policy
-                        .WithOrigins("http://localhost:5173") // Укажите домен фронтенда
+                        .WithOrigins("http://localhost:5173")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                 );

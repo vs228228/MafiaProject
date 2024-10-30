@@ -50,7 +50,7 @@ namespace MafiaProject.Server.middleware
             {
                 (int)HttpStatusCode.NotFound => new { StatusCode = statusCode },
                 (int)HttpStatusCode.Unauthorized => new { StatusCode = statusCode },
-                (int)HttpStatusCode.BadRequest => new { StatusCode = statusCode, Message = ex.Message },
+                (int)HttpStatusCode.BadRequest => new { StatusCode = statusCode, ex.Message },
                 _ => new { StatusCode = statusCode, Message = "Произошла ошибка в обработке запроса", Details = ex.Message }
             };
         }
