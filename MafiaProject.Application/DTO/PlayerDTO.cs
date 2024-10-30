@@ -6,7 +6,7 @@
         public int UserId { get; set; }
         public int Position { get; set; }
         public string Role { get; set; }
-        public string IsReady { get; set; }
+        public bool IsReady { get; set; }
         public bool IsAlive { get; set; }
         public bool IsMafia { get; set; }
 

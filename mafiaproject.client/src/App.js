@@ -5,6 +5,8 @@ import HomePage from './pages/HomePages/HomePage';
 import AboutAuthor from './pages/AbouAuthor/AboutAuthor';
 import AboutGame from './pages/AboutGame/AboutGame.jsx';
 import SignIn from './pages/SignIn/SignIn.jsx'
+import Profile from './pages/Profile/Profile.jsx';
+import LobbyWin from './pages/LobbyWin/LobbyWin.jsx';
 
 function App() {
   return (
@@ -23,18 +25,15 @@ function App() {
           path="/aboutAuthor"
           element={<AboutAuthor />}
         />
-         {/*<Route
+        <Route
           path="/profile"
           element={<Profile />}
         />
-        <Route
-          path="/SignIn"
-          element={<SignIn />}
-        /> */}
          <Route
           path="/SignIn"
           element={<SignIn />}
         />
+         <Route path="/LobbyWin" element={<LobbyWin />} />
       </Routes>
     </Router>
   );

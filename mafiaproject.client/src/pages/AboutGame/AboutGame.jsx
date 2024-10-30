@@ -47,6 +47,7 @@ const AboutGame = () => {
           <FaAngleRight />
         </div>
       </div>
+      
     </div>
   );
 }

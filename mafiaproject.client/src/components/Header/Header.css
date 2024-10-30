@@ -2,21 +2,22 @@
     display: flex;
     justify-content: space-between;
     list-style-type: none;
-    margin:2vw 5vw 0vw 5vw;
-    
+    margin:1vw 5vw 0vw 5vw;
 }
 
 .emblem_logo_link li a{
-    font-size: 6vw;
+    font-size: 8vw;
     font-weight: 1000;
     color:red;
     text-decoration: none;
+    font-family: 'MYfont_for_logo', sans-serif;
 }
 
 .pages_link nav{
-    margin-top: 3vw;
+    margin-top: 4vw;
     display:flex;
     gap:3vw;
+    font-family: 'MyFont', sans-serif;
 }
 
 
@@ -29,5 +30,5 @@
 .pages_link nav li a {
     text-decoration: none;
     color:rgb(158, 158, 158);
-    font-size: 1.2vw;
+    font-size: 1.8vw;
 }
