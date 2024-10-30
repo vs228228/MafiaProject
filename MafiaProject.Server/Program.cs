@@ -32,6 +32,7 @@ namespace MafiaProject.Server
 
             // инъекция зависимостей
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ILobbyService, LobbyService>();
 
 
             // настраивание бд
