@@ -29,6 +29,8 @@ namespace MafiaProject.Server
             builder.Services.AddScoped<IMapperClass, Mapper>();
             builder.Services.AddAutoMapper(typeof(UserMappingProfile));
             builder.Services.AddAutoMapper(typeof(LobbyMappingProfile));
+            builder.Services.AddAutoMapper(typeof(PlayerMappingProfile));
+            builder.Services.AddAutoMapper(typeof(VoteMappingProfile));
 
             // инъекция зависимостей
             builder.Services.AddScoped<IUserService, UserService>();

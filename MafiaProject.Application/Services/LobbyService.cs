@@ -53,11 +53,13 @@ namespace MafiaProject.Application.Services
         {
             var lobby = await _mapper.Map<LobbyCreateDTO, Lobby>(lobbyCreateDTO);
             await _unitOfWork.Lobbies.CreateAsync(lobby);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteLobbyAsync(int id)
         {
             await _unitOfWork.Lobbies.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DisconnectToLobbyAsync(int lobbyId, int playerId) // create new player repository and remake this method
@@ -165,6 +167,7 @@ namespace MafiaProject.Application.Services
         {
             var ans = await _mapper.Map<LobbyUpdateDTO, Lobby>(lobbyUpdateDTO);
             await _unitOfWork.Lobbies.UpdateAsync(ans);
+            await _unitOfWork.SaveChangesAsync();
         }
         private Player ConvertUserToPlayer(User user)
         {

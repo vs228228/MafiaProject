@@ -28,6 +28,7 @@ namespace MafiaProject.Application.Services
         public async Task DeleteUserAsync(int id)
         {
             await _unitOfWork.Users.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
@@ -75,6 +76,7 @@ namespace MafiaProject.Application.Services
         {
             var ans = await _mapper.Map<UserCreateDTO, User>(userCreateDTO);
             await _unitOfWork.Users.CreateAsync(ans); // needed to check
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO)
