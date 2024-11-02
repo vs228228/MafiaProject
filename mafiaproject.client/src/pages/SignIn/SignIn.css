@@ -29,3 +29,18 @@
     height: 30px;
     cursor: pointer;
 }
+
+.forgetPassword{
+    display: flex;
+    justify-content: center;
+    color:gray;
+    font-size: 1.1vw;
+    text-align: center;
+    cursor: pointer;
+}
+.Lock_icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(140, 22, 22);
+}
