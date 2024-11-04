@@ -15,12 +15,18 @@ namespace MafiaProject.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Vote> Votes { get; set; }
 
-       
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseNpgsql("Server = 213.109.204.190; Port = 5432; Database = MafiaDataBase; User Id = gen_user; Password = MAFIA123;",b => b.MigrationsAssembly("MafiaProject.Infrastructure"));
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new GameConfiguration());
+            modelBuilder.ApplyConfiguration(new LobbyConfiguration());
+            modelBuilder.ApplyConfiguration(new PlayersConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new VoteConfiguration());
         }
+
+
+
     }
 }

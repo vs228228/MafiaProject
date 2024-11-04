@@ -13,7 +13,9 @@
 
         public ICollection<Player> VoteCandidates { get; set; }
 
-        public IEnumerable<Vote> Votes { get; set; }
+        public ICollection<Vote> Votes { get; set; }
         public ICollection<Player> Players { get; set; }
+
+
     }
 }
