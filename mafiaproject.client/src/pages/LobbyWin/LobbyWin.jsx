@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './LobbyWin.css'
 import Button from '../../shared/Button/Button.jsx'
-import ModalWin from '../../shared/ModalWindow/ModalWindow.jsx'
+import ModalWin from '../../components/ModalWindow/ModalWindow.jsx'
 
 const LobbyWin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); 
