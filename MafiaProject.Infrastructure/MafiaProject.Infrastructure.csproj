@@ -28,4 +28,8 @@
     <ProjectReference Include="..\MafiaProject.Application\MafiaProject.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>
