@@ -17,6 +17,7 @@ namespace MafiaProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapperClass _mapper;
         private readonly PhotoService _photoService;
+        private readonly IPasswordHasher _passwordHasher;
 
         public UserService(/*IUnitOfWork unitOfWork,*/ IMapperClass mapper)
         {
@@ -28,6 +29,7 @@ namespace MafiaProject.Application.Services
         public async Task DeleteUserAsync(int id)
         {
             await _unitOfWork.Users.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
@@ -68,21 +70,55 @@ namespace MafiaProject.Application.Services
 
         public async Task<string> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO)
         {
-             throw new NotImplementedException();
+            var userid = refreshTokenDTO.UserId;
+            var ans = await _unitOfWork.Users.GetByIdAsync(userid);
+            if (ans == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            if (refreshTokenDTO.RefreshToken == ans.RefreshToken)
+            {
+                // return to AccessToken
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
+            return "0"; // delete after making AccessToken
         }
 
         public async Task TryAddUserAsync(UserCreateDTO userCreateDTO)
         {
             var ans = await _mapper.Map<UserCreateDTO, User>(userCreateDTO);
+            var email = ans.Email;
+            var user = await _unitOfWork.Users.GetUserByEmailAsync(email);
+            if (user == null) // Need to check is user exist
+            {
+                ans.Password = await _passwordHasher.HashPassword(ans.Password);
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
             await _unitOfWork.Users.CreateAsync(ans); // needed to check
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO)
+        public async Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO)
         {
-            //string email = authDTO.Email;
-            //var ans = _unitOfWork.Users.GetUserByEmailAsync(email);
-            //and then we should compare our passwords, and if they are the same, return TokenDTO
-            throw new NotImplementedException();
+            string email = authDTO.Email;
+            var ans = await _unitOfWork.Users.GetUserByEmailAsync(email);
+            if (ans == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            bool compare = await _passwordHasher.VerifyPassword(ans.Password, authDTO.Password);
+            if (compare)
+            {
+                //return tokenDTO
+            }
+            throw new NotImplementedException(); // delete after adding tokenDTO
         }
 
         public async Task UpdateUserAsync(UserUpdateDto userUpdateDTO, IFormFile photo)

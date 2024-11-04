@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 
 namespace MafiaProject.Infrastructure.Mapper
 {
-    public class UserMappingProfile : Profile
+    public class VoteMappingProfile : Profile
     {
-        public UserMappingProfile() { 
-            CreateMap<User, UserDTO>().ReverseMap();
-            CreateMap<UserCreateDTO, User>();
-            CreateMap<UserUpdateDto, User>();
-            CreateMap<User, StatisticDTO>();
+        public VoteMappingProfile() {
+            CreateMap<Vote, VoteDTO>().ReverseMap();
+            CreateMap<IEnumerable<Vote>, IEnumerable<VoteDTO>>();
         }
     }
 }
