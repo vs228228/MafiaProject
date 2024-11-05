@@ -60,7 +60,7 @@ namespace MafiaProject.Server.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UserUpdateDto userUpdate, IFormFile photo = null)
+        public async Task<IActionResult> UpdateUser([FromForm] UserUpdateDto userUpdate, IFormFile photo = null)
         {
             await _userService.UpdateUserAsync(userUpdate, photo);
             return Ok();

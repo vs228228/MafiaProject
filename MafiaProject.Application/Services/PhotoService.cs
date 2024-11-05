@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MafiaProject.Application.Services
@@ -11,7 +9,8 @@ namespace MafiaProject.Application.Services
     {
         public async Task<string> SaveUserProfilePhotoAsync(IFormFile photo, string userId)
         {
-            string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "UserPhotos");
+            string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
@@ -25,7 +24,8 @@ namespace MafiaProject.Application.Services
                 await photo.CopyToAsync(stream);
             }
 
-            return filePath;
+            // Возвращаем относительный путь для использования в приложении (например, для доступа через URL)
+            return Path.Combine("images", fileName);
         }
     }
 }

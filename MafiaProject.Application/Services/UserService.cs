@@ -19,15 +19,18 @@ namespace MafiaProject.Application.Services
         private readonly PhotoService _photoService;
         private readonly IPasswordHasher _passwordHasher;
 
-        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper)
+        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper, IPasswordHasher passwordHasher)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _photoService = new PhotoService();
+            _passwordHasher = passwordHasher;
         }
 
         public async Task DeleteUserAsync(int id)
         {
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
+            if (user == null) throw new KeyNotFoundException();
             await _unitOfWork.Users.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -91,6 +94,8 @@ namespace MafiaProject.Application.Services
         public async Task TryAddUserAsync(UserCreateDTO userCreateDTO)
         {
             var ans = await _mapper.Map<UserCreateDTO, User>(userCreateDTO);
+            ans.pathToPic = "/images/default.jpg";
+            ans.RefreshToken = "";
             var email = ans.Email;
             var user = await _unitOfWork.Users.GetUserByEmailAsync(email);
             if (user == null) // Need to check is user exist
@@ -123,7 +128,7 @@ namespace MafiaProject.Application.Services
 
         public async Task UpdateUserAsync(UserUpdateDto userUpdateDTO, IFormFile photo)
         {
-            User user = new User();
+            User user = await _unitOfWork.Users.GetByIdAsync(userUpdateDTO.Id);
             var ans = await _mapper.Update<UserUpdateDto, User>(userUpdateDTO, user);
             string id = user.Id.ToString();
             if (photo != null)

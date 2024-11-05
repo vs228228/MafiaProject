@@ -23,8 +23,9 @@ namespace MafiaProject.Server
             builder.Services.AddSwaggerGen();
 
 
-
+            // репозитории
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             // маппер
             builder.Services.AddScoped<IMapperClass, Mapper>();
@@ -32,6 +33,12 @@ namespace MafiaProject.Server
             builder.Services.AddAutoMapper(typeof(LobbyMappingProfile));
             builder.Services.AddAutoMapper(typeof(PlayerMappingProfile));
             builder.Services.AddAutoMapper(typeof(VoteMappingProfile));
+
+            // PasswordHasher
+            builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+            // TokenManager
+            builder.Services.AddScoped<ITokenManager, TokenManager>();
 
             // инъекция зависимостей
             builder.Services.AddScoped<IUserService, UserService>();
