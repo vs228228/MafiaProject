@@ -7,11 +7,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MafiaProject.Infrastructure.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:MafiaProject.Infrastructure/Migrations/20241105122420_init.cs
+
     public partial class init : Migration
-========
-    public partial class test : Migration
->>>>>>>> abba4fa887983d2b6c032e08b2220aceac05f06a:MafiaProject.Infrastructure/Migrations/20241104235128_test.cs
+
+    
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
