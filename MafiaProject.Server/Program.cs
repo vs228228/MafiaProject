@@ -4,6 +4,8 @@ using MafiaProject.Infrastructure.Mapper;
 using MafiaProject.Server.middleware;
 using MafiaProject.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using MafiaProject.Core.Interfaces;
+using MafiaProject.Infrastructure.Repositories;
 
 namespace MafiaProject.Server
 {
@@ -22,8 +24,7 @@ namespace MafiaProject.Server
 
 
 
-            // репозитории
-            //   builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // маппер
             builder.Services.AddScoped<IMapperClass, Mapper>();
