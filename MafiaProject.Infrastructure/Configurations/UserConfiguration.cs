@@ -19,7 +19,6 @@ namespace MafiaProject.Infrastructure.Configurations
             builder.Property(u => u.Password).IsRequired().HasMaxLength(100);
             builder.Property(u => u.pathToPic).HasMaxLength(200);
             builder.Property(u => u.RefreshToken).HasMaxLength(200);
-            builder.Property(u => u.AccessToken).HasMaxLength(200);
             builder.Property(u => u.isPlayer).HasDefaultValue(false);
             builder.HasOne(u => u.Player).WithOne(p => p.User).HasForeignKey<Player>(p => p.UserId);
         }

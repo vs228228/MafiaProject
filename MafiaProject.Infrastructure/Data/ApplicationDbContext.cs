@@ -15,6 +15,8 @@ namespace MafiaProject.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Vote> Votes { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +26,7 @@ namespace MafiaProject.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new PlayersConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new VoteConfiguration());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
         }
 
 
