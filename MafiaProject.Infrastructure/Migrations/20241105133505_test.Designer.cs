@@ -12,13 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MafiaProject.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:MafiaProject.Infrastructure/Migrations/20241105122420_init.Designer.cs
-    [Migration("20241105122420_init")]
-    partial class init
-========
-    [Migration("20241104235128_test")]
+    [Migration("20241105133505_test")]
     partial class test
->>>>>>>> abba4fa887983d2b6c032e08b2220aceac05f06a:MafiaProject.Infrastructure/Migrations/20241104235128_test.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
