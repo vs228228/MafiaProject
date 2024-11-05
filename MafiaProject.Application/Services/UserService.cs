@@ -19,9 +19,9 @@ namespace MafiaProject.Application.Services
         private readonly PhotoService _photoService;
         private readonly IPasswordHasher _passwordHasher;
 
-        public UserService(/*IUnitOfWork unitOfWork,*/ IMapperClass mapper)
+        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper)
         {
-            //  _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _photoService = new PhotoService();
         }
