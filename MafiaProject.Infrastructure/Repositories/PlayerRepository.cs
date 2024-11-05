@@ -17,7 +17,5 @@ namespace MafiaProject.Infrastructure.Repositories
         {
             _context = context;
         }
-
-       
     }
 }
