@@ -3,9 +3,9 @@ import './Profile.css';
 import Image from '../../photo/mafia.jpg';
 import Button from '../../shared/Button/Button';
 
-const Profile = () => {
+const Profile = ({photoUrl}) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [profileImage, setProfileImage] = useState(Image);
+    const [profileImage, setProfileImage] = useState(photoUrl);
     const [username, setUsername] = useState('');
     const [editedImage, setEditedImage] = useState(Image);
     const [editedUsername, setEditedUsername] = useState('Имя пользователя');
