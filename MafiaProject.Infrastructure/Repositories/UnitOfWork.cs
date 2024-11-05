@@ -17,13 +17,17 @@ namespace MafiaProject.Infrastructure.Repositories
         {
             _context = context;
             Users = new UserRepository(_context);
+            Lobbies = new LobbyRepository(_context);
+            Games = new GameRepository(_context);
+            //Players = new PlayerRepository(_context);
+            Votes = new VoteRepository(_context);
 
         }
 
         public IUserRepository Users { get; set; }
         public ILobbyRepository Lobbies { get; set; }
         public IGameRepository Games { get;set; }
-        public IPlayerRepository Player { get; set; }
+        //public IPlayerRepository Players { get; set; }
         public IVoteRepository Votes { get; set; }
 
         
