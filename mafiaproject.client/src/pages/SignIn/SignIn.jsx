@@ -34,11 +34,11 @@ const SignIn = () => {
         setSiteRulesAccepted(!siteRulesAccepted);
     };
 
-    const handlePrivacyPolicyChange = () => {
+    const handlePrivacyPolicyChange = () => {//соглашение с политикой конфидициальности
         setPrivacyPolicyAccepted(!privacyPolicyAccepted);
     };
 
-    const handleForgotPasswordClick = () => {
+    const handleForgotPasswordClick = () => {//забыли пароль- перехоод в другую форму
         setForgetPasswordMode(true);
     };
 
@@ -91,14 +91,12 @@ const SignIn = () => {
                                 />
                             </>
                         )}
-                    
                     </form>
-
                     {!isRegistering && (
                         <span 
                             className="forgetPassword" 
                             onClick={handleForgotPasswordClick} 
-                        >Забыли пароль?
+                        > Забыли пароль?
                         </span>
                     )}
                     {!forgetPasswordMode && (
