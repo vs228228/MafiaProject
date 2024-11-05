@@ -12,10 +12,10 @@ namespace MafiaProject.Infrastructure.Repositories
 {
     public class PlayerRepository : Repository<Player>, IPlayerRepository
     {
-        private readonly PlayerRepository _context;
+        private readonly ApplicationDbContext _context;
         public PlayerRepository(ApplicationDbContext context) : base(context)
         {
-            //_context = context;
+            _context = context;
         }
 
        

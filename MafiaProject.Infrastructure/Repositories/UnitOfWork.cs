@@ -19,7 +19,7 @@ namespace MafiaProject.Infrastructure.Repositories
             Users = new UserRepository(_context);
             Lobbies = new LobbyRepository(_context);
             Games = new GameRepository(_context);
-            //Players = new PlayerRepository(_context);
+            Players = new PlayerRepository(_context);
             Votes = new VoteRepository(_context);
 
         }
@@ -27,7 +27,7 @@ namespace MafiaProject.Infrastructure.Repositories
         public IUserRepository Users { get; set; }
         public ILobbyRepository Lobbies { get; set; }
         public IGameRepository Games { get;set; }
-        //public IPlayerRepository Players { get; set; }
+        public IPlayerRepository Players { get; set; }
         public IVoteRepository Votes { get; set; }
 
         

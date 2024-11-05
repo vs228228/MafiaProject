@@ -14,9 +14,9 @@ namespace MafiaProject.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context;
 
-        public VoteRepository(DbContext context) : base(context)
+        public VoteRepository(ApplicationDbContext context) : base(context)
         {
-            //_context = context;
+            _context = context;
         }
     }
 
