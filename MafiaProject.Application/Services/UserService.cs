@@ -18,6 +18,7 @@ namespace MafiaProject.Application.Services
         private readonly IMapperClass _mapper;
         private readonly PhotoService _photoService;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly ITokenManager _tokenManager;
 
         public UserService(IUnitOfWork unitOfWork, IMapperClass mapper, IPasswordHasher passwordHasher)
         {
@@ -74,21 +75,20 @@ namespace MafiaProject.Application.Services
         public async Task<string> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO)
         {
             var userid = refreshTokenDTO.UserId;
-            var ans = await _unitOfWork.Users.GetByIdAsync(userid);
-            if (ans == null)
+            var user = await _unitOfWork.Users.GetByIdAsync(userid);
+            if (user == null)
             {
                 throw new KeyNotFoundException();
             }
 
-            if (refreshTokenDTO.RefreshToken == ans.RefreshToken)
+            if (refreshTokenDTO.RefreshToken == user.RefreshToken && user.Expiration < DateTime.Now)
             {
-                // return to AccessToken
+                return _tokenManager.GenerateAccessToken(user);
             }
             else
             {
                 throw new UnauthorizedAccessException();
             }
-            return "0"; // delete after making AccessToken
         }
 
         public async Task TryAddUserAsync(UserCreateDTO userCreateDTO)
@@ -106,24 +106,41 @@ namespace MafiaProject.Application.Services
             {
                 throw new UnauthorizedAccessException();
             }
-            await _unitOfWork.Users.CreateAsync(ans); // needed to check
+            await _unitOfWork.Users.CreateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO)
         {
             string email = authDTO.Email;
-            var ans = await _unitOfWork.Users.GetUserByEmailAsync(email);
-            if (ans == null)
+            var user = await _unitOfWork.Users.GetUserByEmailAsync(email);
+            if (user == null)
             {
                 throw new KeyNotFoundException();
             }
-            bool compare = await _passwordHasher.VerifyPassword(ans.Password, authDTO.Password);
+            bool compare = await _passwordHasher.VerifyPassword(user.Password, authDTO.Password);
             if (compare)
             {
-                //return tokenDTO
+                var RefreshToken = _tokenManager.GenerateRefreshToken();
+                TokenDTO tokenDTO = new TokenDTO();
+                tokenDTO.RefreshToken = RefreshToken.Token;
+
+                string AccessToken = _tokenManager.GenerateAccessToken(user);
+                tokenDTO.AccessToken = AccessToken;
+
+                user.Expiration = RefreshToken.Expiration;
+                user.RefreshToken = RefreshToken.Token;
+
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+
+                return tokenDTO;
             }
-            throw new NotImplementedException(); // delete after adding tokenDTO
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
+
         }
 
         public async Task UpdateUserAsync(UserUpdateDto userUpdateDTO, IFormFile photo)
