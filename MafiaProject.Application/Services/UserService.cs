@@ -113,16 +113,14 @@ namespace MafiaProject.Application.Services
         public async Task<TokenDTO> TryAuthUserAsync(AuthDTO authDTO)
         {
             string email = authDTO.Email;
-            var ans = await _unitOfWork.Users.GetUserByEmailAsync(email);
-            if (ans == null)
+            var user = await _unitOfWork.Users.GetUserByEmailAsync(email);
+            if (user == null)
             {
                 throw new KeyNotFoundException();
             }
-            bool compare = await _passwordHasher.VerifyPassword(ans.Password, authDTO.Password);
+            bool compare = await _passwordHasher.VerifyPassword(user.Password, authDTO.Password);
             if (compare)
             {
-                var user = await _mapper.Map<AuthDTO, User>(authDTO);
-
                 var RefreshToken = _tokenManager.GenerateRefreshToken();
                 TokenDTO tokenDTO = new TokenDTO();
                 tokenDTO.RefreshToken = RefreshToken.Token;
