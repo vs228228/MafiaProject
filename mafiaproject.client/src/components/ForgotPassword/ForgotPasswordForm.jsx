@@ -1,25 +1,39 @@
-// import React from 'react';
-// import Button from '../../shared/Button/Button';
-// import Input from '../../shared/Input/Input';
-// import { CiLock } from "react-icons/ci";
+import React, { useState } from 'react';
+import Button from '../../shared/Button/Button';
+import Input from '../../shared/Input/Input';
+import { CiLock } from "react-icons/ci";
 
-// const ForgotPasswordForm = ({ onBack }) => {
-//     return (
-//         <div>
-//             <div className='Lock_icon'><CiLock size={50} /></div>
-//             <h2>Восстановление пароля</h2>
-//             <form onSubmit={(e) => e.preventDefault()}>
-//                 <Input
-//                      type='email' 
-//                      name='email' 
-//                      label='Введите вашу электронную почту' 
-//                      required={true}
-//                 />
-//                 <Button type='submit' text='Получить пароль' />
-//             </form>
-//             <button onClick={onBack}>Назад</button>
-//         </div>
-//     );
-// };
+const ForgotPasswordForm = ({ handleLoginClick, FaArrowLeftLong }) => {
+    const [email, setEmail] = useState(''); 
 
-// export default ForgotPasswordForm;
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Предотвращаем перезагрузку страницы
+        
+
+    };
+
+    return (
+        <div>
+            <div className='Lock_icon'><CiLock size={50} /></div>
+            <h2>Восстановление пароля</h2>
+            <form onSubmit={handleSubmit}>
+                <Input
+                    type='email'
+                    name='email'
+                    label='Введите вашу электронную почту'
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required={true}
+                />
+                <Button type='submit' text='Получить пароль' />
+            </form>
+           
+            <FaArrowLeftLong
+                onClick={handleLoginClick}
+                className="login-button"
+            />
+        </div>
+    );
+};
+
+export default ForgotPasswordForm;

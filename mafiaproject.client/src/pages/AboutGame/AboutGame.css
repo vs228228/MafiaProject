@@ -28,6 +28,26 @@
     background: rgba(0, 0, 0, 0.5); 
     z-index: 0; 
 }
+.image_container {
+    display: flex;
+    align-items: flex-start; 
+    width: 100%;
+    max-width: 1200px; 
+}
+
+.left_images, .right_images {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+.left_images img,
+.right_images img
+ {
+    width: 100px;
+    margin: 1vw 2vw 0.5vw 2vw;
+    opacity: 0.5;
+}
+
 .left_button, .right_button {
     cursor: pointer;
     font-size: 24px; 
