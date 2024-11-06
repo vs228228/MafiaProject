@@ -25,51 +25,51 @@ namespace MafiaProject.Application.Services
         public async Task ChangeMicroAsync(ChangeMicroDTO changeMicroDTO)
         {
             var playerId = changeMicroDTO.Id;
-            var ans = await _unitOfWork.Player.GetByIdAsync(playerId);
+            var ans = await _unitOfWork.Players.GetByIdAsync(playerId);
             if (ans == null)
             {
                 throw new KeyNotFoundException();
             }
             ans.IsMicrophoneOn = !changeMicroDTO.IsMicrophoneOn;
-            await _unitOfWork.Player.UpdateAsync(ans);
+            await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task ChangeReadyAsync(ChangeReadyDTO changeReadyDTO)
         {
             var playerId = changeReadyDTO.Id;
-            var ans = await _unitOfWork.Player.GetByIdAsync(playerId);
+            var ans = await _unitOfWork.Players.GetByIdAsync(playerId);
             if (ans == null)
             {
                 throw new KeyNotFoundException();
             }
             ans.IsReady = !changeReadyDTO.IsReady;
-            await _unitOfWork.Player.UpdateAsync(ans);
+            await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task ChangeVideoAsync(ChangeVideoDTO changeVideoDTO)
         {
             var playerId = changeVideoDTO.Id;
-            var ans = await _unitOfWork.Player.GetByIdAsync(playerId);
+            var ans = await _unitOfWork.Players.GetByIdAsync(playerId);
             if (ans == null)
             {
                 throw new KeyNotFoundException();
             }
             ans.IsCameraOn = !changeVideoDTO.IsCameraOn;
-            await _unitOfWork.Player.UpdateAsync(ans);
+            await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<PlayerDTO>> GetAllPlayersAsync(int gameId)
         {
-            var ans = await _unitOfWork.Player.GetAllAsync();
+            var ans = await _unitOfWork.Players.GetAllAsync();
             return await _mapper.Map<IEnumerable<Player>, IEnumerable<PlayerDTO>>(ans);
         }
 
         public async Task<PlayerDTO> GetPlayerByIdAsync(int playerId)
         {
-            var ans = await _unitOfWork.Player.GetByIdAsync(playerId);
+            var ans = await _unitOfWork.Players.GetByIdAsync(playerId);
             if (ans == null)
             {
                 throw new KeyNotFoundException();
@@ -79,20 +79,20 @@ namespace MafiaProject.Application.Services
 
         public async Task DeletePlayerAsync(int playerId)
         {
-            await _unitOfWork.Player.DeleteAsync(playerId);
+            await _unitOfWork.Players.DeleteAsync(playerId);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdatePlayerAsync(PlayerUpdateDTO playerUpdateDTO)
         {
             var playerId = playerUpdateDTO.Id;
-            var ans = await _unitOfWork.Player.GetByIdAsync(playerId);
+            var ans = await _unitOfWork.Players.GetByIdAsync(playerId);
             if (ans == null)
             {
                 throw new KeyNotFoundException();
             }
             ans.IsAlive = !playerUpdateDTO.IsAlive;
-            await _unitOfWork.Player.UpdateAsync(ans);
+            await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
     }

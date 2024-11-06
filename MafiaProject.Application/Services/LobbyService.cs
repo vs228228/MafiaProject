@@ -70,7 +70,7 @@ namespace MafiaProject.Application.Services
                 throw new KeyNotFoundException("Lobby not found");
             }
 
-            var player = await _unitOfWork.Player.GetByIdAsync(playerId);
+            var player = await _unitOfWork.Players.GetByIdAsync(playerId);
 
             if (player == null)
             {

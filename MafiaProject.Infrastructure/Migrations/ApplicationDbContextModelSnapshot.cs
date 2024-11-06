@@ -31,24 +31,34 @@ namespace MafiaProject.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CountOfAlive")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(10);
 
                     b.Property<int>("CountOfMafia")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(3);
 
                     b.Property<bool>("IsGameEnded")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("RoundNumber")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("WhoLastHealed")
                         .HasColumnType("integer");
@@ -73,17 +83,23 @@ namespace MafiaProject.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsLobbyActive")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsLobbyFull")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -100,28 +116,39 @@ namespace MafiaProject.Infrastructure.Migrations
 
                     b.Property<string>("ConnectionId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
-                    b.Property<int?>("GameId")
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("GameId1")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsAlive")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsCameraOn")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsMafia")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsMicrophoneOn")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsReady")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<int?>("LobbyId")
                         .HasColumnType("integer");
@@ -131,7 +158,8 @@ namespace MafiaProject.Infrastructure.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -150,6 +178,20 @@ namespace MafiaProject.Infrastructure.Migrations
                     b.ToTable("Players");
                 });
 
+            modelBuilder.Entity("MafiaProject.Core.Entityes.RefreshToken", b =>
+                {
+                    b.Property<string>("Token")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Token");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("MafiaProject.Core.Entityes.User", b =>
                 {
                     b.Property<int>("Id")
@@ -158,38 +200,44 @@ namespace MafiaProject.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AccessToken")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("CountOfGame")
                         .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Nick")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("Victories")
                         .HasColumnType("integer");
 
                     b.Property<bool>("isPlayer")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("pathToPic")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.HasKey("Id");
 
@@ -222,9 +270,11 @@ namespace MafiaProject.Infrastructure.Migrations
 
             modelBuilder.Entity("MafiaProject.Core.Entityes.Player", b =>
                 {
-                    b.HasOne("MafiaProject.Core.Entityes.Game", null)
+                    b.HasOne("MafiaProject.Core.Entityes.Game", "Game")
                         .WithMany("Players")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MafiaProject.Core.Entityes.Game", null)
                         .WithMany("VoteCandidates")
@@ -232,20 +282,26 @@ namespace MafiaProject.Infrastructure.Migrations
 
                     b.HasOne("MafiaProject.Core.Entityes.Lobby", null)
                         .WithMany("Players")
-                        .HasForeignKey("LobbyId");
+                        .HasForeignKey("LobbyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MafiaProject.Core.Entityes.User", null)
+                    b.HasOne("MafiaProject.Core.Entityes.User", "User")
                         .WithOne("Player")
                         .HasForeignKey("MafiaProject.Core.Entityes.Player", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MafiaProject.Core.Entityes.Vote", b =>
                 {
                     b.HasOne("MafiaProject.Core.Entityes.Game", null)
                         .WithMany("Votes")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MafiaProject.Core.Entityes.Game", b =>

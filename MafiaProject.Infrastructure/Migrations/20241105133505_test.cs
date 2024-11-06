@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MafiaProject.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,12 +18,12 @@ namespace MafiaProject.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    State = table.Column<string>(type: "text", nullable: false),
-                    CountOfAlive = table.Column<int>(type: "integer", nullable: false),
-                    CountOfMafia = table.Column<int>(type: "integer", nullable: false),
-                    IsGameEnded = table.Column<bool>(type: "boolean", nullable: false),
-                    RoundNumber = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    State = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    CountOfAlive = table.Column<int>(type: "integer", nullable: false, defaultValue: 10),
+                    CountOfMafia = table.Column<int>(type: "integer", nullable: false, defaultValue: 3),
+                    IsGameEnded = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    RoundNumber = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     WhoLastHealed = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -37,15 +38,27 @@ namespace MafiaProject.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatorId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     CountOfPlayers = table.Column<int>(type: "integer", nullable: false),
-                    IsLobbyFull = table.Column<bool>(type: "boolean", nullable: false),
-                    IsLobbyActive = table.Column<bool>(type: "boolean", nullable: false)
+                    IsLobbyFull = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    IsLobbyActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lobbys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Token = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Token);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,15 +67,15 @@ namespace MafiaProject.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nick = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    pathToPic = table.Column<string>(type: "text", nullable: false),
+                    Nick = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    pathToPic = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     CountOfGame = table.Column<int>(type: "integer", nullable: false),
                     Victories = table.Column<int>(type: "integer", nullable: false),
-                    RefreshToken = table.Column<string>(type: "text", nullable: false),
-                    AccessToken = table.Column<string>(type: "text", nullable: false),
-                    isPlayer = table.Column<bool>(type: "boolean", nullable: false)
+                    RefreshToken = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    isPlayer = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -86,7 +99,8 @@ namespace MafiaProject.Infrastructure.Migrations
                         name: "FK_Votes_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,14 +111,14 @@ namespace MafiaProject.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     Position = table.Column<int>(type: "integer", nullable: false),
-                    Role = table.Column<string>(type: "text", nullable: false),
-                    IsReady = table.Column<bool>(type: "boolean", nullable: false),
-                    IsAlive = table.Column<bool>(type: "boolean", nullable: false),
-                    IsMafia = table.Column<bool>(type: "boolean", nullable: false),
-                    ConnectionId = table.Column<string>(type: "text", nullable: false),
-                    IsCameraOn = table.Column<bool>(type: "boolean", nullable: false),
-                    IsMicrophoneOn = table.Column<bool>(type: "boolean", nullable: false),
-                    GameId = table.Column<int>(type: "integer", nullable: true),
+                    Role = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false),
+                    IsReady = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    IsAlive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    IsMafia = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    ConnectionId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    IsCameraOn = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    IsMicrophoneOn = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    GameId = table.Column<int>(type: "integer", nullable: false),
                     GameId1 = table.Column<int>(type: "integer", nullable: true),
                     LobbyId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -115,7 +129,8 @@ namespace MafiaProject.Infrastructure.Migrations
                         name: "FK_Players_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Players_Games_GameId1",
                         column: x => x.GameId1,
@@ -125,7 +140,8 @@ namespace MafiaProject.Infrastructure.Migrations
                         name: "FK_Players_Lobbys_LobbyId",
                         column: x => x.LobbyId,
                         principalTable: "Lobbys",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Players_Users_UserId",
                         column: x => x.UserId,
@@ -166,6 +182,9 @@ namespace MafiaProject.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "Votes");
