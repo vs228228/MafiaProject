@@ -22,7 +22,7 @@ const ModalWindow = ({ isOpen, onClose, modalType }) => {
                 <form>
                 {modalType === 'entrance' && (
                 <>
-                    <Input type='text' name='roomId' label='ID комнаты' require={true} />
+                    <Input type='text' name='roomId' label='ID комнаты' required={true} />
                     <Input 
                         type={showPassword ? 'text' : 'password'} 
                         name='password' 
