@@ -40,12 +40,32 @@
     flex-direction: column;
     margin: 10px;
 }
+
 .left_images img,
-.right_images img
- {
+.right_images img {
     width: 100px;
-    margin: 1vw 2vw 0.5vw 2vw;
+    margin: 1vw 2.2vw 0.5vw 2.2vw;
+    border:2px solid rgb(80, 23, 23);
+    border-radius: 20px;
     opacity: 0.5;
+}
+.left_images img{
+    animation: rotate 25s infinite; 
+}
+.right_images img{
+    animation: rotate 25s infinite; 
+    animation-delay: 12.5s;
+}
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg); 
+    }
+    60% {
+        transform: rotate(360deg); 
+    }
+    100% {
+        transform: rotate(360deg); 
+    }
 }
 
 .left_button, .right_button {
