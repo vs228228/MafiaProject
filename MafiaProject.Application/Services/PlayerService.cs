@@ -17,9 +17,9 @@ namespace MafiaProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapperClass _mapper;
 
-        public PlayerService(/*IUnitOfWork unitOfWork,*/ IMapperClass mapper)
+        public PlayerService(IUnitOfWork unitOfWork, IMapperClass mapper)
         {
-            //  _unitOfWork = unitOfWork;
+              _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task ChangeMicroAsync(ChangeMicroDTO changeMicroDTO)
