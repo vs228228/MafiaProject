@@ -20,12 +20,13 @@ namespace MafiaProject.Application.Services
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenManager _tokenManager;
 
-        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper, IPasswordHasher passwordHasher)
+        public UserService(IUnitOfWork unitOfWork, IMapperClass mapper, IPasswordHasher passwordHasher, ITokenManager tokenManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _photoService = new PhotoService();
             _passwordHasher = passwordHasher;
+            _tokenManager = tokenManager;
         }
 
         public async Task DeleteUserAsync(int id)
@@ -81,7 +82,7 @@ namespace MafiaProject.Application.Services
                 throw new KeyNotFoundException();
             }
 
-            if (refreshTokenDTO.RefreshToken == user.RefreshToken && user.Expiration < DateTime.Now)
+            if (refreshTokenDTO.RefreshToken == user.RefreshToken && user.Expiration < DateTime.Now.ToUniversalTime())
             {
                 return _tokenManager.GenerateAccessToken(user);
             }
@@ -128,7 +129,7 @@ namespace MafiaProject.Application.Services
                 string AccessToken = _tokenManager.GenerateAccessToken(user);
                 tokenDTO.AccessToken = AccessToken;
 
-                user.Expiration = RefreshToken.Expiration;
+                user.Expiration = RefreshToken.Expiration.ToUniversalTime();
                 user.RefreshToken = RefreshToken.Token;
 
                 await _unitOfWork.Users.UpdateAsync(user);
