@@ -15,9 +15,10 @@ const SignIn = () => {
     const [forgetPasswordMode, setForgetPasswordMode] = useState(false);
     const [siteRulesAccepted, setSiteRulesAccepted] = useState(false);
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+    
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
 
     const togglePasswordVisibility = () => {
         setShowPassword(prev => !prev);
@@ -26,64 +27,78 @@ const SignIn = () => {
     const handleRegisterClick = () => {
         setIsRegistering(true);
         setForgetPasswordMode(false);
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setSiteRulesAccepted(false);
+        setPrivacyPolicyAccepted(false);
     };
 
     const handleLoginClick = () => {
         setIsRegistering(false);
         setForgetPasswordMode(false);
+        setEmail('');
+        setPassword('');
     };
 
     const handleForgotPasswordClick = () => {
         setForgetPasswordMode(true);
+        setEmail('');
     };
 
-    const handleLogin = async () => {
-       console.log('Вход');
-       try{
-        const response = await UserService.tryAuthUser(email, password);
-        console.log(response);
-        toast.success('Вход выполнен успешно!');
-       }
-       catch(error){
-        toast.error('Пользователь не найден, зарегистрируйтесь или проверьте вводимые данные');
-       }
+    const handleLogin = async (email, password) => {
+        console.log('Вход');
+        console.log('Email:', email); 
+        console.log('Password:', password);
+        try {
+            const response = await UserService.tryAuthUser(email, password);
+            console.log(response);
+            toast.success('Вход выполнен успешно!');
+        } catch (error) {
+            toast.error('Пользователь не найден, зарегистрируйтесь или проверьте вводимые данные');
+        }
     };
 
-    const handleRegister = async () => {
+    const handleRegister = async (email, password, username) => {
         console.log('Регистрация');
-        if(!siteRulesAccepted || !privacyPolicyAccepted){
+        console.log('Имя пользователя:', username);
+        console.log('Email:', email);
+        console.log('Пароль:', password);
+        console.log('Согласие с правилами:', siteRulesAccepted);
+        console.log('Согласие с политикой конфиденциальности:', privacyPolicyAccepted);
+
+        if (!siteRulesAccepted || !privacyPolicyAccepted) {
             toast.error('Пожалуйста, примите правила сайта и политику конфиденциальности.');
             return;
         }
-        try{
-            const response = await UserService.tryAddUser(username, email, password);
-            console.log(response);
-            toast.success('Регистрация прошла успешно! Вы можете войти в систему!')
-            setIsRegistering(false);
 
-        }catch(error){
-            toast.error('Ошибка регистрации. Проверьте введенные данные и повторите попытку.')
-        }
-    };
+    try {
+                const response = await UserService.tryAddUser(username, email, password);
+                console.log(response);
+                toast.success('Регистрация прошла успешно! Вы можете войти в систему!');
+                setIsRegistering(false);
+                setUsername('');
+                setEmail('');
+                setPassword('');
+            } catch (error) {
+                console.error('Ошибка регистрации:', error);
+                toast.error('Ошибка регистрации. Проверьте введенные данные и повторите попытку.');
+            }
+        };
     
-    const isRegisterButtonDisabled = !(siteRulesAccepted && privacyPolicyAccepted);
-
     return (
         <div className='signIn_Block'>
             <ToastContainer /> 
-                {forgetPasswordMode ?(
-                    <>
-                    <ForgotPasswordForm 
-                        handleLoginClick={handleLoginClick}
-                        FaArrowLeftLong={FaArrowLeftLong}/>
-                    </>
-                
+            {forgetPasswordMode ? (
+                <ForgotPasswordForm 
+                    handleLoginClick={handleLoginClick}
+                    FaArrowLeftLong={FaArrowLeftLong}
+                />
             ) : (
                 <>
                     <h2>{isRegistering ? 'Регистрация' : 'Войти'}</h2>
                     <form onSubmit={(e) => e.preventDefault()}>
-                
-                    {isRegistering ? (
+                        {isRegistering ? (
                             <RegisterForm
                                 username={username}
                                 setUsername={setUsername}
@@ -97,46 +112,43 @@ const SignIn = () => {
                                 setPrivacyPolicyAccepted={setPrivacyPolicyAccepted}
                                 togglePasswordVisibility={togglePasswordVisibility}
                                 showPassword={showPassword}
-                                handleRegister={handleRegister}
+                                handleRegister={handleRegister} 
                             />
                         ) : (
                             <LoginForm
-                                togglePasswordVisibility={togglePasswordVisibility}
-                                showPassword={showPassword}
-                                handleLogin={handleLogin}
-                                setEmail={setEmail}
-                                setPassword={setPassword}
+                            email={email} 
+                            setEmail={setEmail}
+                            password={password}
+                            setPassword={setPassword}
+                            togglePasswordVisibility={togglePasswordVisibility}
+                            onSubmit={handleLogin}
                             />
                         )}
                     </form>
-                    {!isRegistering && (
-                        <span 
-                            className="forgetPassword" 
-                            onClick={handleForgotPasswordClick} 
-                        > Забыли пароль?
-                        </span>
-                    )}
+                   
                     {!forgetPasswordMode && (
                         <div className="button_button">
-                            <Button
-                                    type='submit'
-                                    disabled={isRegistering && isRegisterButtonDisabled}
-                                    text={isRegistering ? 'Регистрация' : 'Войти'}
-                                    onClick={isRegistering ? handleRegister : handleLogin}
-                                />
                             {!isRegistering ? (
                                 <Button
                                     onClick={handleRegisterClick}
                                     className="register-button"
                                     text='Зарегистрироваться'
                                 />
-                        ) : (
-                            <FaArrowLeftLong
-                                onClick={handleLoginClick}
-                                className="login-button"
-                            />
-                        )}
+                            ) : (
+                                <FaArrowLeftLong
+                                    onClick={handleLoginClick}
+                                    className="login-button"
+                                />
+                            )}
                         </div>
+                    )}
+                     {!isRegistering && (
+                        <span 
+                            className="forgetPassword" 
+                            onClick={handleForgotPasswordClick} 
+                        > 
+                            Забыли пароль?
+                        </span>
                     )}
                 </>
             )}

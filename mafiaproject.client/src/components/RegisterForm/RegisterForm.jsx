@@ -1,27 +1,37 @@
 import React from 'react';
 import Input from '../../shared/Input/Input';
 import CheckBox from '../../shared/CheckBoxGroup/CheckBox';
+import Button from '../../shared/Button/Button';
 
-const RegisterForm = ({username, setUsername, email, setEmail, password, setPassword,siteRulesAccepted, privacyPolicyAccepted, setSiteRulesAccepted, 
-    setPrivacyPolicyAccepted, handleRegister,togglePasswordVisibility,showPassword,
-    }  ) => {
-
-    const handleSiteRulesChange = () => {//управляет состоянием согласия пользователя с правилами сайта
-        setSiteRulesAccepted(!siteRulesAccepted);
+const RegisterForm = ({
+    username, setUsername,
+    email, setEmail,
+    password, setPassword,
+    siteRulesAccepted, privacyPolicyAccepted,
+    setSiteRulesAccepted, setPrivacyPolicyAccepted,
+    handleRegister, togglePasswordVisibility,
+    showPassword
+}) => {
+    const handleSiteRulesChange = () => {
+        setSiteRulesAccepted(prev => !prev);
     };
 
-    const handlePrivacyPolicyChange = () => {//соглашение с политикой конфидициальности
-        setPrivacyPolicyAccepted(!privacyPolicyAccepted);
+    const handlePrivacyPolicyChange = () => {
+        setPrivacyPolicyAccepted(prev => !prev);
     };
-    
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleRegister(email, password, username); 
+    };
+
     return (
-        <form onSubmit={(e) => e.preventDefault()}>
-            <Input type='text' name='username' label='Имя пользователя' required={true} />
+        <form onSubmit={handleSubmit}>
             <Input 
-                type={showPassword ? 'text' : 'password'} 
-                name='password' 
-                label='Пароль' 
-                required={true}
+                type='text' 
+                name='username' 
+                label='Имя пользователя' 
+                required={true} 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />
@@ -29,26 +39,28 @@ const RegisterForm = ({username, setUsername, email, setEmail, password, setPass
                 type={showPassword ? 'text' : 'password'} 
                 name='password' 
                 label='Пароль' 
+                required={true}
                 showToggleButton 
                 togglePasswordVisibility={togglePasswordVisibility}
                 isPasswordVisible={showPassword}
-                required={true}  
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <Input type='text'
-                    name='email' 
-                    label='Электронная почта' 
-                    required={true} 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+            <Input 
+                type='text'
+                name='email' 
+                label='Электронная почта' 
+                required={true} 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
             />
             <CheckBox
-                siteRulesAccepted={siteRulesAccepted} 
+                siteRulesAccepted={siteRulesAccepted}
                 privacyPolicyAccepted={privacyPolicyAccepted}
                 handleSiteRulesChange={handleSiteRulesChange}
                 handlePrivacyPolicyChange={handlePrivacyPolicyChange}
             />
+            <Button type="submit" text='Зарегистрироваться' onClick={handleSubmit} />
         </form>
     );
 };

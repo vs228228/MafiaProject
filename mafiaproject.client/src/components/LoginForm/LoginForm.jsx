@@ -1,16 +1,25 @@
 import React from 'react';
 import Input from '../../shared/Input/Input.jsx';
+import Button from '../../shared/Button/Button.jsx';
 
-const LoginForm = ({togglePasswordVisibility,showPassword, handleLogin,setEmail, setPassword}) => {
+const LoginForm = ({ email, setEmail, 
+    password, setPassword, 
+    togglePasswordVisibility, 
+    showPassword, onSubmit }) => {
    
-    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(email, password); 
+    };
+
     return (
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
             <Input 
-                type='text' 
+                type='email' 
                 name='email' 
                 label='Электронная почта' 
                 required={true} 
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
             <Input 
@@ -21,8 +30,10 @@ const LoginForm = ({togglePasswordVisibility,showPassword, handleLogin,setEmail,
                 togglePasswordVisibility={togglePasswordVisibility}
                 isPasswordVisible={showPassword}
                 required={true}
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
+            <Button type="submit" onClick={handleSubmit} text='Войти'/>
         </form>
     );
 };
