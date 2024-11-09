@@ -48,8 +48,8 @@ class UserService {
         return await response.json();
     }
 
-    async tryAddUser(username, email, password) {//+
-        const user = { username, email, password };
+    async tryAddUser(nick, email, password) {//+
+        const user = { nick, email, password };
         try {
             const response = await fetch(UserService.baseUrl, {
                 method: 'POST',
@@ -61,7 +61,7 @@ class UserService {
             if (!response.ok) {
                 throw new Error('Failed to add user');
             }
-            return await response.json();
+            return await "Ok";
         } catch (error) {
             console.error(error);
             throw error;
