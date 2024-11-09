@@ -5,6 +5,9 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import ForgotPasswordForm from '../../components/ForgotPassword/ForgotPasswordForm';
 import RegisterForm from '../../components/RegisterForm/RegisterForm';
 import LoginForm from '../../components/LoginForm/LoginForm';
+import UserService from '../../services/UserService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
     const [isRegistering, setIsRegistering] = useState(false);
@@ -12,42 +15,69 @@ const SignIn = () => {
     const [forgetPasswordMode, setForgetPasswordMode] = useState(false);
     const [siteRulesAccepted, setSiteRulesAccepted] = useState(false);
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
 
-
-    const togglePasswordVisibility = () => {//видимость пароля в полях ввода
+    const togglePasswordVisibility = () => {
         setShowPassword(prev => !prev);
     };
     
-    const handleRegisterClick = () => {//изменяет состояние приложения, чтобы отобразить форму регистрации
+    const handleRegisterClick = () => {
         setIsRegistering(true);
         setForgetPasswordMode(false);
     };
 
-    const handleLoginClick = () => {//изменяет состояние приложения, чтобы отобразить форму входа
+    const handleLoginClick = () => {
         setIsRegistering(false);
         setForgetPasswordMode(false);
     };
 
-    const handleForgotPasswordClick = () => {//забыли пароль- перехоод в другую форму
+    const handleForgotPasswordClick = () => {
         setForgetPasswordMode(true);
     };
+
     const handleLogin = async () => {
        console.log('Вход');
+       try{
+        const response = await UserService.tryAuthUser(email, password);
+        console.log(response);
+        toast.success('Вход выполнен успешно!');
+       }
+       catch(error){
+        toast.error('Пользователь не найден, зарегистрируйтесь или проверьте вводимые данные');
+       }
     };
 
     const handleRegister = async () => {
         console.log('Регистрация');
+        if(!siteRulesAccepted || !privacyPolicyAccepted){
+            toast.error('Пожалуйста, примите правила сайта и политику конфиденциальности.');
+            return;
+        }
+        try{
+            const response = await UserService.tryAddUser(username, email, password);
+            console.log(response);
+            toast.success('Регистрация прошла успешно! Вы можете войти в систему!')
+            setIsRegistering(false);
+
+        }catch(error){
+            toast.error('Ошибка регистрации. Проверьте введенные данные и повторите попытку.')
+        }
     };
+    
     const isRegisterButtonDisabled = !(siteRulesAccepted && privacyPolicyAccepted);
 
     return (
         <div className='signIn_Block'>
-            {forgetPasswordMode ?(
-                <>
+            <ToastContainer /> 
+                {forgetPasswordMode ?(
+                    <>
                     <ForgotPasswordForm 
-                    handleLoginClick={handleLoginClick}
-                    FaArrowLeftLong={FaArrowLeftLong}/>
-                </>
+                        handleLoginClick={handleLoginClick}
+                        FaArrowLeftLong={FaArrowLeftLong}/>
+                    </>
+                
             ) : (
                 <>
                     <h2>{isRegistering ? 'Регистрация' : 'Войти'}</h2>
@@ -55,15 +85,27 @@ const SignIn = () => {
                 
                     {isRegistering ? (
                             <RegisterForm
+                                username={username}
+                                setUsername={setUsername}
+                                email={email}
+                                setEmail={setEmail}
+                                password={password}
+                                setPassword={setPassword}
                                 siteRulesAccepted={siteRulesAccepted}
                                 privacyPolicyAccepted={privacyPolicyAccepted}
                                 setSiteRulesAccepted={setSiteRulesAccepted}
                                 setPrivacyPolicyAccepted={setPrivacyPolicyAccepted}
+                                togglePasswordVisibility={togglePasswordVisibility}
+                                showPassword={showPassword}
+                                handleRegister={handleRegister}
                             />
                         ) : (
                             <LoginForm
                                 togglePasswordVisibility={togglePasswordVisibility}
                                 showPassword={showPassword}
+                                handleLogin={handleLogin}
+                                setEmail={setEmail}
+                                setPassword={setPassword}
                             />
                         )}
                     </form>

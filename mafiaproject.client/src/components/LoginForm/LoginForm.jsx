@@ -1,13 +1,18 @@
 import React from 'react';
-// import Button from '../../shared/Button/Button.jsx';
 import Input from '../../shared/Input/Input.jsx';
 
-const LoginForm = ({togglePasswordVisibility,showPassword, handleLogin}) => {
+const LoginForm = ({togglePasswordVisibility,showPassword, handleLogin,setEmail, setPassword}) => {
    
     
     return (
-        <form onSubmit={(e) => e.preventDefault()}>
-            <Input type='text' name='username' label='Имя пользователя' required={true} />
+        <form onSubmit={handleLogin}>
+            <Input 
+                type='text' 
+                name='email' 
+                label='Электронная почта' 
+                required={true} 
+                onChange={(e) => setEmail(e.target.value)}
+            />
             <Input 
                 type={showPassword ? 'text' : 'password'} 
                 name='password' 
@@ -16,6 +21,7 @@ const LoginForm = ({togglePasswordVisibility,showPassword, handleLogin}) => {
                 togglePasswordVisibility={togglePasswordVisibility}
                 isPasswordVisible={showPassword}
                 required={true}
+                onChange={(e) => setPassword(e.target.value)}
             />
         </form>
     );
