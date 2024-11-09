@@ -2,10 +2,7 @@ import React from 'react';
 import Input from '../../shared/Input/Input.jsx';
 import Button from '../../shared/Button/Button.jsx';
 
-const LoginForm = ({ email, setEmail, 
-    password, setPassword, 
-    togglePasswordVisibility, 
-    showPassword, onSubmit }) => {
+const LoginForm = ({ email, setEmail, password, setPassword, togglePasswordVisibility, showPassword, onSubmit }) => {
    
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,7 +24,7 @@ const LoginForm = ({ email, setEmail,
                 name='password' 
                 label='Пароль' 
                 showToggleButton 
-                togglePasswordVisibility={togglePasswordVisibility}
+                togglePasswordVisibility={togglePasswordVisibility} 
                 isPasswordVisible={showPassword}
                 required={true}
                 value={password}

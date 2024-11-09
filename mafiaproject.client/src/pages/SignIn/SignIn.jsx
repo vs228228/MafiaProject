@@ -52,7 +52,10 @@ const SignIn = () => {
         console.log('Password:', password);
         try {
             const response = await UserService.tryAuthUser(email, password);
-            console.log(response);
+            localStorage.setItem('token', response.token);
+            const userData = await UserService.getUserByEmail(email);
+            localStorage.setItem('userData', JSON.stringify(userData));
+            // console.log(response);
             toast.success('Вход выполнен успешно!');
         } catch (error) {
             toast.error('Пользователь не найден, зарегистрируйтесь или проверьте вводимые данные');
@@ -71,15 +74,17 @@ const SignIn = () => {
             toast.error('Пожалуйста, примите правила сайта и политику конфиденциальности.');
             return;
         }
-
-    try {
-                const response = await UserService.tryAddUser(username, email, password);
-                console.log(response);
-                toast.success('Регистрация прошла успешно! Вы можете войти в систему!');
-                setIsRegistering(false);
-                setUsername('');
-                setEmail('');
-                setPassword('');
+        try {
+            const response = await UserService.tryAddUser(username, email, password);
+            console.log(response);
+            toast.success('Регистрация прошла успешно! Вы можете войти в систему!');
+            const userData = await UserService.getUserByEmail(email);
+            localStorage.setItem('userData', JSON.stringify(userData));
+            
+            setIsRegistering(false);
+            setUsername('');
+            setEmail('');
+            setPassword('');
             } catch (error) {
                 console.error('Ошибка регистрации:', error);
                 toast.error('Ошибка регистрации. Проверьте введенные данные и повторите попытку.');
@@ -121,6 +126,7 @@ const SignIn = () => {
                             password={password}
                             setPassword={setPassword}
                             togglePasswordVisibility={togglePasswordVisibility}
+                            showPassword={showPassword}
                             onSubmit={handleLogin}
                             />
                         )}

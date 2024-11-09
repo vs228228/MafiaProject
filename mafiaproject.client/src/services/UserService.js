@@ -14,22 +14,30 @@ class UserService {
         }
     }
 
-    async getUserById(id) {
-        try {
-            const response = await fetch(`${UserService.baseUrl}/${id}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch user by ID');
-            }
-            return await response.json();
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    }
+    // async getUserById(id) {
+    //     try {
+    //         const response = await fetch(`${UserService.baseUrl}/${id}`);
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch user by ID');
+    //         }
+    //         return await response.json();
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw error;
+    //     }
+    // }
 
     async getUserByEmail(email) {
         try {
-            const response = await fetch(`${UserService.baseUrl}/getByEmail/${email}`);
+            const response = await fetch(`${UserService.baseUrl}/getByEmail/${email}`,
+                {
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }, 
+                }
+            );
             if (!response.ok) {
                 throw new Error('Failed to fetch user by email');
             }
@@ -108,7 +116,7 @@ class UserService {
         }
     }
 
-    async updateUser(id, username, email, photo = null) {
+    async updateUser(id, username, email, photo = null) {//при редактировании
         const userUpdate = { id, username, email };
 
         const formData = new FormData();
@@ -125,13 +133,15 @@ class UserService {
             if (!response.ok) {
                 throw new Error('Failed to update user');
             }
+            const updatedUser = await response.json();
+            return updatedUser;
         } catch (error) {
             console.error(error);
             throw error;
         }
     }
 
-    async deleteUser(id) {
+    async deleteUser(id) {//---
         try {
             const response = await fetch(`${UserService.baseUrl}?id=${id}`, {
                 method: 'DELETE',

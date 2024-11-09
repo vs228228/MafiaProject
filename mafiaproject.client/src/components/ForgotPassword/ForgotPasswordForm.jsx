@@ -7,9 +7,7 @@ const ForgotPasswordForm = ({ handleLoginClick, FaArrowLeftLong }) => {
     const [email, setEmail] = useState(''); 
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Предотвращаем перезагрузку страницы
-        
-
+        e.preventDefault(); 
     };
 
     return (
