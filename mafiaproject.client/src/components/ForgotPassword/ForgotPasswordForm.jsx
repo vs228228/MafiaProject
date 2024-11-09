@@ -16,7 +16,7 @@ const ForgotPasswordForm = ({ handleLoginClick, FaArrowLeftLong }) => {
         <div>
             <div className='Lock_icon'><CiLock size={50} /></div>
             <h2>Восстановление пароля</h2>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <Input
                     type='email'
                     name='email'
@@ -25,7 +25,7 @@ const ForgotPasswordForm = ({ handleLoginClick, FaArrowLeftLong }) => {
                     onChange={(e) => setEmail(e.target.value)} 
                     required={true}
                 />
-                <Button type='submit' text='Получить пароль' />
+                <Button type='submit' text='Получить пароль' onSubmit={handleSubmit} />
             </form>
            
             <FaArrowLeftLong

@@ -1,13 +1,27 @@
 import React from 'react';
-// import Button from '../../shared/Button/Button.jsx';
 import Input from '../../shared/Input/Input.jsx';
+import Button from '../../shared/Button/Button.jsx';
 
-const LoginForm = ({togglePasswordVisibility,showPassword, handleLogin}) => {
+const LoginForm = ({ email, setEmail, 
+    password, setPassword, 
+    togglePasswordVisibility, 
+    showPassword, onSubmit }) => {
    
-    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(email, password); 
+    };
+
     return (
-        <form onSubmit={(e) => e.preventDefault()}>
-            <Input type='text' name='username' label='Имя пользователя' required={true} />
+        <form onSubmit={handleSubmit}>
+            <Input 
+                type='email' 
+                name='email' 
+                label='Электронная почта' 
+                required={true} 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
             <Input 
                 type={showPassword ? 'text' : 'password'} 
                 name='password' 
@@ -16,7 +30,10 @@ const LoginForm = ({togglePasswordVisibility,showPassword, handleLogin}) => {
                 togglePasswordVisibility={togglePasswordVisibility}
                 isPasswordVisible={showPassword}
                 required={true}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
             />
+            <Button type="submit" onClick={handleSubmit} text='Войти'/>
         </form>
     );
 };
