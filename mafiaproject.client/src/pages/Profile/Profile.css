@@ -34,7 +34,12 @@
     justify-content: flex-end;
 }
 
-.edit_profile button:hover{
+.edit_profile a {
+    color: rgb(151, 151, 151);   
+}
+
+.edit_profile button:hover,
+a:hover{
     font-size: 1.1vw;
     color: red;
 }

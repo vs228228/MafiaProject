@@ -5,8 +5,8 @@ import UserService from '../../services/UserService';
 import {ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner'; 
-import ProfPhoto from '../../photo/image.jpg';
-// import Input from '../../shared/Input/Input'
+import ProfPhoto from '../../photo/mafia.jpg';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -14,6 +14,7 @@ const Profile = () => {
     const [editedImage, setEditedImage] = useState(ProfPhoto);
     const [editedUsername, setEditedUsername] = useState('Имя пользователя');
     const [loading, setLoading] = useState(true);
+    
 
     useEffect(() => {
         const storedUserData = JSON.parse(localStorage.getItem('userData'));
@@ -40,10 +41,10 @@ const Profile = () => {
     const handleSaveChanges = async () => {
         console.log('Сохранение изменений')
         try {
-            const updatedUser = await UserService.updateUser(userData.id, editedUsername, userData.email, editedImage);
+            const updatedUser = await UserService.updateUser(userData.id, editedUsername, userData.email, editedImage instanceof File ? editedImage : null);
             setUserData(updatedUser); 
             setIsEditing(false);
-            
+            toast.success('Изменения успешно сохранены!')
         } catch (error) {
             console.error('Ошибка при сохранении изменений:', error);
             toast.error('Не удалось сохранить изменения, попробуйте снова.');
@@ -63,7 +64,7 @@ const Profile = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setEditedImage(reader.result);
+                setEditedImage(file);
             };
             reader.readAsDataURL(file);
         }
@@ -118,7 +119,12 @@ const Profile = () => {
                         <div>Поражения: {userData ? userData.losses : 0}</div>
                     </div>
                 )}
-                {!isEditing && (
+                {!isEditing && !userData && ( 
+                    <div className="edit_profile">
+                        <Link  to="/Signin">Авторизоваться</Link> 
+                    </div>
+                )}
+                {!isEditing &&  userData &&(
                     <div className="edit_profile">
                         <button onClick={handleEditClick}>Редактировать профиль</button>
                     </div>

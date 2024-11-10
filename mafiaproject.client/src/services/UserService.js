@@ -121,7 +121,7 @@ class UserService {
 
         const formData = new FormData();
         formData.append('userUpdate', JSON.stringify(userUpdate));
-        if (photo) {
+        if (photo instanceof File) {
             formData.append('photo', photo);
         }
 
