@@ -1,32 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Profile.css';
-import Image from '../../photo/mafia.jpg';
 import Button from '../../shared/Button/Button';
+import UserService from '../../services/UserService';
+import {ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ThreeDots } from 'react-loader-spinner'; 
+import ProfPhoto from '../../photo/image.jpg';
+// import Input from '../../shared/Input/Input'
 
-const Profile = ({photoUrl}) => {
+const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
-    const [profileImage, setProfileImage] = useState(photoUrl);
-    const [username, setUsername] = useState('');
-    const [editedImage, setEditedImage] = useState(Image);
+    const [userData, setUserData] = useState(null);
+    const [editedImage, setEditedImage] = useState(ProfPhoto);
     const [editedUsername, setEditedUsername] = useState('Имя пользователя');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const storedUserData = JSON.parse(localStorage.getItem('userData'));
+        if (storedUserData) {
+            setTimeout(() => {
+                setUserData(storedUserData);
+                setEditedImage(storedUserData.photoUrl || ProfPhoto);
+                setEditedUsername(storedUserData.nick || '');
+                setLoading(false); 
+            }, 5000);
+        } else {
+            setLoading(false);
+        }
+    }, []);
 
     const handleEditClick = () => {
-        setIsEditing(true);
-        setEditedImage(profileImage);
-        setEditedUsername(username);
+        // if (userData) {
+            setIsEditing(true);
+            setEditedImage(userData.photoUrl || ProfPhoto);
+            setEditedUsername(userData.nick || '');
+        // }
     };
 
-//сохранение покуда локально, и сохраняются изменения в пределе компонента, позже свяжем с бд и будет импорт и экспорт 
-//элементов
-    const handleSaveChanges = () => {
-        setProfileImage(editedImage);
-        setUsername(editedUsername);
-        setIsEditing(false);
+    const handleSaveChanges = async () => {
+        console.log('Сохранение изменений')
+        try {
+            const updatedUser = await UserService.updateUser(userData.id, editedUsername, userData.email, editedImage);
+            setUserData(updatedUser); 
+            setIsEditing(false);
+            
+        } catch (error) {
+            console.error('Ошибка при сохранении изменений:', error);
+            toast.error('Не удалось сохранить изменения, попробуйте снова.');
+        }
     };
 
     const handleDiscardChanges = () => {
-        setEditedImage(profileImage);
-        setEditedUsername(username);
+        if (userData) {
+            setEditedImage(userData.photoUrl || ProfPhoto);
+            setEditedUsername(userData.nick || '');
+        }
         setIsEditing(false);
     };
 
@@ -41,18 +69,29 @@ const Profile = ({photoUrl}) => {
         }
     };
 
-    const handleChangeUsername = (event) => {
-        setEditedUsername(event.target.value);
-    };
-
     const handleButtonClick = () => {
         document.getElementById('fileInput').click();
     };
 
+    if (loading) {
+        return (
+            <div className="loading-container">
+                <ThreeDots 
+                    height="100" 
+                    width="100" 
+                    color="#00BFFF" 
+                    ariaLabel="loading" 
+                />
+            </div>
+        );
+    }
+
     return (
-        <div className='profile_page'>
+        <div className='profile_page'> 
+        <ToastContainer />    
             <div className='profile_page_change'>
                 {isEditing ? (
+                    
                     <div className="info_about_user">
                         <img src={editedImage} alt='User profile' className='profile_photo' />
                         <button onClick={handleButtonClick}>изменить изображение</button>
@@ -67,16 +106,16 @@ const Profile = ({photoUrl}) => {
                             <input
                                 type="text"
                                 value={editedUsername}
-                                onChange={handleChangeUsername}
+                                onChange={(e) => setEditedUsername(e.target.value)}
                             />
                         </div>
                     </div>
                 ) : (
                     <div className="info_about_user">
-                        <img src={profileImage} alt='User profile' className='profile_photo' />
-                        <div>Имя пользователя: {username}</div>
-                        <div>Победы:</div>
-                        <div>Поражения:</div>
+                        <img src={userData ? userData.photoUrl || ProfPhoto : ProfPhoto} alt='User profile' className='profile_photo' />
+                        <div>Имя пользователя: {userData ? userData.nick : 'Пользователь не авторизован'}</div>
+                        <div>Победы: {userData ? userData.wins : 0}</div>
+                        <div>Поражения: {userData ? userData.losses : 0}</div>
                     </div>
                 )}
                 {!isEditing && (

@@ -3,10 +3,7 @@ import './Input.css'
 import { IoEyeSharp } from "react-icons/io5";
 import { FaEyeSlash } from "react-icons/fa6";
 
-const Input = ({ type, name, 
-    label, required, showToggleButton, 
-    togglePasswordVisibility, 
-    isPasswordVisible, value, onChange }) => {
+const Input = ({ type, name, label, required, showToggleButton, togglePasswordVisibility, isPasswordVisible, value, onChange }) => {
     
     return (
         <div className='user-box'>
