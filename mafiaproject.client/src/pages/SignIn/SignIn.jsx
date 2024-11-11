@@ -93,7 +93,7 @@ const SignIn = () => {
     
     return (
         <div className='signIn_Block'>
-            <ToastContainer /> 
+            <ToastContainer theme="dark" /> 
             {forgetPasswordMode ? (
                 <ForgotPasswordForm 
                     handleLoginClick={handleLoginClick}

@@ -1,12 +1,28 @@
 import React from 'react';
 import './Header.css'
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
 
 const Header = () => {
 
   const location = useLocation();
+  const history = useNavigate();
 
+  const handleLogout = () => {
+    const confirmLogout = window.confirm('Вы действительно хотите выйти?');
+    if(confirmLogout){
+      localStorage.removeItem('token');
+      localStorage.removeItem('userData');
+      toast.success("Вы вышли из системы.");
+      history.push('./SignIn')
+    }
+    else{
+      toast.info("Вы остались в системе.")
+    }
+  };
 
+  const isAuthenticated = !!localStorage.getItem('token');
+  
   return (
     <div className='header'>
       <div className='header_links'>
@@ -31,7 +47,11 @@ const Header = () => {
               <NavLink to='/profile' className={location.pathname === '/profile ' ? 'active' : ''}>Профиль</NavLink>
             </li>
             <li>
-              <NavLink to='/SignIn' className={location.pathname === '/SignIn ' ? 'active' : ''}>Войти</NavLink>
+                {isAuthenticated ? (
+                    <span onClick={handleLogout} className="logout-button">Выйти</span>
+                ) : (
+                  <NavLink to='/SignIn' className={location.pathname === '/SignIn ' ? 'active' : ''}>Войти</NavLink>
+                )}
             </li>
           </nav>
         </div>

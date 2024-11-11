@@ -2,12 +2,24 @@ import React, { useState } from 'react';
 import Button from '../../shared/Button/Button';
 import Input from '../../shared/Input/Input';
 import { CiLock } from "react-icons/ci";
+import {toast} from 'react-toastify';
 
 const ForgotPasswordForm = ({ handleLoginClick, FaArrowLeftLong }) => {
     const [email, setEmail] = useState(''); 
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+        return emailRegex.test(email);
+    };
+
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
+        if (!validateEmail(email)) 
+            {
+                toast.error('Пожалуйста, введите правильный адрес электронной почты.'); 
+                return;
+            }
+        
     };
 
     return (

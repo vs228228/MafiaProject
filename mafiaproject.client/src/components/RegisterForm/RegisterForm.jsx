@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '../../shared/Input/Input';
 import CheckBox from '../../shared/CheckBoxGroup/CheckBox';
 import Button from '../../shared/Button/Button';
+import { toast } from 'react-toastify'
 
 const RegisterForm = ({
     username, setUsername,
@@ -12,6 +13,7 @@ const RegisterForm = ({
     handleRegister, togglePasswordVisibility,
     showPassword
 }) => {
+
     const handleSiteRulesChange = () => {
         setSiteRulesAccepted(prev => !prev);
     };
@@ -20,10 +22,22 @@ const RegisterForm = ({
         setPrivacyPolicyAccepted(prev => !prev);
     };
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+        return emailRegex.test(email);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!validateEmail(email)) 
+            {
+                toast.error('Пожалуйста, введите правильный адрес электронной почты.'); 
+                return;
+            }
         handleRegister(email, password, username); 
     };
+
+    
 
     return (
         <form onSubmit={handleSubmit}>
