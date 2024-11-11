@@ -24,8 +24,6 @@
     font-family: 'MyFont', sans-serif;
 }
 
-
-/* для активации ссылки */
 .header_links nav li a.active {
     color: red;
     text-decoration:underline;

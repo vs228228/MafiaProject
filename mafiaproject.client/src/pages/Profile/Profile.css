@@ -72,3 +72,11 @@ a:hover{
     font-family: 'MYfont_for_logo';
     color:rgb(145, 145, 145);
 }
+
+.loading-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 60vh;
+    font-family: 'MyFont';
+ }

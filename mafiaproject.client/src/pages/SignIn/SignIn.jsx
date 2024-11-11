@@ -6,10 +6,11 @@ import ForgotPasswordForm from '../../components/ForgotPassword/ForgotPasswordFo
 import RegisterForm from '../../components/RegisterForm/RegisterForm';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import UserService from '../../services/UserService';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
+    const navigate = useNavigate();
     const [isRegistering, setIsRegistering] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [forgetPasswordMode, setForgetPasswordMode] = useState(false);
@@ -55,6 +56,7 @@ const SignIn = () => {
             localStorage.setItem('token', response.token);
             const userData = await UserService.getUserByEmail(email);
             localStorage.setItem('userData', JSON.stringify(userData));
+            navigate('/');
             // console.log(response);
             toast.success('Вход выполнен успешно!');
         } catch (error) {
@@ -93,7 +95,7 @@ const SignIn = () => {
     
     return (
         <div className='signIn_Block'>
-            <ToastContainer theme="dark" /> 
+            {/* <ToastContainer theme="dark" />  */}
             {forgetPasswordMode ? (
                 <ForgotPasswordForm 
                     handleLoginClick={handleLoginClick}

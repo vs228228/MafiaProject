@@ -4,18 +4,24 @@ import Button from '../../shared/Button/Button';
 import UserService from '../../services/UserService';
 import {ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ThreeDots } from 'react-loader-spinner'; 
+//  import { ThreeDots } from 'react-loader-spinner'; 
+import ReactLoading from 'react-loading';
+
 import ProfPhoto from '../../photo/mafia.jpg';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState(null);
     const [editedImage, setEditedImage] = useState(ProfPhoto);
     const [editedUsername, setEditedUsername] = useState('Имя пользователя');
     const [loading, setLoading] = useState(true);
-    
 
+    const handleSignInClick = () => {
+        navigate('/SignIn');
+    };
+    
     useEffect(() => {
         const storedUserData = JSON.parse(localStorage.getItem('userData'));
         if (storedUserData) {
@@ -24,27 +30,26 @@ const Profile = () => {
                 setEditedImage(storedUserData.photoUrl || ProfPhoto);
                 setEditedUsername(storedUserData.nick || '');
                 setLoading(false); 
-            }, 5000);
+            }, 2500);
         } else {
             setLoading(false);
         }
     }, []);
 
     const handleEditClick = () => {
-        // if (userData) {
             setIsEditing(true);
             setEditedImage(userData.photoUrl || ProfPhoto);
             setEditedUsername(userData.nick || '');
-        // }
+        
     };
 
     const handleSaveChanges = async () => {
         console.log('Сохранение изменений')
         try {
-            const updatedUser = await UserService.updateUser(userData.id, editedUsername, userData.email, editedImage instanceof File ? editedImage : null);
+            const updatedUser = await UserService.updateUser(userData.id, editedUsername, userData.email, editedImage);
             setUserData(updatedUser); 
             setIsEditing(false);
-            toast.success('Изменения успешно сохранены!')
+            
         } catch (error) {
             console.error('Ошибка при сохранении изменений:', error);
             toast.error('Не удалось сохранить изменения, попробуйте снова.');
@@ -64,7 +69,7 @@ const Profile = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setEditedImage(file);
+                setEditedImage(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -74,19 +79,41 @@ const Profile = () => {
         document.getElementById('fileInput').click();
     };
 
-    if (loading) {
-        return (
-            <div className="loading-container">
-                <ThreeDots 
-                    height="100" 
-                    width="100" 
-                    color="#00BFFF" 
-                    ariaLabel="loading" 
-                />
-            </div>
-        );
-    }
+    const handleDeleteProfile = async () => {
+        if (window.confirm('Вы уверены, что хотите удалить свой профиль?')) {
+            try {
+                await UserService.deleteUser(userData.id);
+                toast.success('Профиль успешно удален!');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('token');
+                setTimeout(()=>{
+                    navigate('/SignIn');
+                }, 1500)
+               
+            } catch (error) {
+                console.error('Возникла ошибка при удалении профиля');
+                toast.error('Возникла ошибка при удалении профиля, попробуйте еще раз');
+            }
+        } else {
+            toast.info("Вы остались в системе.");
+        }
+    };
 
+    if (loading) {
+        // return (
+        //     <div className="loading-container">
+        //         <ThreeDots 
+        //             height="100" 
+        //             width="100" 
+        //             color="red" 
+        //             ariaLabel="loading" 
+        //         />
+        //     </div>
+        // );
+        return(<div className="loading-container">
+            <ReactLoading type={"spin"} color={"red"} height={50} width={50} /></div>
+        )
+    }
     return (
         <div className='profile_page'> 
         <ToastContainer />    
@@ -119,14 +146,13 @@ const Profile = () => {
                         <div>Поражения: {userData ? userData.losses : 0}</div>
                     </div>
                 )}
-                {!isEditing && !userData && ( 
+                {!isEditing && (
                     <div className="edit_profile">
-                        <Link  to="/Signin">Авторизоваться</Link> 
-                    </div>
-                )}
-                {!isEditing &&  userData &&(
-                    <div className="edit_profile">
-                        <button onClick={handleEditClick}>Редактировать профиль</button>
+                        {userData ? (
+                            <button onClick={handleEditClick}>Редактировать профиль</button>
+                        ) : (
+                            <button onClick={handleSignInClick}>Авторизоваться</button>
+                        )}
                     </div>
                 )}
             </div>
@@ -134,6 +160,7 @@ const Profile = () => {
                 <div className='button_change_or_reset'>
                     <Button text='Сохранить изменения' onClick={handleSaveChanges} />
                     <Button text='Сбросить изменения' onClick={handleDiscardChanges} />
+                    <Button text='Удалить профиль' onClick={handleDeleteProfile} />
                 </div>
             )}
         </div>

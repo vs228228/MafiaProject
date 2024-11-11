@@ -7,10 +7,14 @@ import AboutGame from './pages/AboutGame/AboutGame.jsx';
 import SignIn from './pages/SignIn/SignIn.jsx'
 import Profile from './pages/Profile/Profile.jsx';
 import LobbyWin from './pages/LobbyWin/LobbyWin.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (
     <Router>
+      <ToastContainer theme="dark"/> 
       <Header />
       <Routes>
         <Route
