@@ -57,7 +57,6 @@ const SignIn = () => {
             const userData = await UserService.getUserByEmail(email);
             localStorage.setItem('userData', JSON.stringify(userData));
             navigate('/');
-            // console.log(response);
             toast.success('Вход выполнен успешно!');
         } catch (error) {
             toast.error('Пользователь не найден, зарегистрируйтесь или проверьте вводимые данные');
@@ -92,10 +91,17 @@ const SignIn = () => {
                 toast.error('Ошибка регистрации. Проверьте введенные данные и повторите попытку.');
             }
         };
+        const handleFormSubmit = (e) => {
+            e.preventDefault(); 
+            if (isRegistering) {
+                handleRegister(email, password, username);
+            } else {
+                handleLogin(email, password);
+            }
+        };
     
     return (
         <div className='signIn_Block'>
-            {/* <ToastContainer theme="dark" />  */}
             {forgetPasswordMode ? (
                 <ForgotPasswordForm 
                     handleLoginClick={handleLoginClick}
@@ -104,7 +110,7 @@ const SignIn = () => {
             ) : (
                 <>
                     <h2>{isRegistering ? 'Регистрация' : 'Войти'}</h2>
-                    <form onSubmit={(e) => e.preventDefault()}>
+                    <form onSubmit={handleFormSubmit}>
                         {isRegistering ? (
                             <RegisterForm
                                 username={username}

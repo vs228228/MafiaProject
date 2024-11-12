@@ -39,7 +39,7 @@ const AboutGame = () => {
       
         <div className="left_images">
           <img src={cardCitizen} alt="Citizen Card" />
-          <img class='first' src={cardSpy} alt="Spy Card" />
+          <img src={cardSpy} alt="Spy Card" />
           <img src={cardDoctor} alt="Doctor Card" />
         </div>
         
@@ -67,7 +67,7 @@ const AboutGame = () => {
         
         <div className="right_images">
           <img src={cardMafia} alt="Mafia Card" />
-          <img class='first' src={cardBulletproof} alt="Doctor Card" />
+          <img src={cardBulletproof} alt="Doctor Card" />
           <img src={cardPolice} alt="Police Card" />
           
         </div>
