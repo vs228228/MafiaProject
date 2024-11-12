@@ -11,7 +11,9 @@ const LogOutLogic = () => {
             localStorage.removeItem('token');
             localStorage.removeItem('userData');
             toast.success("Вы вышли из системы.");
-            navigate('/SignIn');
+            setTimeout(()=>{
+                navigate('/SignIn');
+            }, 1500)
         } else {
             toast.info("Вы остались в системе.");
         }

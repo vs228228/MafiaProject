@@ -54,10 +54,7 @@
 {
     animation: rotate 15s infinite; 
 }
-/* .right_images img{
-    animation: rotate 25s infinite; 
-    animation-delay: 12.5s;
-} */
+
 @keyframes rotate {
     0% {
         transform: rotate(0deg); 

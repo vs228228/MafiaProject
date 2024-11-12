@@ -1,27 +1,12 @@
 import React from 'react';
 import './Header.css';
 import { NavLink, useLocation } from 'react-router-dom';
- import {toast} from 'react-toastify'
- import { useNavigate } from 'react-router-dom';
+ import LogOutLogic from '../../shared/LogOutLogic/LogOutLogic';
 
 const Header = () => {
 
   const location = useLocation();
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    const confirmLogout = window.confirm('Вы действительно хотите выйти?');
-    if(confirmLogout){
-      localStorage.removeItem('token');
-      localStorage.removeItem('userData');
-      toast.success("Вы вышли из системы.");
-      setTimeout(()=>{
-        navigate('/SignIn');
-    }, 1500)
-    }
-    else{
-      toast.info("Вы остались в системе.")
-    }
-  };
+  const { handleLogout } = LogOutLogic();
 
   const isAuthenticated = !!localStorage.getItem('token');
   
