@@ -3,11 +3,12 @@ import MafiaPicture from '../../photo/person.png';
 import './HomePage.css';
 import Button from '../../shared/Button/Button.jsx';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const HomePage = () => {
     const navigate = useNavigate();
-
     const isAuthenticated = !!localStorage.getItem('token');
+
     const handleSignInClick = () => {
         navigate('/SignIn');
     };
@@ -17,9 +18,17 @@ const HomePage = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userData');
-      };
+        const confirmLogout = window.confirm('Вы действительно хотите выйти?');
+        // toast.info("yes")
+        if (confirmLogout) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userData');
+            toast.success("Вы вышли из системы.");
+            navigate('/SignIn');
+        } else {
+            toast.info("Вы остались в системе.");
+        }
+    };
 
     return (
         <div className='home_page'>
@@ -31,11 +40,11 @@ const HomePage = () => {
                 <div className="buttons">
                     <Button text="Играть" colorClass="red" onClick={handlePlayClick} />
                     {isAuthenticated ? (
-                         <Button text="Выйти" colorClass="white" onClick={handleLogout} />
-                    ):(
-                    <Button text="Войти" colorClass="white" onClick={handleSignInClick} />
-                )}
-                    </div>
+                        <Button text="Выйти" colorClass="white" onClick={handleLogout} />
+                    ) : (
+                        <Button text="Войти" colorClass="white" onClick={handleSignInClick} />
+                    )}
+                </div>
             </div>
         </div>
     );

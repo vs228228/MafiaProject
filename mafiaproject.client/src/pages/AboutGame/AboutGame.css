@@ -49,13 +49,15 @@
     border-radius: 20px;
     opacity: 0.5;
 }
-.left_images img{
-    animation: rotate 25s infinite; 
+.left_images img,
+.right_images img
+{
+    animation: rotate 15s infinite; 
 }
-.right_images img{
+/* .right_images img{
     animation: rotate 25s infinite; 
     animation-delay: 12.5s;
-}
+} */
 @keyframes rotate {
     0% {
         transform: rotate(0deg); 

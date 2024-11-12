@@ -116,32 +116,26 @@ class UserService {
         }
     }
 
-    async updateUser(id, username, email, photo = null) {//при редактировании
+    async updateUser(id, username, email, photo = null) {
         const userUpdate = { id, username, email };
-
+    
         const formData = new FormData();
         formData.append('userUpdate', JSON.stringify(userUpdate));
-        if (photo instanceof File) {
-            formData.append('photo', photo);
+        if (photo) {
+          formData.append('photo', photo);
         }
+    
+        return fetch(UserService.baseUrl, {
+          method: 'PUT',
+          body: formData,
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to update user');
+          }
+        });
+      }
 
-        try {
-            const response = await fetch(UserService.baseUrl, {
-                method: 'PUT',
-                body: formData,
-            });
-            if (!response.ok) {
-                throw new Error('Failed to update user');
-            }
-            const updatedUser = await response.json();
-            return updatedUser;
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    }
-
-    async deleteUser(id) {//---
+    async deleteUser(id) {//+
         try {
             const response = await fetch(`${UserService.baseUrl}?id=${id}`, {
                 method: 'DELETE',
