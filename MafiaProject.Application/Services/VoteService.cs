@@ -17,7 +17,7 @@ namespace MafiaProject.Application.Services
 
         public VoteService(IUnitOfWork unitOfWork, IMapperClass mapper)
         {
-              _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task CreateVoteAsync(VoteCreateDTO voteCreateDTO)

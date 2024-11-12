@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MafiaProject.Infrastructure.Repositories
 {
-    internal class LobbyRepository : Repository<Lobby>, ILobbyRepository
+    public class LobbyRepository : Repository<Lobby>, ILobbyRepository
     {
         private readonly ApplicationDbContext _context;
 
