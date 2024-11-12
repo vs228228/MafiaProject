@@ -3,7 +3,8 @@ import MafiaPicture from '../../photo/person.png';
 import './HomePage.css';
 import Button from '../../shared/Button/Button.jsx';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import LogOutLogic from '../../shared/LogOutLogic/LogOutLogic.jsx';
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -12,23 +13,11 @@ const HomePage = () => {
     const handleSignInClick = () => {
         navigate('/SignIn');
     };
-
+    
     const handlePlayClick = () => {
         navigate('/LobbyWin');
     };
-
-    const handleLogout = () => {
-        const confirmLogout = window.confirm('Вы действительно хотите выйти?');
-        // toast.info("yes")
-        if (confirmLogout) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userData');
-            toast.success("Вы вышли из системы.");
-            navigate('/SignIn');
-        } else {
-            toast.info("Вы остались в системе.");
-        }
-    };
+    const { handleLogout } = LogOutLogic();
 
     return (
         <div className='home_page'>

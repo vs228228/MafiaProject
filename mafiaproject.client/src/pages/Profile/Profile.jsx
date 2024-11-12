@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import Button from '../../shared/Button/Button';
 import UserService from '../../services/UserService';
-import {ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 //  import { ThreeDots } from 'react-loader-spinner'; 
 import ReactLoading from 'react-loading';
-
 import ProfPhoto from '../../photo/mafia.jpg';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +28,7 @@ const Profile = () => {
                 setEditedImage(storedUserData.photoUrl || ProfPhoto);
                 setEditedUsername(storedUserData.nick || '');
                 setLoading(false); 
-            }, 2500);
+            }, 1000);
         } else {
             setLoading(false);
         }
@@ -46,7 +44,7 @@ const Profile = () => {
     const handleSaveChanges = async () => {
         console.log('Сохранение изменений')
         try {
-            const updatedUser = await UserService.updateUser(userData.id, editedUsername, userData.email, editedImage);
+            const updatedUser = await UserService.updateUser(userData.id, editedUsername, editedImage);
             setUserData(updatedUser); 
             setIsEditing(false);
             
@@ -116,7 +114,6 @@ const Profile = () => {
     }
     return (
         <div className='profile_page'> 
-        <ToastContainer />    
             <div className='profile_page_change'>
                 {isEditing ? (
                     
