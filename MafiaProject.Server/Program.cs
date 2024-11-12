@@ -26,6 +26,9 @@ namespace MafiaProject.Server
             // репозитории
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IVoteRepository, VoteRepository>();
+            builder.Services.AddScoped<IGameRepository, GameRepository>();
+            builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
             // маппер
             builder.Services.AddScoped<IMapperClass, Mapper>();
