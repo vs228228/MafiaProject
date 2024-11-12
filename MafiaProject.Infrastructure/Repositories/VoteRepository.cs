@@ -18,6 +18,38 @@ namespace MafiaProject.Infrastructure.Repositories
         {
             _context = context;
         }
+
+        public async Task CreateAsync(Vote entity)
+        {
+            await _context.Votes.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var vote = await _context.Votes.FindAsync(id);
+            if (vote != null)
+            {
+                _context.Votes.Remove(vote);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateAsync(Vote entity)
+        {
+            _context.Votes.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Vote> GetByIdAsync(int id)
+        {
+            return await _context.Votes.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Vote>> GetAllAsync()
+        {
+            return await _context.Votes.ToListAsync();
+        }
     }
 
 }
