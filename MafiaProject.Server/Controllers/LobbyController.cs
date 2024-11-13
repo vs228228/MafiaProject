@@ -46,10 +46,10 @@ namespace MafiaProject.Server.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateLobbyAsync(LobbyUpdateDTO lobbyUpdateDTO)
+        public async Task<IActionResult> CreateLobbyAsync(LobbyCreateDTO lobbyCreateDTO)
         {
-            await _lobbyService.UpdateLobbyAsync(lobbyUpdateDTO);
-            return Ok();
+            await _lobbyService.CreateLobbyAsync(lobbyCreateDTO);
+            return Created();
         }
 
         [HttpPost("{startGame}")]
@@ -76,10 +76,10 @@ namespace MafiaProject.Server.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> CreateLobbyAsync(LobbyCreateDTO lobbyCreateDTO)
+        public async Task<IActionResult> UpdateLobbyAsync(LobbyUpdateDTO lobbyUpdateDTO)
         {
-            await _lobbyService.CreateLobbyAsync(lobbyCreateDTO);
-            return Created();
+            await _lobbyService.UpdateLobbyAsync(lobbyUpdateDTO);
+            return Ok();
         }
 
         [HttpDelete]
