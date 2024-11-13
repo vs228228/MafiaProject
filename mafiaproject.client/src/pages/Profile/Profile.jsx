@@ -3,7 +3,6 @@ import './Profile.css';
 import Button from '../../shared/Button/Button';
 import UserService from '../../services/UserService';
 import { toast } from 'react-toastify';
-//  import { ThreeDots } from 'react-loader-spinner'; 
 import ReactLoading from 'react-loading';
 import ProfPhoto from '../../photo/mafia.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -15,19 +14,24 @@ const Profile = () => {
     const [editedImage, setEditedImage] = useState(ProfPhoto);
     const [editedUsername, setEditedUsername] = useState('Имя пользователя');
     const [loading, setLoading] = useState(true);
+    const [editedImageFile, setEditedImageFile] = useState(null);
 
     const handleSignInClick = () => {
         navigate('/SignIn');
     };
-    
+
     useEffect(() => {
         const storedUserData = JSON.parse(localStorage.getItem('userData'));
         if (storedUserData) {
             setTimeout(() => {
-                setUserData(storedUserData);
-                setEditedImage(storedUserData.photoUrl || ProfPhoto);
-                setEditedUsername(storedUserData.nick || '');
-                setLoading(false); 
+                UserService.getUserByEmail(storedUserData.email)
+                    .then(data => {
+                        setUserData(data);
+                        setEditedImage(data.photoUrl || ProfPhoto);
+                        setEditedUsername(data.nick || '');
+                        setLoading(false);
+                    })
+                    .catch(() => setLoading(false));
             }, 1000);
         } else {
             setLoading(false);
@@ -35,19 +39,27 @@ const Profile = () => {
     }, []);
 
     const handleEditClick = () => {
-            setIsEditing(true);
-            setEditedImage(userData.photoUrl || ProfPhoto);
-            setEditedUsername(userData.nick || '');
-        
+        setIsEditing(true);
+        setEditedImage(userData.photoUrl || ProfPhoto);
+        setEditedUsername(userData.nick || '');
     };
 
     const handleSaveChanges = async () => {
-        console.log('Сохранение изменений')
+        console.log('Сохранение изменений', { id: userData.id, nick: editedUsername, photo: editedImageFile });
+
         try {
-            const updatedUser = await UserService.updateUser(userData.id, editedUsername, editedImage);
-            setUserData(updatedUser); 
-            setIsEditing(false);
-            
+            await UserService.updateUser(userData.id, editedUsername, editedImageFile);
+
+            const updatedUser = await UserService.getUserByEmail(userData.email);
+            if (updatedUser) {
+                setUserData(updatedUser);
+                setEditedImage(updatedUser.photoUrl || ProfPhoto);
+                setEditedUsername(updatedUser.nick || '');
+                toast.success('Изменения успешно сохранены!');
+                setIsEditing(false);
+            } else {
+                throw new Error('Не удалось получить обновленные данные пользователя');
+            }
         } catch (error) {
             console.error('Ошибка при сохранении изменений:', error);
             toast.error('Не удалось сохранить изменения, попробуйте снова.');
@@ -68,6 +80,7 @@ const Profile = () => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setEditedImage(reader.result);
+                setEditedImageFile(file);
             };
             reader.readAsDataURL(file);
         }
@@ -84,10 +97,10 @@ const Profile = () => {
                 toast.success('Профиль успешно удален!');
                 localStorage.removeItem('userData');
                 localStorage.removeItem('token');
-                setTimeout(()=>{
+                setTimeout(() => {
                     navigate('/SignIn');
-                }, 1500)
-               
+                }, 1500);
+
             } catch (error) {
                 console.error('Возникла ошибка при удалении профиля');
                 toast.error('Возникла ошибка при удалении профиля, попробуйте еще раз');
@@ -98,25 +111,15 @@ const Profile = () => {
     };
 
     if (loading) {
-        // return (
-        //     <div className="loading-container">
-        //         <ThreeDots 
-        //             height="100" 
-        //             width="100" 
-        //             color="red" 
-        //             ariaLabel="loading" 
-        //         />
-        //     </div>
-        // );
-        return(<div className="loading-container">
+        return (<div className="loading-container">
             <ReactLoading type={"spin"} color={"red"} height={50} width={50} /></div>
-        )
+        );
     }
+
     return (
-        <div className='profile_page'> 
+        <div className='profile_page'>
             <div className='profile_page_change'>
                 {isEditing ? (
-                    
                     <div className="info_about_user">
                         <img src={editedImage} alt='User profile' className='profile_photo' />
                         <button onClick={handleButtonClick}>изменить изображение</button>

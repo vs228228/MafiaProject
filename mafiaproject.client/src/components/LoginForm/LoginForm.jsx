@@ -21,10 +21,8 @@ const LoginForm = ({ email, setEmail, password, setPassword, togglePasswordVisib
     };
 
     return (
-        // <form onSubmit={handleSubmit}>
+      
         <div>
-
-        
             <Input 
                 type='email' 
                 name='email' 
@@ -45,7 +43,6 @@ const LoginForm = ({ email, setEmail, password, setPassword, togglePasswordVisib
                 onChange={(e) => setPassword(e.target.value)}
             />
             <Button type="submit" onClick={handleSubmit} text='Войти'/>
-        {/* // </form> */}
         </div>
     );
 };
