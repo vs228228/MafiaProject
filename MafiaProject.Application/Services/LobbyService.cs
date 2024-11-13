@@ -58,6 +58,8 @@ namespace MafiaProject.Application.Services
 
         public async Task DeleteLobbyAsync(int id)
         {
+            var lobby = await _unitOfWork.Lobbies.GetByIdAsync(id);
+            if (lobby == null) throw new KeyNotFoundException();
             await _unitOfWork.Lobbies.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
