@@ -116,7 +116,7 @@ class UserService {
         }
     }
 
-    async updateUser(id, nick, photo = null) { // при редактированнии
+    async updateUser(id, nick, photo ) { // при редактированнии
         const formData = new FormData();
         formData.append('Id', id);
         formData.append('Nick', nick);
@@ -132,7 +132,7 @@ class UserService {
             if (!response.ok) {
                 throw new Error('Failed to update user');
             }
-            return "Ok";
+            
         } catch (error) {
             console.error(error);
             throw error;
@@ -141,7 +141,7 @@ class UserService {
 
     async deleteUser(id) {//+
         try {
-            const response = await fetch(`${UserService.baseUrl}`, {
+            const response = await fetch(`${UserService.baseUrl}?id=${id}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {

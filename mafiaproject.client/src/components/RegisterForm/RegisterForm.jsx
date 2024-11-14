@@ -40,7 +40,7 @@ const RegisterForm = ({
     
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             <Input 
                 type='text' 
                 name='username' 
@@ -75,7 +75,7 @@ const RegisterForm = ({
                 handlePrivacyPolicyChange={handlePrivacyPolicyChange}
             />
             <Button type="submit" text='Зарегистрироваться' onClick={handleSubmit} />
-        </form>
+        </div>
     );
 };
 
