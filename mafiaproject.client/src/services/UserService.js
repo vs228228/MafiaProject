@@ -122,6 +122,7 @@ class UserService {
         formData.append('Nick', nick);
         if (photo instanceof File) {
             formData.append('photo', photo);
+           
         }
 
         try {

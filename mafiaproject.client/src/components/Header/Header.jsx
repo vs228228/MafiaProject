@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.css';
 import { NavLink, useLocation } from 'react-router-dom';
- import LogOutLogic from '../../shared/LogOutLogic/LogOutLogic';
+ import LogOutLogic from '../../servicesLogic/LogOutLogic/LogOutLogic';
 
 const Header = () => {
 
