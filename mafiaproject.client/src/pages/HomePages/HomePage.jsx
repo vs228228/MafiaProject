@@ -4,7 +4,7 @@ import './HomePage.css';
 import Button from '../../shared/Button/Button.jsx';
 import { useNavigate } from 'react-router-dom';
 // import { toast } from 'react-toastify';
-import LogOutLogic from '../../shared/LogOutLogic/LogOutLogic.jsx';
+import LogOutLogic from '../../servicesLogic/LogOutLogic/LogOutLogic.jsx';
 
 const HomePage = () => {
     const navigate = useNavigate();

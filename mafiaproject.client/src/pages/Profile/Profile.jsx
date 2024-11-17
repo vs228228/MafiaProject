@@ -14,7 +14,8 @@ const Profile = () => {
     const [editedImage, setEditedImage] = useState(ProfPhoto);
     const [editedUsername, setEditedUsername] = useState('Имя пользователя');
     const [loading, setLoading] = useState(true);
-    const [editedImageFile, setEditedImageFile] = useState(null);
+    const [editedImageFile, setEditedImageFile] = useState();
+
 
     const handleSignInClick = () => {
         navigate('/SignIn');
@@ -27,7 +28,7 @@ const Profile = () => {
                 UserService.getUserByEmail(storedUserData.email)
                     .then(data => {
                         setUserData(data);
-                        setEditedImage(data.photoUrl || ProfPhoto);
+                        setEditedImage(createImagePath(data.pathToPic) || ProfPhoto);
                         setEditedUsername(data.nick || '');
                         setLoading(false);
                     })
@@ -40,21 +41,27 @@ const Profile = () => {
 
     const handleEditClick = () => {
         setIsEditing(true);
-        setEditedImage(userData.photoUrl || ProfPhoto);
+        setEditedImage(createImagePath(userData.pathToPic) || ProfPhoto);
         setEditedUsername(userData.nick || '');
     };
 
-    const handleSaveChanges = async () => {
-        console.log('Сохранение изменений', { id: userData.id, nick: editedUsername, photo: editedImageFile });
+    const createImagePath = (imagePath) => {
+        const Path = 'https://localhost:7081/';
+        return imagePath ? `${Path}${imagePath}` : null;
+    }
 
+    const handleSaveChanges = async () => {
+        // console.log('Сохранение изменений', { id: userData.id, nick: editedUsername, photo: editedImageFile });
         try {
             await UserService.updateUser(userData.id, editedUsername, editedImageFile);
 
             const updatedUser = await UserService.getUserByEmail(userData.email);
             if (updatedUser) {
                 setUserData(updatedUser);
-                setEditedImage(updatedUser.photoUrl || ProfPhoto);
+                setEditedImage(createImagePath(updatedUser.pathToPic) || ProfPhoto);
+                // console.log(updatedUser)
                 setEditedUsername(updatedUser.nick || '');
+                // console.log('Сохраненный путь к фото:', updatedUser.pathToPic);
                 toast.success('Изменения успешно сохранены!');
                 setIsEditing(false);
             } else {
@@ -68,7 +75,7 @@ const Profile = () => {
 
     const handleDiscardChanges = () => {
         if (userData) {
-            setEditedImage(userData.photoUrl || ProfPhoto);
+            setEditedImage(createImagePath(userData.pathToPic) || ProfPhoto);
             setEditedUsername(userData.nick || '');
         }
         setIsEditing(false);
@@ -140,10 +147,10 @@ const Profile = () => {
                     </div>
                 ) : (
                     <div className="info_about_user">
-                        <img src={userData ? userData.photoUrl || ProfPhoto : ProfPhoto} alt='User profile' className='profile_photo' />
-                        <div>Имя пользователя: {userData ? userData.nick : 'Пользователь не авторизован'}</div>
-                        <div>Победы: {userData ? userData.wins : 0}</div>
-                        <div>Поражения: {userData ? userData.losses : 0}</div>
+                        <img src={userData ? createImagePath(userData.pathToPic) || ProfPhoto : ProfPhoto} alt='User profile' className='profile_photo' />
+                        <div><span>Имя пользователя:</span> {userData ? userData.nick : 'Пользователь не авторизован'}</div>
+                        <div><span>Победы:</span> {userData ? userData.wins : 0}</div>
+                        <div><span>Поражения:</span> {userData ? userData.losses : 0}</div>
                     </div>
                 )}
                 {!isEditing && (
