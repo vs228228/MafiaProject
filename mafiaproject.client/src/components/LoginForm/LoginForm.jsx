@@ -11,6 +11,7 @@ const LoginForm = ({ email, setEmail, password, setPassword, togglePasswordVisib
     };
 
     const handleSubmit = (e) => {
+        console.log("default")
         e.preventDefault();
         if (!validateEmail(email)) 
             {

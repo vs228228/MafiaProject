@@ -37,8 +37,6 @@ const RegisterForm = ({
         handleRegister(email, password, username); 
     };
 
-    
-
     return (
         <div>
             <Input 

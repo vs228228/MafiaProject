@@ -48,9 +48,9 @@ const SignIn = () => {
     };
 
     const handleLogin = async (email, password) => {
-        console.log('Вход');
-        console.log('Email:', email); 
-        console.log('Password:', password);
+        // console.log('Вход');
+        // console.log('Email:', email); 
+        // console.log('Password:', password);
         try {
             const response = await UserService.tryAuthUser(email, password);
             localStorage.setItem('token', response.token);
@@ -64,12 +64,12 @@ const SignIn = () => {
     };
 
     const handleRegister = async (email, password, username) => {
-        console.log('Регистрация');
-        console.log('Имя пользователя:', username);
-        console.log('Email:', email);
-        console.log('Пароль:', password);
-        console.log('Согласие с правилами:', siteRulesAccepted);
-        console.log('Согласие с политикой конфиденциальности:', privacyPolicyAccepted);
+        // console.log('Регистрация');
+        // console.log('Имя пользователя:', username);
+        // console.log('Email:', email);
+        // console.log('Пароль:', password);
+        // console.log('Согласие с правилами:', siteRulesAccepted);
+        // console.log('Согласие с политикой конфиденциальности:', privacyPolicyAccepted);
 
         if (!siteRulesAccepted || !privacyPolicyAccepted) {
             toast.error('Пожалуйста, примите правила сайта и политику конфиденциальности.');
