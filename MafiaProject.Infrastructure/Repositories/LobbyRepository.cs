@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MafiaProject.Infrastructure.Repositories
 {
@@ -19,49 +20,69 @@ namespace MafiaProject.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task AddPlayerToLobbyAsync(Player player)
+        public async Task AddPlayerToLobbyAsync(Player player)
         {
-            throw new NotImplementedException();
+            var lobby = await _context.Lobbies
+                .Include(l => l.Players)
+                .FirstOrDefaultAsync(l => l.Id == player.LobbyId);
+
+            if (lobby != null)
+            {
+                lobby.Players.Add(player);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task CreateAsync(Lobby entity)
+        public async Task CreateAsync(Lobby entity)
         {
-            throw new NotImplementedException();
+            await _context.Lobbies.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Player>> GetAllPlayersAsync()
+        public async Task<IEnumerable<Player>> GetAllPlayersAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Players.ToListAsync();
         }
 
-        public Task<KeyValuePair<IEnumerable<Lobby>, int>> GetLobbiesAsync(int pageNumber, int pageSize)
+        public async Task<KeyValuePair<IEnumerable<Lobby>, int>> GetLobbiesAsync(int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            var totalLobbies = await _context.Lobbies.CountAsync();
+            var lobbies = await _context.Lobbies
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new KeyValuePair<IEnumerable<Lobby>, int>(lobbies, totalLobbies);
         }
 
-        public Task<bool> IsLobbyReadyForGameAsync(int lobbyId)
+
+        public async Task<bool> IsLobbyReadyForGameAsync(int lobbyId)
         {
-            throw new NotImplementedException();
+            var lobby = await _context.Lobbies
+               .Include(l => l.Players)
+               .FirstOrDefaultAsync(l => l.Id == lobbyId);
+
+            return lobby != null && lobby.Players.Count <= 10; 
         }
 
-        public Task RemovePlayerFromLobbyAsync(int playerId)
+        public async Task RemovePlayerFromLobbyAsync(int playerId)
         {
-            throw new NotImplementedException();
+            var player = await _context.Players.FindAsync(playerId);
+            if (player != null)
+            {
+                _context.Players.Remove(player);
+                await _context.SaveChangesAsync();
+            }
         }
-
-        public Task UpdateAsync(Lobby entity)
+        public async Task UpdateAsync(Lobby entity)
         {
-            throw new NotImplementedException();
+            _context.Lobbies.Update(entity);
+            await _context.SaveChangesAsync();
+
         }
-
-        Task<IEnumerable<Lobby>> IRepository<Lobby>.GetAllAsync()
+        public async Task<Lobby> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        Task<Lobby> IRepository<Lobby>.GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
+            return await _context.Lobbies.FindAsync(id);
         }
     }
 }
