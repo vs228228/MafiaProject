@@ -1,14 +1,15 @@
 import React from 'react';
 import './Header.css';
 import { NavLink, useLocation } from 'react-router-dom';
- import LogOutLogic from '../../servicesLogic/LogOutLogic/LogOutLogic';
+import LogOutLogic from '../../servicesLogic/LogOutLogic/LogOutLogic';
+import Cookies from 'js-cookie';
 
 const Header = () => {
 
   const location = useLocation();
   const { handleLogout } = LogOutLogic();
 
-  const isAuthenticated = !!localStorage.getItem('token');
+  const isAuthenticated = !!Cookies.get('token');
   
   return (
     <div className='header'>

@@ -3,19 +3,19 @@ import MafiaPicture from '../../photo/person.png';
 import './HomePage.css';
 import Button from '../../shared/Button/Button.jsx';
 import { useNavigate } from 'react-router-dom';
-// import { toast } from 'react-toastify';
 import LogOutLogic from '../../servicesLogic/LogOutLogic/LogOutLogic.jsx';
+import Cookies from 'js-cookie';
 
 const HomePage = () => {
     const navigate = useNavigate();
-    const isAuthenticated = !!localStorage.getItem('token');
+    const isAuthenticated = !!Cookies.get('token');
 
     const handleSignInClick = () => {
         navigate('/SignIn');
     };
     
     const handlePlayClick = () => {
-        navigate('/LobbyWin');
+        navigate('/LobbyWindow');
     };
     const { handleLogout } = LogOutLogic();
 

@@ -1,6 +1,7 @@
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const LogOutLogic = () => {
     const navigate = useNavigate();
@@ -8,7 +9,7 @@ const LogOutLogic = () => {
     const handleLogout = () => {
         const confirmLogout = window.confirm('Вы действительно хотите выйти?');
         if (confirmLogout) {
-            localStorage.removeItem('token');
+            Cookies.remove('token');
             localStorage.removeItem('userData');
             toast.success("Вы вышли из системы.");
             setTimeout(()=>{

@@ -73,4 +73,5 @@ class LobbyService {
     }
 }
 
-export default new LobbyService();
+const LobbyServiceInstance = new LobbyService();
+export default LobbyServiceInstance;
