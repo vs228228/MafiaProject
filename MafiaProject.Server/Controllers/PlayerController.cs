@@ -29,13 +29,6 @@ namespace MafiaProject.Server.Controllers
             return Ok(ans);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdatePlayerAsync(PlayerUpdateDTO playerUpdateDTO)
-        {
-            await _playerService.UpdatePlayerAsync(playerUpdateDTO);
-            return Ok();
-        }
-
         [HttpPost("changeMicro")]
         public async Task<IActionResult> ChangeMicroAsync(ChangeMicroDTO changeMicroDTO)
         {
@@ -54,6 +47,13 @@ namespace MafiaProject.Server.Controllers
         public async Task<IActionResult> ChangeVideoAsync(ChangeVideoDTO changeVideoDTO)
         {
             await _playerService.ChangeVideoAsync(changeVideoDTO);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdatePlayerAsync(PlayerUpdateDTO playerUpdateDTO)
+        {
+            await _playerService.UpdatePlayerAsync(playerUpdateDTO);
             return Ok();
         }
 
