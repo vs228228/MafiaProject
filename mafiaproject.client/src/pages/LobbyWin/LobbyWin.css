@@ -10,5 +10,25 @@
 .list_of_lobby{
     margin-top: 2vw;
     height: 20vh;
-    border: 2px solid rgb(158, 158, 158);
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    background: rgba(91, 91, 91, 0.5);
+}
+
+.list_of_lobby table {
+    border-collapse: collapse; 
+}
+.table-row {
+    padding-left: 20px; 
+}
+
+.list_of_lobby th {
+    padding: 1vw;
+    padding-left: 20px; 
+    font-family: MyFont;
+    font-size: 1.8vw;
+}
+
+.list_of_lobby th:not(:last-child) {
+    padding-right: 12vw; 
 }

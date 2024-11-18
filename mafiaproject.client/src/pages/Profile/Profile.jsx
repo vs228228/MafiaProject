@@ -59,9 +59,7 @@ const Profile = () => {
             if (updatedUser) {
                 setUserData(updatedUser);
                 setEditedImage(createImagePath(updatedUser.pathToPic) || ProfPhoto);
-                // console.log(updatedUser)
                 setEditedUsername(updatedUser.nick || '');
-                // console.log('Сохраненный путь к фото:', updatedUser.pathToPic);
                 toast.success('Изменения успешно сохранены!');
                 setIsEditing(false);
             } else {
