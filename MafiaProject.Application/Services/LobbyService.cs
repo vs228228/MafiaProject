@@ -16,9 +16,9 @@ namespace MafiaProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapperClass _mapper;
 
-        public LobbyService(/*IUnitOfWork unitOfWork,*/ IMapperClass mapper)
+        public LobbyService(IUnitOfWork unitOfWork, IMapperClass mapper)
         {
-            //  _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task ConnectToLobbyAsync(int lobbyId, int userId)
