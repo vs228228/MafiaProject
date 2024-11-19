@@ -18,47 +18,60 @@ namespace MafiaProject.Infrastructure.Repositories
             _context = context;
         }
 
-
-
-
-        public Task AddVoteAsync(int gameId, Vote vote)
+        public async Task AddVoteAsync(int gameId, Vote vote)
         {
+            var game = await _context.Games.Include(g => g.Votes).FirstOrDefaultAsync(g => g.Id == gameId);
+            if (game == null)
+                throw new KeyNotFoundException("Game not found.");
+
+            game.Votes.Add(vote);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CreateAsync(Game entity)
+        {
+            await _context.Games.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EndGameAsync(int gameId)
+        {
+            var game = await _context.Games.FindAsync(gameId);
+            if (game == null)
+                throw new KeyNotFoundException("Game not found.");
+
+            game.IsGameEnded = true;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Player>> GetAlivePlayersCountAsync(int gameId)
+        {
+            var players = await _context.Players
+                .Where(p => p.GameId == gameId && p.IsAlive)
+                .ToListAsync();
+
+            return players;
+        }
+
+        public async Task<IEnumerable<Vote>> GetAllVotesAsync(int gameId)
+        {
+            var votes = await _context.Votes
+                .Where(v => v.GameId == gameId)
+                .ToListAsync();
+
+            return votes;
+
             throw new NotImplementedException();
         }
 
-        public Task CreateAsync(Game entity)
+        public async Task UpdateAsync(Game entity)
         {
-            throw new NotImplementedException();
+            _context.Games.Update(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task EndGameAsync(int gameId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IEnumerable<Player>> GetAlivePlayersCountAsync(int gameId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IEnumerable<Vote>> GetAllVotesAsync(int gameId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task UpdateAsync(Game entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<Game>> IRepository<Game>.GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Game> IRepository<Game>.GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
