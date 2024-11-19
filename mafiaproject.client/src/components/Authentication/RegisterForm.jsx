@@ -2,7 +2,7 @@ import React from 'react';
 import Input from '../../shared/Input/Input';
 import CheckBox from '../../shared/CheckBoxGroup/CheckBox';
 import Button from '../../shared/Button/Button';
-import { toast } from 'react-toastify'
+import {handleSubmit as handleFormSubmit } from '../../servicesLogic/FormUtilsEmail/FormUtilsEmail';
 
 const RegisterForm = ({
     username, setUsername,
@@ -22,19 +22,8 @@ const RegisterForm = ({
         setPrivacyPolicyAccepted(prev => !prev);
     };
 
-    const validateEmail = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-        return emailRegex.test(email);
-    };
-
     const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!validateEmail(email)) 
-            {
-                toast.error('Пожалуйста, введите правильный адрес электронной почты.'); 
-                return;
-            }
-        handleRegister(email, password, username); 
+        if (handleFormSubmit(e, () => handleRegister(email, password, username), email)){ }
     };
 
     return (

@@ -6,7 +6,7 @@ import AboutAuthor from './pages/AbouAuthor/AboutAuthor';
 import AboutGame from './pages/AboutGame/AboutGame.jsx';
 import SignIn from './pages/SignIn/SignIn.jsx'
 import Profile from './pages/Profile/Profile.jsx';
-import LobbyWin from './pages/LobbyWin/LobbyWin.jsx';
+import LobbyWindow from './pages/LobbyWindow/LobbyWindow.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -37,7 +37,7 @@ function App() {
           path="/SignIn"
           element={<SignIn />}
         />
-         <Route path="/LobbyWin" element={<LobbyWin />} />
+         <Route path="/LobbyWindow" element={<LobbyWindow />} />
       </Routes>
     </Router>
   );

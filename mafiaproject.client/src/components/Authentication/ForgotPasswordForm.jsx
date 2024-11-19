@@ -1,25 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '../../shared/Button/Button';
 import Input from '../../shared/Input/Input';
 import { CiLock } from "react-icons/ci";
-import {toast} from 'react-toastify';
+import {  handleSubmit as handleFormSubmit } from '../../servicesLogic/FormUtilsEmail/FormUtilsEmail';
 
-const ForgotPasswordForm = ({ handleLoginClick, FaArrowLeftLong }) => {
-    const [email, setEmail] = useState(''); 
-
-    const validateEmail = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-        return emailRegex.test(email);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateEmail(email)) 
-            {
-                toast.error('Пожалуйста, введите правильный адрес электронной почты.'); 
-                return;
-            }
-        
+const ForgotPasswordForm = ({email, setEmail, handleLoginClick, FaArrowLeftLong }) => {
+   
+    const handleSubmit = (e) => {
+        if (handleFormSubmit(e, () => {
+            console.log('Запрос на восстановление пароля отправлен для:', email);
+        }, email)) {}
     };
 
     return (

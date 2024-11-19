@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import './ModalWindow.css';
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import EntranceLobby from './EntranceLobby';
@@ -24,27 +24,26 @@ const ModalWindow = ({ isOpen, onClose, modalType }) => {
                 <h2>{modalType === 'entrance' ? 'Войти в лобби' : 'Создать лобби'}</h2>
                 
                 {modalType === 'entrance' && (
-                    <EntranceLobby 
-                        onClose={onClose}
-                        showPassword = {showPassword}
-                        RoomId={RoomId}
-                        setRoomId={setRoomId}
-                        RoomPassword={RoomPassword}
-                        setRoomPassword={setRoomPassword}
-                        togglePasswordVisibility={togglePasswordVisibility}
-                    />
-                )}
-                {modalType === 'create' && (
-                    <CreateLobby 
-                    onClose={onClose}
-                    showPassword = {showPassword}
-                    RoomName={RoomName}
-                    setRoomName = {setRoomName}
+                <EntranceLobby 
+                    showPassword={showPassword}
                     RoomId={RoomId}
                     setRoomId={setRoomId}
                     RoomPassword={RoomPassword}
                     setRoomPassword={setRoomPassword}
-                    togglePasswordVisibility={togglePasswordVisibility} 
+                    togglePasswordVisibility={togglePasswordVisibility}
+                />
+                )}
+                {modalType === 'create' && (
+                    <CreateLobby 
+                        onClose={onClose}
+                        showPassword={showPassword}
+                        RoomName={RoomName}
+                        setRoomName={setRoomName}
+                        RoomId={RoomId}
+                        setRoomId={setRoomId}
+                        RoomPassword={RoomPassword}
+                        setRoomPassword={setRoomPassword}
+                        togglePasswordVisibility={togglePasswordVisibility} 
                     />
                 )}
             </div>

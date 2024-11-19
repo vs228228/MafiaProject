@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import './SignIn.css';
 import Button from '../../shared/Button/Button';
 import { FaArrowLeftLong } from "react-icons/fa6";
-import ForgotPasswordForm from '../../components/ForgotPassword/ForgotPasswordForm';
-import RegisterForm from '../../components/RegisterForm/RegisterForm';
-import LoginForm from '../../components/LoginForm/LoginForm';
+import ForgotPasswordForm from '../../components/Authentication/ForgotPasswordForm';
+import RegisterForm from '../../components/Authentication/RegisterForm';
+import LoginForm from '../../components/Authentication/LoginForm';
 import UserService from '../../services/UserService';
 import {toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -53,7 +54,8 @@ const SignIn = () => {
         // console.log('Password:', password);
         try {
             const response = await UserService.tryAuthUser(email, password);
-            localStorage.setItem('token', response.token);
+            // localStorage.setItem('token', response.token);
+            Cookies.set('token', response.token, { expires: 7 });
             const userData = await UserService.getUserByEmail(email);
             localStorage.setItem('userData', JSON.stringify(userData));
             navigate('/');
@@ -106,6 +108,8 @@ const SignIn = () => {
                 <ForgotPasswordForm 
                     handleLoginClick={handleLoginClick}
                     FaArrowLeftLong={FaArrowLeftLong}
+                    email={email}
+                    setEmail={setEmail}
                 />
             ) : (
                 <>
