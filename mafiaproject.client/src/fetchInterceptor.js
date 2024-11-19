@@ -3,14 +3,16 @@
     const originalFetch = window.fetch;
 
     // Функция для получения токена из cookies
-    function getAccessToken() {
-        const match = localStorage.getItem("accessToken");
-        return match;
+
+    function getCookie(name) {
+        const cookies = document.cookie.split('; '); 
+        const cookie = cookies.find(c => c.startsWith(name + '=')); 
+        return cookie ? cookie.split('=')[1] : null; 
     }
 
     // Функция для обновления токена
     async function refreshAccessToken() {
-        const refreshToken = localStorage.getItem("refreshToken")
+        const refreshToken = getCookie("refresh_token")
         if (!refreshToken) {
             throw new Error('No refresh token found');
         }
@@ -28,11 +30,10 @@
                 throw new Error('Failed to refresh token');
             }
 
-            const newAccessToken = response.headers.get('access_token');
-            if (newAccessToken) {
-                document.cookie = `access_token=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
-            }
-            return newAccessToken;
+            const data = await response.json();
+                document.cookie = `access_token=${data.token}; Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
+
+            return data.token;
         } catch (error) {
             console.error(error);
             throw error;
@@ -41,12 +42,13 @@
 
     // Перехватываем все запросы
     window.fetch = async function (url, options = {}) {
-        const accessToken = getAccessToken();
+        const accessToken = getCookie("access_token");
+        console.log(accessToken)
 
         // Если токен есть, добавляем его в заголовки
         if (accessToken) {
             options.headers = options.headers || {};
-            options.headers['Authorization'] = `Bearer ${accessToken}`;
+            options.headers['authorization'] = `Bearer ${accessToken}`;
         }
 
         // Выполняем запрос

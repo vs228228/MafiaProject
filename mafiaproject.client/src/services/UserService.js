@@ -93,19 +93,10 @@ class UserService {
 
             const data = await response.json();
 
-            localStorage.setItem('refreshToken', data.refreshToken);
-            localStorage.setItem('accessToken', data.accessToken);
 
-            // Сохраняем токены из заголовков в куки
-            const accessToken = response.headers.get('access_token');
-            const refreshToken = response.headers.get('refresh_token');
-
-            if (accessToken) {
-                document.cookie = `access_token=${accessToken}; HttpOnly; Secure; SameSite=Strict; Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
-            }
-            if (refreshToken) {
-                document.cookie = `refresh_token=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60000).toUTCString()}`;
-            }
+            document.cookie = `access_token=${data.accessToken};Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
+            document.cookie = `refresh_token=${data.refreshToken}; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60000).toUTCString()}`;
+            
 
             return "Ok";
         } catch (error) {
