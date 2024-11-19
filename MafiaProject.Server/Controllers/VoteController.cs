@@ -1,5 +1,6 @@
 ﻿using MafiaProject.Application.DTO;
 using MafiaProject.Application.interfaces;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MafiaProject.Server.Controllers
