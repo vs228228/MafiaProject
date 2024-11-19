@@ -35,7 +35,16 @@ namespace MafiaProject.Application.Services
                 throw new KeyNotFoundException("User not found");
             }
             user.isPlayer = true;
-            var player = ConvertUserToPlayer(user);
+            var player = ConvertUserToPlayer(user, lobbyId);
+            if (player == null)
+            {
+                throw new KeyNotFoundException("Player not found");
+            }
+
+            if (lobby.Players == null)
+            {
+                lobby.Players = new List<Player>();
+            }
 
             lobby.Players.Add(player);
             lobby.CountOfPlayers++;
@@ -171,18 +180,25 @@ namespace MafiaProject.Application.Services
             await _unitOfWork.Lobbies.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
-        private Player ConvertUserToPlayer(User user)
+        private Player ConvertUserToPlayer(User user, int lobbyId)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
             return new Player
             {
                 UserId = user.Id,
-                Role = "Unknown",
+                User = user,
+                LobbyId = lobbyId,
+                Position = 0, // Начальная позиция, можно изменить если нужно
+                Role = "Citizen", // Начальная роль, можно изменить если нужно
                 IsReady = false,
                 IsAlive = true,
                 IsMafia = false,
-                ConnectionId = Guid.NewGuid().ToString(),
                 IsCameraOn = false,
-                IsMicrophoneOn = false
+                IsMicrophoneOn = false,
+                ConnectionId = string.Empty, // Будет установлен при подключении к SignalR
+                GameId = 0 // Будет установлен при начале игры
             };
         }
     }
