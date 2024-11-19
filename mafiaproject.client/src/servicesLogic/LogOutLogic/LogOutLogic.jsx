@@ -10,7 +10,9 @@ const LogOutLogic = () => {
         const confirmLogout = window.confirm('Вы действительно хотите выйти?');
         if (confirmLogout) {
             Cookies.remove('token');
-            localStorage.removeItem('userData');
+            Cookies.removeItem('userData');
+            Cookies.removeItem('refreshToken');
+            localStorage.removeItem('accessToken');
             toast.success("Вы вышли из системы.");
             setTimeout(()=>{
                 navigate('/SignIn');

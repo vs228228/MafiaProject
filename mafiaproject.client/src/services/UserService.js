@@ -76,7 +76,7 @@ class UserService {
         }
     }
 
-    async tryAuthUser(email, password) {//+
+    async tryAuthUser(email, password) {
         const authDTO = { email, password };
         try {
             const response = await fetch(`${UserService.baseUrl}/TryAuth`, {
@@ -86,10 +86,19 @@ class UserService {
                 },
                 body: JSON.stringify(authDTO),
             });
+
             if (!response.ok) {
                 throw new Error('Failed to authenticate user');
             }
-            return await response.json();
+
+            const data = await response.json();
+
+
+            document.cookie = `access_token=${data.accessToken};Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
+            document.cookie = `refresh_token=${data.refreshToken}; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60000).toUTCString()}`;
+            
+
+            return "Ok";
         } catch (error) {
             console.error(error);
             throw error;
@@ -106,10 +115,21 @@ class UserService {
                 },
                 body: JSON.stringify(refreshTokenDTO),
             });
+
             if (!response.ok) {
                 throw new Error('Failed to refresh token');
             }
-            return await response.json();
+
+            const data = await response.json();
+            localStorage.setItem('accessToken', data.accessToken);
+
+            // Сохраняем новый access_token из заголовков в куки
+            const newAccessToken = response.headers.get('access_token');
+            if (newAccessToken) {
+                document.cookie = `access_token=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
+            }
+
+            return "Ok";
         } catch (error) {
             console.error(error);
             throw error;
