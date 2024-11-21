@@ -27,8 +27,10 @@ class PlayerService {
         }
     }
 
-    async changeMicro(changeMicroDTO) {
+    async changeMicro(playerId, isMicrophoneOn) {
         try {
+            const Id = playerId;
+            const changeMicroDTO = { Id, isMicrophoneOn };
             const response = await fetch(`${PlayerService.baseUrl}/changeMicro`, {
                 method: 'POST',
                 headers: {
@@ -45,8 +47,10 @@ class PlayerService {
         }
     }
 
-    async changeReady(changeReadyDTO) {
+    async changeReady(playerId, isReady) {
         try {
+            const Id = playerId;
+            const changeReadyDTO = { Id, isReady };
             const response = await fetch(`${PlayerService.baseUrl}/changeReady`, {
                 method: 'POST',
                 headers: {
@@ -63,8 +67,10 @@ class PlayerService {
         }
     }
 
-    async changeCamera(changeVideoDTO) {
+    async changeCamera(playerId, isCameraOn) {
         try {
+            const Id = playerId;
+            const changeVideoDTO = { Id, isCameraOn };
             const response = await fetch(`${PlayerService.baseUrl}/changeCamera`, {
                 method: 'POST',
                 headers: {
@@ -81,8 +87,10 @@ class PlayerService {
         }
     }
 
-    async updatePlayer(playerUpdateDTO) {
+    async updatePlayer(playerId, isAlive) {
         try {
+            const id = playerId
+            const playerUpdateDTO = { id, isAlive }
             const response = await fetch(PlayerService.baseUrl, {
                 method: 'PUT',
                 headers: {
