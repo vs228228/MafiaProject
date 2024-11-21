@@ -25,7 +25,7 @@ class LobbyService {
         return await response.json();
     }
 
-    async updateLobby(lobbyUpdateDTO) {
+    async updateLobby(lobbyUpdateDTO) { // этот метод пока не трогайте
         const response = await fetch(`${LobbyService.baseUrl}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -57,7 +57,8 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to disconnect from lobby');
     }
 
-    async createLobby(lobbyCreateDTO) {
+    async createLobby(creatorId, name, password) { // пассворд можешь нулл передавать, если его нет
+        const lobbyCreateDTO = { creatorId, name, password }
         const response = await fetch(`${LobbyService.baseUrl}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
