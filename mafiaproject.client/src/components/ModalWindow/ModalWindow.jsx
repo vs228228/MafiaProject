@@ -3,12 +3,13 @@ import './ModalWindow.css';
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import EntranceLobby from './EntranceLobby';
 import CreateLobby from './CreateLobby';
+import DeleteLobby from './DeleteLobby';
 
-const ModalWindow = ({ isOpen, onClose, modalType }) => {
+const ModalWindow = ({ isOpen, onClose, modalType, setLobbies  }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [RoomName, setRoomName] = useState('');
-    const [RoomId, setRoomId] = useState('');
     const [RoomPassword, setRoomPassword] = useState('');
+    const [creatorId, setCreatorId] = useState('');
 
     const togglePasswordVisibility = () => {
         setShowPassword(prev => !prev);
@@ -20,17 +21,17 @@ const ModalWindow = ({ isOpen, onClose, modalType }) => {
         <div className='modalWin_'>
             <div className="form_for_create_or_entrance">
                 <AiOutlineCloseCircle className="close-button" onClick={onClose} />
-                
-                <h2>{modalType === 'entrance' ? 'Войти в лобби' : 'Создать лобби'}</h2>
+                <h2>{modalType === 'entrance' ? 'Войти в лобби' : modalType === 'create' ? 'Создать лобби' : 'Удалить лобби'}</h2>
                 
                 {modalType === 'entrance' && (
                 <EntranceLobby 
                     showPassword={showPassword}
-                    RoomId={RoomId}
-                    setRoomId={setRoomId}
                     RoomPassword={RoomPassword}
                     setRoomPassword={setRoomPassword}
                     togglePasswordVisibility={togglePasswordVisibility}
+                    creatorId={creatorId}
+                    setCreatorId={setCreatorId}
+                    onClose={onClose}
                 />
                 )}
                 {modalType === 'create' && (
@@ -39,11 +40,19 @@ const ModalWindow = ({ isOpen, onClose, modalType }) => {
                         showPassword={showPassword}
                         RoomName={RoomName}
                         setRoomName={setRoomName}
-                        RoomId={RoomId}
-                        setRoomId={setRoomId}
                         RoomPassword={RoomPassword}
+                        creatorId={creatorId}
+                        setCreatorId={setCreatorId}
                         setRoomPassword={setRoomPassword}
                         togglePasswordVisibility={togglePasswordVisibility} 
+                    />
+                )}
+                {modalType === 'delete' && (
+                    <DeleteLobby 
+                        onClose={onClose}
+                        togglePasswordVisibility={togglePasswordVisibility} 
+                        setLobbies={setLobbies} 
+                        
                     />
                 )}
             </div>

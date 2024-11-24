@@ -2,23 +2,46 @@ import React from 'react';
 import './ModalWindow.css';
 import Button from '../../shared/Button/Button';
 import Input from '../../shared/Input/Input';
+import {toast } from 'react-toastify';
+import LobbyService from '../../services/LobbyService';
 
 const EntranceLobby = ({
     showPassword,
-    RoomId, setRoomId,
     RoomPassword, setRoomPassword,
-    togglePasswordVisibility
+    togglePasswordVisibility,
+    creatorId,setCreatorId
 }) => {
     
+    // const handleEnterClick = async (event) => {
+    //     event.preventDefault();
+
+    //     if (!creatorId) {
+    //         toast.error('ID комнаты не может быть пустым');
+    //         return;
+    //     }
+    //     if (!RoomPassword) {
+    //         toast.error('Пароль не может быть пустым');
+    //         return;
+    //     }
+    //     try {
+    //         // Здесь вы можете вызвать метод для подключения к лобби
+    //         await LobbyService.disconnectFromLobby(creatorId, RoomPassword); // Предполагая, что метод connectToLobby принимает ID комнаты и пароль
+    //         toast.success('Вы успешно вошли в лобби!');
+    //     } catch (error) {
+    //         console.error("Ошибка при входе в лобби:", error);
+    //         toast.error(error.message); // Отображаем сообщение ошибки
+    //     }
+    // };
+
     return (
-        <form>
+        <form >
             <Input 
                 type='text' 
                 name='roomId' 
                 label='ID комнаты' 
                 required={true}
-                value={RoomId}
-                onChange={(e) => setRoomId(e.target.value)}
+                value={creatorId}
+                onChange={(e) => setCreatorId(e.target.value)}
             />       
             <Input 
                 type={showPassword ? 'text' : 'password'} 

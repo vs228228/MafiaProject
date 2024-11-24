@@ -25,7 +25,7 @@ class LobbyService {
         return await response.json();
     }
 
-    async updateLobby(lobbyUpdateDTO) { // этот метод пока не трогайте
+    async updateLobby(lobbyUpdateDTO) { // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         const response = await fetch(`${LobbyService.baseUrl}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -57,16 +57,15 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to disconnect from lobby');
     }
 
-    async createLobby(creatorId, name, password) { // пассворд можешь нулл передавать, если его нет
+    async createLobby(creatorId, name, password) { // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ
         const lobbyCreateDTO = { creatorId, name, password }
         const response = await fetch(`${LobbyService.baseUrl}`, {
-            method: 'PUT',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(lobbyCreateDTO)
         });
         if (!response.ok) 
-        //     const errorText = await response.text(); 
-        // throw new Error(`Failed to create lobby: ${errorText}`);
+        
         throw new Error('Failed to create lobby');
         return await response.json();
         

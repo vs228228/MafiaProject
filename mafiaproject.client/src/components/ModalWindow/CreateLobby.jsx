@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ModalWindow.css';
 import Button from '../../shared/Button/Button';
 import Input from '../../shared/Input/Input';
@@ -8,44 +8,64 @@ import LobbyService from '../../services/LobbyService';
 const CreateLobby = ({
     showPassword,
     RoomName, setRoomName,
-    RoomId, setRoomId,
     RoomPassword, setRoomPassword,
-    togglePasswordVisibility,updateLobbies,
-   
+    togglePasswordVisibility,
+    updateLobbies,
 }) => {
+    //  const [creatorId, setCreatorId] = useState(null);
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId'); 
+        if (userId) {
+            // setCreatorId(userId);
+            console.log("ID пользователя:", userId); 
+        } else {
+            toast.error('ID пользователя не найден');
+        }
+    }, []);
 
     const handleCreateClick = async (event) => {
-        event.preventDefault();
-        console.log(RoomName);
-        console.log(RoomId);
-        console.log(RoomPassword);
-        
-        const lobbyCreateDTO = {
-            name: RoomName,
-            password: RoomPassword,
-            // players: [
-            //     { id: 'player1', isAlive: true }, 
-            //     { id: 'player2', isAlive: true }  
-            // ]
-        };
-        
-        try {
-            const response = await LobbyService.createLobby(lobbyCreateDTO); 
-            console.log(response);
-            toast.success(`Вы создали комнату с именем ${RoomName}`); 
-            localStorage.setItem('lobbyData', JSON.stringify(response));
-           
-            // const userData = await LobbyService.getLobbyById(RoomId);
-            // localStorage.setItem('userData', JSON.stringify(userData));
-            // updateLobbies(response);
-            
-            
-           
-        } catch (error) {
-            console.error("Ошибка при создании комнаты:", error);
-            toast.error('Ошибка при создании лобби');
-        }
-    }
+        // event.preventDefault();
+    
+        // if (!creatorId) {
+        //     toast.error('ID пользователя не найден');
+        //     return;
+        // }
+        // if (!RoomName) {
+        //     toast.error('Название комнаты обязательно для заполнения');
+        //     return;
+        // }
+
+        // try {
+        //     // Проверяем, существует ли лобби с таким названием
+        //     const existingLobbies = await LobbyService.getAllLobbies();
+        //     const isLobbyExists = existingLobbies.some(lobby => lobby.name.toLowerCase() === RoomName.toLowerCase());
+
+        //     if (isLobbyExists) {
+        //         toast.error('Лобби с таким названием уже существует');
+        //         return;
+        //     }
+
+        //     // Создаем новое лобби
+        //     const response = await LobbyService.createLobby({
+        //         creatorId,
+        //         Name: RoomName,
+        //         password: RoomPassword || null
+        //     });
+        //     console.log("Ответ от сервера:", response);
+    
+        //     if (response && response.lobbyId) {
+        //         toast.success(`Вы создали комнату с именем "${RoomName}" и ID: ${response.lobbyId}`);
+        //         localStorage.setItem('lobbyData', JSON.stringify(response));
+        //         updateLobbies(response); // Обновляем список лобби
+        //     } else {
+        //         toast.error('Не удалось получить ID созданной комнаты');
+        //     }
+        // } catch (error) {
+        //     console.error("Ошибка при создании комнаты:", error);
+        //     toast.error(error.message);
+        // }
+    };
 
     return (
         <form onSubmit={handleCreateClick}>
@@ -57,14 +77,6 @@ const CreateLobby = ({
                 value={RoomName} 
                 onChange={(e) => setRoomName(e.target.value)}
             />
-            {/* <Input 
-                type='text' 
-                name='roomId' 
-                label='ID комнаты' 
-                required={true}
-                value={RoomId} 
-                onChange={(e) => setRoomId(e.target.value)}
-            /> */}
             <Input 
                 type={showPassword ? 'text' : 'password'} 
                 name='password' 
