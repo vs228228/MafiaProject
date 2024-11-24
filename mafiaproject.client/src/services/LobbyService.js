@@ -65,7 +65,8 @@ class LobbyService {
             body: JSON.stringify(lobbyCreateDTO)
         });
         if (!response.ok) 
-        
+        //     const errorText = await response.text(); 
+        // throw new Error(`Failed to create lobby: ${errorText}`);
         throw new Error('Failed to create lobby');
         return await response.json();
         

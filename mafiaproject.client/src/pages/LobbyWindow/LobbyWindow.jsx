@@ -60,7 +60,7 @@ const LobbyWindow = () => {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             modalType={modalType}
-            setLobbies={setLobbies}
+            setLobbies={setLobbies} 
           />
         </div>
 
@@ -89,7 +89,7 @@ const LobbyWindow = () => {
                     <td>{lobby.password ? 'Закрытый' : 'Открытый'}</td> 
                     <td>{lobby.status}</td>
                     <td>
-                      <button onClick={() => handleOpenModal('entrance')}>ИГРАТЬ</button>
+                      <button onClick={() => console.log(`Вход в лобби ${lobby.name}`)}>ИГРАТЬ</button>
                     </td>
                   </tr>
                 ))}
