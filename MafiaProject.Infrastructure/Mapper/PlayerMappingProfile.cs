@@ -13,7 +13,6 @@ namespace MafiaProject.Infrastructure.Mapper
     {
         public PlayerMappingProfile() {
             CreateMap<Player, PlayerDTO>().ReverseMap();
-            CreateMap<IEnumerable<Player>, IEnumerable<PlayerDTO>>();
         }
     }
 }

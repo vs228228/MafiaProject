@@ -23,30 +23,47 @@ namespace MafiaProject.Application.Services
         }
         public async Task ConnectToLobbyAsync(int lobbyId, int userId)
         {
-            var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId); // make by repository not by service
-            if (lobby == null)
+            try
             {
-                throw new KeyNotFoundException("Lobby not found");
-            }
+                var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId); // make by repository not by service
+                if (lobby == null)
+                {
+                    throw new KeyNotFoundException("Lobby not found");
+                }
 
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null)
+                var user = await _unitOfWork.Users.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    throw new KeyNotFoundException("User not found");
+                }
+                user.isPlayer = true;
+                var player = ConvertUserToPlayer(user, lobbyId);
+                if (player == null)
+                {
+                    throw new KeyNotFoundException("Player not found");
+                }
+
+                if (lobby.Players == null)
+                {
+                    lobby.Players = new List<Player>();
+                }
+                lobby.Players.Add(player);
+                lobby.CountOfPlayers++;
+
+                if (lobby.CountOfPlayers >= 10) // Assuming 10 is the max number of players
+                {
+                    lobby.IsLobbyFull = true;
+                }
+                await _unitOfWork.Lobbies.UpdateAsync(lobby);
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
             {
-                throw new KeyNotFoundException("User not found");
+                // Логирование ошибки
+                throw new Exception($"Error connecting to lobby: {ex.Message}", ex);
             }
-            user.isPlayer = true;
-            var player = ConvertUserToPlayer(user);
-
-            lobby.Players.Add(player);
-            lobby.CountOfPlayers++;
-
-            if (lobby.CountOfPlayers >= 10) // Assuming 10 is the max number of players
-            {
-                lobby.IsLobbyFull = true;
-            }
-            await _unitOfWork.Lobbies.UpdateAsync(lobby);
-            await _unitOfWork.Users.UpdateAsync(user);
-            await _unitOfWork.SaveChangesAsync();
+        
         }
 
         public async Task CreateLobbyAsync(LobbyCreateDTO lobbyCreateDTO)
@@ -58,6 +75,8 @@ namespace MafiaProject.Application.Services
 
         public async Task DeleteLobbyAsync(int id)
         {
+            var lobby = await _unitOfWork.Lobbies.GetByIdAsync(id);
+            if (lobby == null) throw new KeyNotFoundException();
             await _unitOfWork.Lobbies.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -165,23 +184,32 @@ namespace MafiaProject.Application.Services
 
         public async Task UpdateLobbyAsync(LobbyUpdateDTO lobbyUpdateDTO)
         {
-            var ans = await _mapper.Map<LobbyUpdateDTO, Lobby>(lobbyUpdateDTO);
+            Lobby lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyUpdateDTO.Id);
+            var ans = await _mapper.Update(lobbyUpdateDTO, lobby);
             await _unitOfWork.Lobbies.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
-        private Player ConvertUserToPlayer(User user)
+        private Player ConvertUserToPlayer(User user, int lobbyId)
         {
-            return new Player
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            var player = new Player
             {
                 UserId = user.Id,
-                Role = "Unknown",
+                User = user,
+                LobbyId = lobbyId,
+                Position = 1, // Начальная позиция, можно изменить если нужно
+                Role = "Citizen", // Начальная роль, можно изменить если нужно
                 IsReady = false,
                 IsAlive = true,
                 IsMafia = false,
-                ConnectionId = Guid.NewGuid().ToString(),
                 IsCameraOn = false,
-                IsMicrophoneOn = false
+                IsMicrophoneOn = false,
+                ConnectionId = string.Empty, // Будет установлен при подключении к SignalR
             };
+            user.Player = player;
+            return player;
         }
     }
 }
