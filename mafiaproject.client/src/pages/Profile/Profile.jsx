@@ -51,7 +51,7 @@ const Profile = () => {
     }
 
     const handleSaveChanges = async () => {
-        // console.log('Сохранение изменений', { id: userData.id, nick: editedUsername, photo: editedImageFile });
+        console.log('Сохранение изменений', { id: userData.id, nick: editedUsername, photo: editedImageFile });
         try {
             await UserService.updateUser(userData.id, editedUsername, editedImageFile);
 

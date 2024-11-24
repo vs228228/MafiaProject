@@ -11,8 +11,8 @@ import Cookies from 'js-cookie';
 const LobbyWindow = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [modalType, setModalType] = useState('');
-  const [lobbies, setLobbies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [lobbies, setLobbies] = useState([]);
+  const [loading, setLoading] = useState(false);
   const isAuthenticated = !!Cookies.get('token');
   const navigate = useNavigate();
 
@@ -33,26 +33,26 @@ const LobbyWindow = () => {
         setIsModalOpen(false);
     };
 
-    const fetchLobbies = async () => {
-      setLoading(true);
-      try {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-          const allLobbies = await LobbyService.getAllLobbies();
-          setLobbies(allLobbies);
+  //   const fetchLobbies = async () => {
+  //     setLoading(true);
+  //     try {
+  //       await new Promise(resolve => setTimeout(resolve, 2000));
+  //         const allLobbies = await LobbyService.getAllLobbies();
+  //         setLobbies(allLobbies);
           
-      } catch (error) {
-          setLoading(false);
-          toast.error('Ошибка при загрузке лобби')
-        }
-    };
+  //     } catch (error) {
+  //         setLoading(false);
+  //         toast.error('Ошибка при загрузке лобби')
+  //       }
+  //   };
 
-  useEffect(() => {
-    fetchLobbies();
-  }, []);
+  // useEffect(() => {
+  //   fetchLobbies();
+  // }, []);
 
-  const updateLobbies = (newLobby) => {
-    setLobbies((prevLobbies) => [...prevLobbies, newLobby]);
-  };
+  // const updateLobbies = (newLobby) => {
+  //   setLobbies((prevLobbies) => [...prevLobbies, newLobby]);
+  // };
 
   return (
     <div className='Lobby_Win'>
@@ -64,7 +64,7 @@ const LobbyWindow = () => {
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
                 modalType={modalType}
-                updateLobbies={updateLobbies}      
+                // updateLobbies={updateLobbies}      
               />
             </div>
 
@@ -73,7 +73,7 @@ const LobbyWindow = () => {
             <div className="loading-container">
               <ReactLoading type="spin" color="red" height={50} width={50} />
             </div>
-          ) : (
+          ) : ( 
             <table>
               <thead>
                 <tr>
@@ -82,18 +82,17 @@ const LobbyWindow = () => {
                   <th>Статус</th>
                 </tr>
               </thead>
-              <tbody>
+              {/* <tbody>
                 {lobbies.map(lobby => (
                   <tr key={lobby.id}>
                     <td>{lobby.name}</td>
                     <td>{lobby.password ? 'Закрытый' : 'Открытый'}</td>
-                    {/* <td>{lobby.currentPlayers >= 10 ? 'Игра идет' : `${lobby.currentPlayers}/10 - Набор`}</td> */}
                     <button>войти</button>
                   </tr>
                 ))}
-              </tbody>
+              </tbody> */}
             </table>
-          )}
+          )} 
         </div>
         </div>
     </div>
