@@ -10,7 +10,8 @@ const CreateLobby = ({
     RoomName, setRoomName,
     RoomId, setRoomId,
     RoomPassword, setRoomPassword,
-    togglePasswordVisibility,updateLobbies
+    togglePasswordVisibility,updateLobbies,
+   
 }) => {
 
     const handleCreateClick = async (event) => {
@@ -21,19 +22,25 @@ const CreateLobby = ({
         
         const lobbyCreateDTO = {
             name: RoomName,
-            id: RoomId,
             password: RoomPassword,
+            // players: [
+            //     { id: 'player1', isAlive: true }, 
+            //     { id: 'player2', isAlive: true }  
+            // ]
         };
-
+        
         try {
             const response = await LobbyService.createLobby(lobbyCreateDTO); 
             console.log(response);
             toast.success(`Вы создали комнату с именем ${RoomName}`); 
             localStorage.setItem('lobbyData', JSON.stringify(response));
-
-            const userData = await LobbyService.getLobbyById(RoomId);//обновление данных о лобби
-            localStorage.setItem('userData', JSON.stringify(userData));
-            updateLobbies(response);
+           
+            // const userData = await LobbyService.getLobbyById(RoomId);
+            // localStorage.setItem('userData', JSON.stringify(userData));
+            // updateLobbies(response);
+            
+            
+           
         } catch (error) {
             console.error("Ошибка при создании комнаты:", error);
             toast.error('Ошибка при создании лобби');
@@ -50,14 +57,14 @@ const CreateLobby = ({
                 value={RoomName} 
                 onChange={(e) => setRoomName(e.target.value)}
             />
-            <Input 
+            {/* <Input 
                 type='text' 
                 name='roomId' 
                 label='ID комнаты' 
                 required={true}
                 value={RoomId} 
                 onChange={(e) => setRoomId(e.target.value)}
-            />
+            /> */}
             <Input 
                 type={showPassword ? 'text' : 'password'} 
                 name='password' 
