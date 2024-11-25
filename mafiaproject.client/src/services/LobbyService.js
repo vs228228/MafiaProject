@@ -48,11 +48,11 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to connect to lobby');
     }
 
-    async disconnectFromLobby(lobbyId, playerId) {
+    async disconnectFromLobby(userId, lobbyId) {
         const response = await fetch(`${LobbyService.baseUrl}/disconnectToLobby`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ lobbyId, playerId })
+            body: JSON.stringify({ lobbyId, userId })
         });
         if (!response.ok) throw new Error('Failed to disconnect from lobby');
     }
