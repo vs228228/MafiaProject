@@ -83,6 +83,8 @@ namespace MafiaProject.Application.Services
 
         public async Task DisconnectToLobbyAsync(int lobbyId, int playerId) // create new player repository and remake this method
         {
+            try
+            {
             var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId);
             if (lobby == null)
             {
@@ -108,6 +110,12 @@ namespace MafiaProject.Application.Services
             await _unitOfWork.Lobbies.UpdateAsync(lobby);
             await _unitOfWork.Users.UpdateAsync(user);
             await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Логирование ошибки
+                throw new Exception($"Error exit from lobby: {ex.Message}", ex);
+            }
         }
 
         public async Task<IEnumerable<LobbyDTO>> GetAllLobbiesAsync()
