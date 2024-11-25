@@ -39,7 +39,7 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to start game');
     }
 
-    async connectToLobby(lobbyId, userId) {
+    async connectToLobby(userId, lobbyId) {
         const response = await fetch(`${LobbyService.baseUrl}/connectToLobby`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -57,20 +57,35 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to disconnect from lobby');
     }
 
-    async createLobby(creatorId, name, password) { // �������� ������ ���� ����������, ���� ��� ���
-        const lobbyCreateDTO = { creatorId, name, password }
-        const response = await fetch(`${LobbyService.baseUrl}`, {
+    async createLobby({ creatorId, name, password }) {
+        const lobbyCreateDTO = { creatorId, name, password };
+    
+        const response = await fetch(LobbyService.baseUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(lobbyCreateDTO)
         });
-        if (!response.ok) 
-        //     const errorText = await response.text(); 
-        // throw new Error(`Failed to create lobby: ${errorText}`);
-        throw new Error('Failed to create lobby');
-        return await response.json();
-        
+    
+        console.log("Response status:", response.status); // Логируем статус ответа
+        if (response.status === 204) {
+            // console.log("Lobby created successfully, but no content returned.");
+            return; 
+        }
+        if (!response.ok) {
+            const errorText = await response.text(); 
+            console.error("Error response text:", errorText); 
+        }
+        // // Проверяем наличие тела ответа
+        const text = await response.text();
+        // console.log("Response from server:", text); // Логируем ответ от сервера
+    
+        if (!text) {
+            throw new Error('Empty response from server');
+        }
+        return JSON.parse(text);
     }
+    
+    
 
     async deleteLobby(id) {
         const response = await fetch(`${LobbyService.baseUrl}?id=${id}`, { method: 'DELETE' });

@@ -55,7 +55,7 @@
     z-index: 1; 
     font-family: MyFont;
     font-size: 1.8vw;
-    color: rgb(192, 45, 45);
+    color: rgb(167, 42, 42);
 }
 
 .list_of_lobby th::after {

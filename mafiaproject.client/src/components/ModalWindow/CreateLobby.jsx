@@ -9,15 +9,15 @@ const CreateLobby = ({
     showPassword,
     RoomName, setRoomName,
     RoomPassword, setRoomPassword,
-    togglePasswordVisibility,updateLobbies
+    togglePasswordVisibility,
+    setLobbies
 }) => {
-    //  const [creatorId, setCreatorId] = useState(null);
+    const [creatorId, setCreatorId] = useState('');
 
     useEffect(() => {
         const userId = localStorage.getItem('userId'); 
         if (userId) {
-            // setCreatorId(userId);
-            console.log("ID пользователя:", userId); 
+            setCreatorId(userId);
         } else {
             toast.error('ID пользователя не найден');
         }
@@ -25,30 +25,47 @@ const CreateLobby = ({
 
     const handleCreateClick = async (event) => {
         event.preventDefault();
-        console.log(RoomName);
-        console.log(RoomId);
-        console.log(RoomPassword);
-        
-        const lobbyCreateDTO = {
-            name: RoomName,
-            id: RoomId,
-            password: RoomPassword,
-        };
+
+        if (!creatorId) {
+            toast.error('ID пользователя не найден');
+            return;
+        }
+        if (!RoomName) {
+            toast.error('Название комнаты обязательно для заполнения');
+            return;
+        }
 
         try {
-            const response = await LobbyService.createLobby(lobbyCreateDTO); 
-            console.log(response);
-            toast.success(`Вы создали комнату с именем ${RoomName}`); 
-            localStorage.setItem('lobbyData', JSON.stringify(response));
+            // Проверяем, существует ли лобби с таким названием
+            const existingLobbies = await LobbyService.getAllLobbies();
+            const isLobbyExists = existingLobbies.some(lobby => lobby.name.toLowerCase() === RoomName.toLowerCase());
 
-            const userData = await LobbyService.getLobbyById(RoomId);//обновление данных о лобби
-            localStorage.setItem('userData', JSON.stringify(userData));
-            updateLobbies(response);
+            if (isLobbyExists) {
+                toast.error('Лобби с таким названием уже существует');
+                return;
+            }
+
+            // Создаем новое лобби
+            const LobbyData = await LobbyService.createLobby({
+                creatorId,
+                name: RoomName,
+                password: RoomPassword || '',
+            });
+
+            toast.success(`Вы создали комнату с именем "${RoomName}"`);
+            localStorage.setItem('lobbyData', JSON.stringify(LobbyData));
+            setRoomName('');
+            setRoomPassword('');
+            
+            const updatedLobbies = await LobbyService.getAllLobbies();
+            setLobbies(updatedLobbies);
         } catch (error) {
             console.error("Ошибка при создании комнаты:", error);
-            toast.error('Ошибка при создании лобби');
+            toast.error(error.message);
+            setRoomName('');
+            setRoomPassword('');
         }
-    }
+    };
 
     return (
         <form onSubmit={handleCreateClick}>
@@ -59,14 +76,6 @@ const CreateLobby = ({
                 required={true}
                 value={RoomName} 
                 onChange={(e) => setRoomName(e.target.value)}
-            />
-            <Input 
-                type='text' 
-                name='roomId' 
-                label='ID комнаты' 
-                required={true}
-                value={RoomId} 
-                onChange={(e) => setRoomId(e.target.value)}
             />
             <Input 
                 type={showPassword ? 'text' : 'password'} 

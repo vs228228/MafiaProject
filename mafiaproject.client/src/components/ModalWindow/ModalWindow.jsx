@@ -29,8 +29,6 @@ const ModalWindow = ({ isOpen, onClose, modalType, setLobbies  }) => {
                     RoomPassword={RoomPassword}
                     setRoomPassword={setRoomPassword}
                     togglePasswordVisibility={togglePasswordVisibility}
-                    creatorId={creatorId}
-                    setCreatorId={setCreatorId}
                     onClose={onClose}
                 />
                 )}
@@ -45,6 +43,7 @@ const ModalWindow = ({ isOpen, onClose, modalType, setLobbies  }) => {
                         setCreatorId={setCreatorId}
                         setRoomPassword={setRoomPassword}
                         togglePasswordVisibility={togglePasswordVisibility} 
+                        setLobbies={setLobbies} 
                     />
                 )}
                 {modalType === 'delete' && (
