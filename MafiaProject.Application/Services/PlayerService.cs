@@ -30,7 +30,7 @@ namespace MafiaProject.Application.Services
             {
                 throw new KeyNotFoundException();
             }
-            ans.IsMicrophoneOn = !changeMicroDTO.IsMicrophoneOn;
+            ans.IsMicrophoneOn = changeMicroDTO.IsMicrophoneOn;
             await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -43,7 +43,7 @@ namespace MafiaProject.Application.Services
             {
                 throw new KeyNotFoundException();
             }
-            ans.IsReady = !changeReadyDTO.IsReady;
+            ans.IsReady = changeReadyDTO.IsReady;
             await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -56,7 +56,7 @@ namespace MafiaProject.Application.Services
             {
                 throw new KeyNotFoundException();
             }
-            ans.IsCameraOn = !changeVideoDTO.IsCameraOn;
+            ans.IsCameraOn = changeVideoDTO.IsCameraOn;
             await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -91,7 +91,7 @@ namespace MafiaProject.Application.Services
             {
                 throw new KeyNotFoundException();
             }
-            ans.IsAlive = !playerUpdateDTO.IsAlive;
+            ans.IsAlive = playerUpdateDTO.IsAlive;
             await _unitOfWork.Players.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }

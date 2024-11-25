@@ -13,7 +13,7 @@ namespace MafiaProject.Infrastructure.Mapper
     {
         public VoteMappingProfile() {
             CreateMap<Vote, VoteDTO>().ReverseMap();
-            CreateMap<IEnumerable<Vote>, IEnumerable<VoteDTO>>();
+            CreateMap<VoteCreateDTO, Vote>();
         }
     }
 }
