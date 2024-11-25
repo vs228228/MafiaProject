@@ -16,9 +16,9 @@ namespace MafiaProject.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPlayerByIdAsync(int userId)
+        public async Task<IActionResult> GetPlayerByIdAsync(int playerId)
         {
-            var ans = await _playerService.GetPlayerByIdAsync(userId);
+            var ans = await _playerService.GetPlayerByIdAsync(playerId);
             return Ok(ans);
         }
 

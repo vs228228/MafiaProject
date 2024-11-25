@@ -21,49 +21,47 @@ namespace MafiaProject.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task ConnectToLobbyAsync(int lobbyId, int userId)
+        public async Task ConnectToLobbyAsync(int lobbyId, int userId, string password)
         {
-            try
-            {
+            
                 var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId); // make by repository not by service
                 if (lobby == null)
                 {
                     throw new KeyNotFoundException("Lobby not found");
                 }
+                if(lobby.Password == password || lobby.Password == null)
+                {
+                    var user = await _unitOfWork.Users.GetByIdAsync(userId);
+                    if (user == null)
+                    {
+                        throw new KeyNotFoundException("User not found");
+                    }
+                    user.isPlayer = true;
+                    var player = ConvertUserToPlayer(user, lobbyId);
+                    if (player == null)
+                    {
+                        throw new KeyNotFoundException("Player not found");
+                    }
 
-                var user = await _unitOfWork.Users.GetByIdAsync(userId);
-                if (user == null)
-                {
-                    throw new KeyNotFoundException("User not found");
-                }
-                user.isPlayer = true;
-                var player = ConvertUserToPlayer(user, lobbyId);
-                if (player == null)
-                {
-                    throw new KeyNotFoundException("Player not found");
-                }
+                    if (lobby.Players == null)
+                    {
+                        lobby.Players = new List<Player>();
+                    }
+                    lobby.Players.Add(player);
+                    lobby.CountOfPlayers++;
 
-                if (lobby.Players == null)
-                {
-                    lobby.Players = new List<Player>();
-                }
-                lobby.Players.Add(player);
-                lobby.CountOfPlayers++;
-
-                if (lobby.CountOfPlayers >= 10) // Assuming 10 is the max number of players
-                {
-                    lobby.IsLobbyFull = true;
-                }
-                await _unitOfWork.Lobbies.UpdateAsync(lobby);
-                await _unitOfWork.Users.UpdateAsync(user);
-                await _unitOfWork.SaveChangesAsync();
+                    if (lobby.CountOfPlayers >= 10) // Assuming 10 is the max number of players
+                    {
+                        lobby.IsLobbyFull = true;
+                    }
+                    await _unitOfWork.Users.UpdateAsync(user);
+                    await _unitOfWork.Lobbies.UpdateAsync(lobby);
+                    await _unitOfWork.SaveChangesAsync();
             }
-            catch (Exception ex)
+            else
             {
-                // Логирование ошибки
-                throw new Exception($"Error connecting to lobby: {ex.Message}", ex);
+                throw new KeyNotFoundException("Incorrect password");
             }
-        
         }
 
         public async Task CreateLobbyAsync(LobbyCreateDTO lobbyCreateDTO)
