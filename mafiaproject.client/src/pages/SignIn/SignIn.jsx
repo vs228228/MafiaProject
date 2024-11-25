@@ -58,6 +58,7 @@ const SignIn = () => {
             Cookies.set('token', response.token, { expires: 7 });
             const userData = await UserService.getUserByEmail(email);
             localStorage.setItem('userData', JSON.stringify(userData));
+            localStorage.setItem('userId',userData.id);
             navigate('/');
             toast.success('Вход выполнен успешно!');
         } catch (error) {

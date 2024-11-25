@@ -14,18 +14,18 @@ class UserService {
         }
     }
 
-    // async getUserById(id) {
-    //     try {
-    //         const response = await fetch(`${UserService.baseUrl}/${id}`);
-    //         if (!response.ok) {
-    //             throw new Error('Failed to fetch user by ID');
-    //         }
-    //         return await response.json();
-    //     } catch (error) {
-    //         console.error(error);
-    //         throw error;
-    //     }
-    // }
+    async getUserById(id) {
+        try {
+            const response = await fetch(`${UserService.baseUrl}/${id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch user by ID');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 
     async getUserByEmail(email) {
         try {

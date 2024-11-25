@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ModalWindow.css';
 import Button from '../../shared/Button/Button';
 import Input from '../../shared/Input/Input';
@@ -8,10 +8,20 @@ import LobbyService from '../../services/LobbyService';
 const CreateLobby = ({
     showPassword,
     RoomName, setRoomName,
-    RoomId, setRoomId,
     RoomPassword, setRoomPassword,
     togglePasswordVisibility,updateLobbies
 }) => {
+    //  const [creatorId, setCreatorId] = useState(null);
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId'); 
+        if (userId) {
+            // setCreatorId(userId);
+            console.log("ID пользователя:", userId); 
+        } else {
+            toast.error('ID пользователя не найден');
+        }
+    }, []);
 
     const handleCreateClick = async (event) => {
         event.preventDefault();
