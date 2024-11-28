@@ -9,14 +9,16 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const LobbyWindow = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
-  const [lobbies, setLobbies] = useState([]); 
+  const [lobbies, setLobbies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedLobby, setSelectedLobby] = useState(null);
+
   const isAuthenticated = !!Cookies.get('token');
   const navigate = useNavigate();
 
-  const handleOpenModal = (type) => {
+  const handleOpenModal = (type, lobby = null) => {
     if (!isAuthenticated) {
       toast.error('Пожалуйста, войдите в систему и повторите попытку');
       setTimeout(() => {
@@ -26,6 +28,10 @@ const LobbyWindow = () => {
     }
     setModalType(type);
     setIsModalOpen(true);
+
+    if (lobby && type === 'entrance') {
+      setSelectedLobby(lobby); 
+    }
   };
 
   const handleCloseModal = () => {
@@ -52,24 +58,16 @@ const LobbyWindow = () => {
     <div className='Lobby_Win'>
       <div className="lobby_win">
         <div className="Button_entrance_or_create_lobby">
-          <Button onClick={() => handleOpenModal('entrance')} text='Вход в лобби' />
           <Button onClick={() => handleOpenModal('create')} text='Создать новое лобби' />
           <Button onClick={() => handleOpenModal('delete')} text='Удалить лобби' />
-          
-          <ModalWin
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            modalType={modalType}
-            setLobbies={setLobbies} 
-          />
         </div>
 
         <div className="list_of_lobby">
-          {loading ? ( 
+          {loading ? (
             <div className="loading-container">
               <ReactLoading type="spin" color="red" height={50} width={50} />
             </div>
-          ) : ( 
+          ) : (
             <table>
               <thead>
                 <tr>
@@ -80,26 +78,33 @@ const LobbyWindow = () => {
                   <th>Действия</th>
                 </tr>
               </thead>
-              
               <tbody>
                 {lobbies.map(lobby => (
                   <tr key={lobby.id}>
                     <td>{lobby.name}</td>
                     <td>{lobby.id}</td>
-                    <td>{lobby.password ? 'Закрытый' : 'Открытый'}</td> 
+                    <td>{lobby.password ? 'Закрытый' : 'Открытый'}</td>
                     <td>{lobby.status}</td>
                     <td>
-                      <button onClick={() => console.log(`Вход в лобби ${lobby.name}`)}>ИГРАТЬ</button>
+                    <button onClick={() => handleOpenModal('entrance', lobby)}>ИГРАТЬ</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          )} 
+          )}
         </div>
       </div>
+
+      <ModalWin
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        modalType={modalType}
+        setLobbies={setLobbies}
+        lobby={selectedLobby} 
+      />
     </div>
   );
-}
+};
 
 export default LobbyWindow;

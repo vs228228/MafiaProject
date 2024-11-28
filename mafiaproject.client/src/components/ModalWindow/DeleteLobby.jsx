@@ -8,10 +8,7 @@ const DeleteLobby = ({ setLobbies, onClose }) => {
     const [roomId, setRoomId] = useState('');
 
     const handleDeleteLobby = async (event) => {
-        // const confirmDelete = window.confirm("Вы действительно хотите удалить комнату?");
-        // if (!confirmDelete) {
-        //     return; 
-        // }
+    
         event.preventDefault();
         if (!roomId) {
             toast.info('Пожалуйста, введите ID комнаты!');

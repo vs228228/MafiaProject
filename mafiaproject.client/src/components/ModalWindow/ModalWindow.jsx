@@ -5,7 +5,7 @@ import EntranceLobby from './EntranceLobby';
 import CreateLobby from './CreateLobby';
 import DeleteLobby from './DeleteLobby';
 
-const ModalWindow = ({ isOpen, onClose, modalType, setLobbies  }) => {
+const ModalWindow = ({ isOpen, onClose, modalType, setLobbies, lobby }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [RoomName, setRoomName] = useState('');
     const [RoomPassword, setRoomPassword] = useState('');
@@ -24,16 +24,15 @@ const ModalWindow = ({ isOpen, onClose, modalType, setLobbies  }) => {
                 <h2>{modalType === 'entrance' ? 'Войти в лобби' : modalType === 'create' ? 'Создать лобби' : 'Удалить лобби'}</h2>
                 
                 {modalType === 'entrance' && (
-                <EntranceLobby 
-                    showPassword={showPassword}
-                    RoomPassword={RoomPassword}
-                    setRoomPassword={setRoomPassword}
-                    togglePasswordVisibility={togglePasswordVisibility}
-                    onClose={onClose}
-                />
+                    <EntranceLobby
+                        showPassword={showPassword}
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        onClose={onClose}
+                        lobby={lobby}  // Передаем информацию о лобби
+                    />
                 )}
                 {modalType === 'create' && (
-                    <CreateLobby 
+                    <CreateLobby
                         onClose={onClose}
                         showPassword={showPassword}
                         RoomName={RoomName}
@@ -42,16 +41,15 @@ const ModalWindow = ({ isOpen, onClose, modalType, setLobbies  }) => {
                         creatorId={creatorId}
                         setCreatorId={setCreatorId}
                         setRoomPassword={setRoomPassword}
-                        togglePasswordVisibility={togglePasswordVisibility} 
-                        setLobbies={setLobbies} 
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        setLobbies={setLobbies}
                     />
                 )}
                 {modalType === 'delete' && (
-                    <DeleteLobby 
+                    <DeleteLobby
                         onClose={onClose}
-                        togglePasswordVisibility={togglePasswordVisibility} 
-                        setLobbies={setLobbies} 
-                        
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        setLobbies={setLobbies}
                     />
                 )}
             </div>

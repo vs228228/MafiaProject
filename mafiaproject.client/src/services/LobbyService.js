@@ -39,11 +39,12 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to start game');
     }
 
-    async connectToLobby(userId, lobbyId) {
+    async connectToLobby( lobbyId,userId, password) {
+    
         const response = await fetch(`${LobbyService.baseUrl}/connectToLobby`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ lobbyId, userId })
+            body: JSON.stringify({ lobbyId, userId, password })
         });
         if (!response.ok) throw new Error('Failed to connect to lobby');
     }

@@ -15,7 +15,9 @@ const CreateLobby = ({
     const [creatorId, setCreatorId] = useState('');
 
     useEffect(() => {
-        const userId = localStorage.getItem('userId'); 
+        const userId = localStorage.getItem('userId');
+        // console.log(userId) 
+      
         if (userId) {
             setCreatorId(userId);
         } else {
@@ -45,13 +47,13 @@ const CreateLobby = ({
                 return;
             }
 
-            // Создаем новое лобби
             const LobbyData = await LobbyService.createLobby({
                 creatorId,
                 name: RoomName,
                 password: RoomPassword || '',
             });
 
+           
             toast.success(`Вы создали комнату с именем "${RoomName}"`);
             localStorage.setItem('lobbyData', JSON.stringify(LobbyData));
             setRoomName('');

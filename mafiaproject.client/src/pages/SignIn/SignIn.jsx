@@ -49,16 +49,14 @@ const SignIn = () => {
     };
 
     const handleLogin = async (email, password) => {
-        // console.log('Вход');
-        // console.log('Email:', email); 
-        // console.log('Password:', password);
+    
         try {
             const response = await UserService.tryAuthUser(email, password);
-            // localStorage.setItem('token', response.token);
             Cookies.set('token', response.token, { expires: 7 });
             const userData = await UserService.getUserByEmail(email);
             localStorage.setItem('userData', JSON.stringify(userData));
             localStorage.setItem('userId',userData.id);
+            console.log(userData)
             navigate('/');
             toast.success('Вход выполнен успешно!');
         } catch (error) {
@@ -67,13 +65,7 @@ const SignIn = () => {
     };
 
     const handleRegister = async (email, password, username) => {
-        // console.log('Регистрация');
-        // console.log('Имя пользователя:', username);
-        // console.log('Email:', email);
-        // console.log('Пароль:', password);
-        // console.log('Согласие с правилами:', siteRulesAccepted);
-        // console.log('Согласие с политикой конфиденциальности:', privacyPolicyAccepted);
-
+      
         if (!siteRulesAccepted || !privacyPolicyAccepted) {
             toast.error('Пожалуйста, примите правила сайта и политику конфиденциальности.');
             return;
@@ -86,9 +78,11 @@ const SignIn = () => {
             localStorage.setItem('userData', JSON.stringify(userData));
             
             setIsRegistering(false);
+            
             setUsername('');
             setEmail('');
             setPassword('');
+
             } catch (error) {
                 console.error('Ошибка регистрации:', error);
                 toast.error('Ошибка регистрации. Проверьте введенные данные и повторите попытку.');
