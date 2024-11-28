@@ -29,7 +29,7 @@ namespace MafiaProject.Application.Services
             {
                 throw new KeyNotFoundException("Lobby not found");
             }
-            if (lobby.Password == password || lobby.Password == null)
+            if (lobby.Password == password || lobby.Password == "")
             {
                 var user = await _unitOfWork.Users.GetByIdAsync(userId);
                 if (user == null)
