@@ -4,71 +4,89 @@ import Button from '../../shared/Button/Button';
 import Input from '../../shared/Input/Input';
 import {toast } from 'react-toastify';
 import LobbyService from '../../services/LobbyService';
+import { useNavigate } from 'react-router-dom';
+import WebChat from '../../pages/WebChat/WebChat';
 
 const EntranceLobby = ({
     showPassword,
-    RoomPassword, setRoomPassword,
     togglePasswordVisibility,
-    
+    lobby,
 }) => {
-    const [lobbyId, setLobbyId] = useState('');
-    const [creatorId, setCreatorId] = useState('');
+    const [lobbyId, setLobbyId] = useState(lobby?.id || '');
+    const [RoomPassword, setRoomPassword] = useState('');
+    const [creatorId, setCreatorId] = useState(0);
+    const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     const userId = localStorage.getItem('userId'); 
-    //     if (userId) {
-    //         setCreatorId(userId);
-    //     } else {
-    //         toast.error('ID пользователя не найден');
-    //     }
-    // }, []);
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+        if (userId) {
 
-    // const handleEnterClick = async (event) => {
-    //     event.preventDefault();
+            setCreatorId(parseInt(userId, 10));
 
-        // if (!lobbyId) {
-        //     toast.error('ID комнаты не может быть пустым');
-        //     return;
-        // }
-        // if (!RoomPassword) {
-        //     toast.error('Пароль не может быть пустым');
-        //     return;
-        // }
-    //     try {
-    //         // Здесь вы можете вызвать метод для подключения к лобби
-    //         await LobbyService.connectToLobby(creatorId, lobbyId); // Предполагая, что метод connectToLobby принимает ID комнаты и пароль
-    //         toast.success('Вы успешно вошли в лобби!');
-    //     } catch (error) {
-    //         console.error("Ошибка при входе в лобби:", error);
-    //         toast.error(error.message); 
-    //     }
-    // };
+        } else {
+            toast.error('ID пользователя не найден');
+        }
+    }, []);
+
+    const handleEnterClick = async (event) => {
+        event.preventDefault();
+
+        if (!lobbyId) {
+            toast.error('ID комнаты не может быть пустым');
+            return;
+        }
+
+        if (lobby.password && !RoomPassword.trim()) {
+            toast.error('Пароль не может быть пустым');
+            return;
+        }
+        console.log('Данные для подключения:', {
+            creatorId,
+            lobbyId,
+            RoomPassword
+        });
+        try {
+            toast.info('Подключение...');
+            await LobbyService.connectToLobby(lobbyId,creatorId, RoomPassword);
+            toast.success('Вы успешно вошли в лобби!');
+            setTimeout(()=>{
+                navigate('/WebChat')
+            }, 1000)
+            
+        } catch (error) {
+            toast.error(error.message);
+            console.log(error.message)
+        }
+    }
+
 
     return (
-        <form>
-            <Input 
-                type='text' 
-                name='roomId' 
-                label='ID комнаты' 
+        <form onSubmit={handleEnterClick}>
+            <Input
+                type='text'
+                name='roomId'
+                label='ID комнаты'
                 required={true}
                 value={lobbyId}
                 onChange={(e) => setLobbyId(e.target.value)}
-            />       
-            <Input 
-                type={showPassword ? 'text' : 'password'} 
-                name='password' 
-                label='Пароль' 
-                showToggleButton 
-                togglePasswordVisibility={togglePasswordVisibility}
-                value={RoomPassword}
-                onChange={(e) => setRoomPassword(e.target.value)}
-                isPasswordVisible={showPassword}
             />
+            {lobby.password && (
+                <Input
+                    type={showPassword ? 'text' : 'password'}
+                    name='password'
+                    label='Пароль'
+                    showToggleButton
+                    togglePasswordVisibility={togglePasswordVisibility}
+                    value={RoomPassword}
+                    onChange={(e) => setRoomPassword(e.target.value)}
+                    isPasswordVisible={showPassword}
+                />
+            )}
             <div className="button_in_lobby">
-                <Button type="submit" text='Войти' />
+                <Button type="submit" text="Войти" />
             </div>
         </form>
     );
-}
+};
 
 export default EntranceLobby;
