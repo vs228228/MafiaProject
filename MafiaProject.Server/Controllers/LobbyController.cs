@@ -64,8 +64,8 @@ namespace MafiaProject.Server.Controllers
         [HttpPost("connectToLobby")]
         public async Task<IActionResult> ConnectToLobbyAsync(int lobbyId, int userId, string password = "")
         {
-            await _lobbyService.ConnectToLobbyAsync(lobbyId, userId, password);
-            return Ok();
+            var ans = await _lobbyService.ConnectToLobbyAsync(lobbyId, userId, password);
+            return Ok(ans);
         }
 
         [HttpPost("disconnectToLobby")]

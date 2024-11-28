@@ -21,42 +21,49 @@ namespace MafiaProject.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task ConnectToLobbyAsync(int lobbyId, int userId, string password)
+        public async Task<int> ConnectToLobbyAsync(int lobbyId, int userId, string password)
         {
-            
-                var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId); // make by repository not by service
-                if (lobby == null)
+
+            var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId); // make by repository not by service
+            if (lobby == null)
+            {
+                throw new KeyNotFoundException("Lobby not found");
+            }
+            if (lobby.Password == password || lobby.Password == null)
+            {
+                var user = await _unitOfWork.Users.GetByIdAsync(userId);
+                if (user == null)
                 {
-                    throw new KeyNotFoundException("Lobby not found");
+                    throw new KeyNotFoundException("User not found");
                 }
-                if(lobby.Password == password || lobby.Password == null)
+                user.isPlayer = true;
+                var player = ConvertUserToPlayer(user, lobbyId);
+                if (player == null)
                 {
-                    var user = await _unitOfWork.Users.GetByIdAsync(userId);
-                    if (user == null)
-                    {
-                        throw new KeyNotFoundException("User not found");
-                    }
-                    user.isPlayer = true;
-                    var player = ConvertUserToPlayer(user, lobbyId);
-                    if (player == null)
-                    {
-                        throw new KeyNotFoundException("Player not found");
-                    }
+                    throw new KeyNotFoundException("Player not found");
+                }
 
-                    if (lobby.Players == null)
-                    {
-                        lobby.Players = new List<Player>();
-                    }
-                    lobby.Players.Add(player);
-                    lobby.CountOfPlayers++;
+                var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync();
+                var players = await _mapper.Map<IEnumerable<Player>, IEnumerable<PlayerDTO>>(ans);
+                int position = GetFreePosition(players);
+                player.Position = position;
 
-                    if (lobby.CountOfPlayers >= 10) // Assuming 10 is the max number of players
-                    {
-                        lobby.IsLobbyFull = true;
-                    }
-                    await _unitOfWork.Users.UpdateAsync(user);
-                    await _unitOfWork.Lobbies.UpdateAsync(lobby);
-                    await _unitOfWork.SaveChangesAsync();
+                if (lobby.Players == null)
+                {
+                    lobby.Players = new List<Player>();
+                }
+                lobby.Players.Add(player);
+                lobby.CountOfPlayers++;
+
+                if (lobby.CountOfPlayers >= 10) // Assuming 10 is the max number of players
+                {
+                    lobby.IsLobbyFull = true;
+                }
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.Lobbies.UpdateAsync(lobby);
+                await _unitOfWork.SaveChangesAsync();
+                user = await _unitOfWork.Users.GetByIdAsync(userId);
+                return user.Player.Id;
             }
             else
             {
@@ -83,31 +90,31 @@ namespace MafiaProject.Application.Services
         {
             try
             {
-            var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId);
-            if (lobby == null)
-            {
-                throw new KeyNotFoundException("Lobby not found");
-            }
+                var lobby = await _unitOfWork.Lobbies.GetByIdAsync(lobbyId);
+                if (lobby == null)
+                {
+                    throw new KeyNotFoundException("Lobby not found");
+                }
 
-            var player = await _unitOfWork.Players.GetByIdAsync(playerId);
+                var player = await _unitOfWork.Players.GetByIdAsync(playerId);
 
-            if (player == null)
-            {
-                throw new KeyNotFoundException("Player not found");
-            }
+                if (player == null)
+                {
+                    throw new KeyNotFoundException("Player not found");
+                }
 
-            lobby.Players.Remove(player);
-            lobby.CountOfPlayers--;
-            var user = await _unitOfWork.Users.GetByIdAsync(player.UserId);
-            user.isPlayer = false;
+                lobby.Players.Remove(player);
+                lobby.CountOfPlayers--;
+                var user = await _unitOfWork.Users.GetByIdAsync(player.UserId);
+                user.isPlayer = false;
 
-            if (lobby.CountOfPlayers < 10) // Assuming 10 is the max number of players
-            {
-                lobby.IsLobbyFull = false;
-            }
-            await _unitOfWork.Lobbies.UpdateAsync(lobby);
-            await _unitOfWork.Users.UpdateAsync(user);
-            await _unitOfWork.SaveChangesAsync();
+                if (lobby.CountOfPlayers < 10) // Assuming 10 is the max number of players
+                {
+                    lobby.IsLobbyFull = false;
+                }
+                await _unitOfWork.Lobbies.UpdateAsync(lobby);
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -159,14 +166,14 @@ namespace MafiaProject.Application.Services
                 throw new KeyNotFoundException();
             }
             int num = 0;
-            foreach(Player player in lobby.Players)
+            foreach (Player player in lobby.Players)
             {
-                if(player.IsReady == true)
+                if (player.IsReady == true)
                 {
                     num++;
                 }
             }
-            if(lobby.CountOfPlayers == 10 && num == 10)
+            if (lobby.CountOfPlayers == 10 && num == 10)
             {
                 var game = new Game
                 {
@@ -216,6 +223,25 @@ namespace MafiaProject.Application.Services
             };
             user.Player = player;
             return player;
+        }
+
+        private int GetFreePosition(IEnumerable<PlayerDTO> players)
+        {
+            int[] arr = new int[11];
+            int pos = 1;
+            foreach (PlayerDTO player in players)
+            {
+                arr[player.Position]++;
+            }
+            for (int i = 1; i < 11; i++)
+            {
+                if (arr[i] == 0)
+                {
+                    pos = i;
+                    break;
+                }
+            }
+            return pos;
         }
     }
 }
