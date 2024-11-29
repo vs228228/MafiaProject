@@ -43,7 +43,7 @@ namespace MafiaProject.Application.Services
                     throw new KeyNotFoundException("Player not found");
                 }
 
-                var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync();
+                var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync(lobby.Id);
                 var players = await _mapper.Map<IEnumerable<Player>, IEnumerable<PlayerDTO>>(ans);
                 int position = GetFreePosition(players);
                 player.Position = position;
