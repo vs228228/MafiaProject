@@ -131,7 +131,7 @@ namespace MafiaProject.Application.Services
 
         public async Task<IEnumerable<PlayerDTO>> GetAllPlayersAsync(int lobbyId)
         {
-            var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync();
+            var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync(lobbyId);
             return await _mapper.Map<IEnumerable<Player>, IEnumerable<PlayerDTO>>(ans);
         }
 

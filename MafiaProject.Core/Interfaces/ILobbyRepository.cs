@@ -11,6 +11,7 @@ namespace MafiaProject.Core.Interfaces
         // public Task RemovePlayerFromLobbyAsync(Player player);
         public Task RemovePlayerFromLobbyAsync(int playerId);
         public Task<IEnumerable<Player>> GetAllPlayersAsync();
+        public Task<IEnumerable<Player>> GetAllPlayersAsync(int lobbyId);
 
         public Task<bool> IsLobbyReadyForGameAsync(int lobbyId);
 
