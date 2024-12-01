@@ -28,7 +28,7 @@ const ModalWindow = ({ isOpen, onClose, modalType, setLobbies, lobby }) => {
                         showPassword={showPassword}
                         togglePasswordVisibility={togglePasswordVisibility}
                         onClose={onClose}
-                        lobby={lobby}  // Передаем информацию о лобби
+                        lobby={lobby}  
                     />
                 )}
                 {modalType === 'create' && (
