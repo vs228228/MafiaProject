@@ -44,6 +44,15 @@ namespace MafiaProject.Infrastructure.Repositories
             return await _context.Players.ToListAsync();
         }
 
+        public async Task<IEnumerable<Player>> GetAllPlayersAsync(int lobbyId)
+        {
+
+            return await _context.Players
+            .Where(player => player.LobbyId == lobbyId)
+            .ToListAsync();
+
+        }
+
         public async Task<KeyValuePair<IEnumerable<Lobby>, int>> GetLobbiesAsync(int pageNumber, int pageSize)
         {
             var totalLobbies = await _context.Lobbies.CountAsync();
@@ -80,6 +89,7 @@ namespace MafiaProject.Infrastructure.Repositories
             await _context.SaveChangesAsync();
 
         }
+        
         public async Task<Lobby> GetByIdAsync(int id)
         {
             return await _context.Lobbies.FindAsync(id);

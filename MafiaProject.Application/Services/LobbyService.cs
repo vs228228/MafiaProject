@@ -29,7 +29,7 @@ namespace MafiaProject.Application.Services
             {
                 throw new KeyNotFoundException("Lobby not found");
             }
-            if (lobby.Password == password || lobby.Password == null)
+            if (lobby.Password == password || lobby.Password == "")
             {
                 var user = await _unitOfWork.Users.GetByIdAsync(userId);
                 if (user == null)
@@ -43,7 +43,7 @@ namespace MafiaProject.Application.Services
                     throw new KeyNotFoundException("Player not found");
                 }
 
-                var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync();
+                var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync(lobby.Id);
                 var players = await _mapper.Map<IEnumerable<Player>, IEnumerable<PlayerDTO>>(ans);
                 int position = GetFreePosition(players);
                 player.Position = position;
@@ -131,7 +131,7 @@ namespace MafiaProject.Application.Services
 
         public async Task<IEnumerable<PlayerDTO>> GetAllPlayersAsync(int lobbyId)
         {
-            var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync();
+            var ans = await _unitOfWork.Lobbies.GetAllPlayersAsync(lobbyId);
             return await _mapper.Map<IEnumerable<Player>, IEnumerable<PlayerDTO>>(ans);
         }
 

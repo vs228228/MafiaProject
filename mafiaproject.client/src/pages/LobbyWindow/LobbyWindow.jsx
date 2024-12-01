@@ -18,6 +18,8 @@ const LobbyWindow = () => {
   const isAuthenticated = !!Cookies.get('token');
   const navigate = useNavigate();
 
+  // const userId = localStorage.getItem('userId');
+  
   const handleOpenModal = (type, lobby = null) => {
     if (!isAuthenticated) {
       toast.error('Пожалуйста, войдите в систему и повторите попытку');
@@ -26,12 +28,21 @@ const LobbyWindow = () => {
       }, 2000);
       return;
     }
+
+    if (lobby && type === 'entrance') {
+      if(lobby.countOfPlayers >= 10){
+        toast.info("Комната переполнена. Невозможно войти.");
+        return;
+      }
+      else{
+        setSelectedLobby(lobby); 
+      }
+    }
+
     setModalType(type);
     setIsModalOpen(true);
 
-    if (lobby && type === 'entrance') {
-      setSelectedLobby(lobby); 
-    }
+   
   };
 
   const handleCloseModal = () => {
@@ -42,6 +53,8 @@ const LobbyWindow = () => {
     setLoading(true);
     try {
       const allLobbies = await LobbyService.getAllLobbies();
+      //  console.log(allLobbies)
+      
       setLobbies(allLobbies);
     } catch (error) {
       toast.error('Ошибка при загрузке лобби');
@@ -84,7 +97,7 @@ const LobbyWindow = () => {
                     <td>{lobby.name}</td>
                     <td>{lobby.id}</td>
                     <td>{lobby.password ? 'Закрытый' : 'Открытый'}</td>
-                    <td>{lobby.status}</td>
+                    <td>{lobby.countOfPlayers}  / 10</td>
                     <td>
                     <button onClick={() => handleOpenModal('entrance', lobby)}>ИГРАТЬ</button>
                     </td>

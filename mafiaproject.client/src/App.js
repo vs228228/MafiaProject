@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import HomePage from './pages/HomePages/HomePage';
 import AboutAuthor from './pages/AbouAuthor/AboutAuthor';
@@ -9,13 +9,15 @@ import Profile from './pages/Profile/Profile.jsx';
 import LobbyWindow from './pages/LobbyWindow/LobbyWindow.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import WebChat from './pages/WebChat/WebChat.jsx';
 
 function App() {
+  const location = useLocation();
   return (
-    <Router>
+    <>
       <ToastContainer theme="dark"/> 
-      <Header />
+      {location.pathname !== '/WebChat' && <Header />}
+      {/* <Header/> */}
       <Routes>
         <Route
           path="/"
@@ -38,8 +40,9 @@ function App() {
           element={<SignIn />}
         />
          <Route path="/LobbyWindow" element={<LobbyWindow />} />
+         <Route path="/WebChat" element={<WebChat />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

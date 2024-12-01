@@ -8,4 +8,4 @@ const WebChat = () => {
   )
 }
 
-export default WebChat
+export default WebChat;
