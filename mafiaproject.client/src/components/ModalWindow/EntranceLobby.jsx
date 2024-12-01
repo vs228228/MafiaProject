@@ -53,12 +53,12 @@ const EntranceLobby = ({
             RoomPassword
         });
         try {
-            toast.info('Подключение...');
-            await LobbyService.connectToLobby(lobbyId,creatorId, RoomPassword);
+            
+            await LobbyService.connectToLobby(lobbyId, creatorId, RoomPassword);
             toast.success('Вы успешно вошли в лобби!');
             setTimeout(()=>{
-                navigate('/WebChat')
-            }, 1000)
+                navigate('/WebChat', { state: { lobbyId, creatorId } }); // Передаем данные через state
+            }, 500)
             
         } catch (error) {
         
