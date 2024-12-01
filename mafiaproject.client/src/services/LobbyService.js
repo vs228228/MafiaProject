@@ -39,8 +39,8 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to start game');
     }
 
-    async connectToLobby( lobbyId,userId, password = "") {//+
 
+    async connectToLobby( lobbyId,userId, password = "") {//+
         const connect = {
             lobbyId, userId, password
         }
