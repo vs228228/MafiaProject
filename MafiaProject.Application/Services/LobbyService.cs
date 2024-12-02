@@ -36,11 +36,6 @@ namespace MafiaProject.Application.Services
                 {
                     throw new KeyNotFoundException("User not found");
                 }
-
-                if (user.isPlayer == true)
-                {
-                    throw new KeyNotFoundException("Player is already exist");
-                }
                 user.isPlayer = true;
                 var player = ConvertUserToPlayer(user, lobbyId);
                 if (player == null)
@@ -171,8 +166,7 @@ namespace MafiaProject.Application.Services
                 throw new KeyNotFoundException();
             }
             int num = 0;
-            var players = await _unitOfWork.Lobbies.GetAllPlayersAsync(lobbyId);
-            foreach (Player player in players)
+            foreach (Player player in lobby.Players)
             {
                 if (player.IsReady == true)
                 {
@@ -185,7 +179,7 @@ namespace MafiaProject.Application.Services
                 {
                     Name = lobby.Name,
                     State = "Started",
-                    Players = (ICollection<Player>)players,
+                    Players = lobby.Players,
                     CountOfAlive = 10,
                     CountOfMafia = 3,
                     IsGameEnded = false,

@@ -71,7 +71,6 @@ namespace MafiaProject.Server
             builder.Services.AddAutoMapper(typeof(LobbyMappingProfile));
             builder.Services.AddAutoMapper(typeof(PlayerMappingProfile));
             builder.Services.AddAutoMapper(typeof(VoteMappingProfile));
-            builder.Services.AddAutoMapper(typeof(GameMappingProfile));
 
             // PasswordHasher
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
