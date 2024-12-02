@@ -5,14 +5,14 @@ import Input from '../../shared/Input/Input';
 import {toast } from 'react-toastify';
 import LobbyService from '../../services/LobbyService';
 import { useNavigate } from 'react-router-dom';
-import WebChat from '../../pages/WebChat/WebChat';
 
 const EntranceLobby = ({
     showPassword,
     togglePasswordVisibility,
     lobby,
 }) => {
-    const [lobbyId, setLobbyId] = useState(lobby?.id || '');
+    
+    const [lobbyId, setLobbyId] = useState(lobby?.id ? parseInt(lobby.id, 10) : '');
     const [RoomPassword, setRoomPassword] = useState('');
     const [creatorId, setCreatorId] = useState(0);
     const navigate = useNavigate();
@@ -27,6 +27,13 @@ const EntranceLobby = ({
             toast.error('ID пользователя не найден');
         }
     }, []);
+
+    const handleLobbyIdChange = (value) => {
+        const numericValue = value === '' ? '' : parseInt(value, 10);
+        if (!isNaN(numericValue)) {
+            setLobbyId(numericValue);
+        }
+    };
 
     const handleEnterClick = async (event) => {
         event.preventDefault();
@@ -46,15 +53,16 @@ const EntranceLobby = ({
             RoomPassword
         });
         try {
-            toast.info('Подключение...');
-            await LobbyService.connectToLobby(lobbyId,creatorId, RoomPassword);
+            
+            await LobbyService.connectToLobby(lobbyId, creatorId, RoomPassword);
             toast.success('Вы успешно вошли в лобби!');
             setTimeout(()=>{
-                navigate('/WebChat')
-            }, 1000)
+                navigate('/WebChat', { state: { lobbyId, creatorId } }); // Передаем данные через state
+            }, 500)
             
         } catch (error) {
-            toast.error(error.message);
+        
+            toast.error('Ошибка подключения, повторите еще раз');
             console.log(error.message)
         }
     }
@@ -68,7 +76,7 @@ const EntranceLobby = ({
                 label='ID комнаты'
                 required={true}
                 value={lobbyId}
-                onChange={(e) => setLobbyId(e.target.value)}
+                onChange={(e) => handleLobbyIdChange(e.target.value)}
             />
             {lobby.password && (
                 <Input

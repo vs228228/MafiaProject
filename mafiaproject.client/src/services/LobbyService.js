@@ -13,7 +13,7 @@ class LobbyService {
         return await response.json();
     }
 
-    async getAllLobbies() {
+    async getAllLobbies() {//+
         const response = await fetch(`${LobbyService.baseUrl}/getAll`);
         if (!response.ok) throw new Error('Failed to fetch all lobbies');
         return await response.json();
@@ -39,8 +39,8 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to start game');
     }
 
-    async connectToLobby( lobbyId,userId, password = "") {
 
+    async connectToLobby( lobbyId,userId, password = "") {//+
         const connect = {
             lobbyId, userId, password
         }
@@ -61,7 +61,7 @@ class LobbyService {
         if (!response.ok) throw new Error('Failed to disconnect from lobby');
     }
 
-    async createLobby({ creatorId, name, password }) {
+    async createLobby({ creatorId, name, password }) {//+
         const lobbyCreateDTO = { creatorId, name, password };
     
         const response = await fetch(LobbyService.baseUrl, {
@@ -91,7 +91,7 @@ class LobbyService {
     
     
 
-    async deleteLobby(id) {
+    async deleteLobby(id) {//+
         const response = await fetch(`${LobbyService.baseUrl}?id=${id}`, { method: 'DELETE' });
         if (!response.ok) throw new Error('Failed to delete lobby');
     }
