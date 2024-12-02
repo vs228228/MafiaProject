@@ -69,9 +69,9 @@ namespace MafiaProject.Server.Controllers
         }
 
         [HttpPost("disconnectToLobby")]
-        public async Task<IActionResult> DisconnectToLobbyAsync(int lobbyId, int playerId)
+        public async Task<IActionResult> DisconnectToLobbyAsync(DisconnectDTO disconnectDTO)
         {
-            await _lobbyService.DisconnectToLobbyAsync(lobbyId, playerId);
+            await _lobbyService.DisconnectToLobbyAsync(disconnectDTO.lobbyId, disconnectDTO.playerId);;
             return Ok();
         }
 

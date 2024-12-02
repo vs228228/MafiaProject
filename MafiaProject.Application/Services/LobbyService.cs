@@ -37,10 +37,10 @@ namespace MafiaProject.Application.Services
                     throw new KeyNotFoundException("User not found");
                 }
 
-                if (user.isPlayer == true)
+                /*if (user.isPlayer == true)
                 {
                     throw new KeyNotFoundException("Player is already exist");
-                }
+                }*/
                 user.isPlayer = true;
                 var player = ConvertUserToPlayer(user, lobbyId);
                 if (player == null)
