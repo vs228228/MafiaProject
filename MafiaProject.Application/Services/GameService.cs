@@ -26,7 +26,7 @@ namespace MafiaProject.Application.Services
         {
             var game = await _unitOfWork.Games.GetByIdAsync(gameId);
             var arrPlayer = game.Players;
-            string[] roles = {"Mafia", "Civilian", "Civilian", "Godfather", "Civilian", "Doctor", "Civilian", "Civilian", "Mafia", "Sheriff"};
+            string[] roles = { "Mafia", "Civilian", "Civilian", "Godfather", "Civilian", "Doctor", "Civilian", "Civilian", "Mafia", "Sheriff" };
             int[] array = Enumerable.Range(1, 10).ToArray(); // Создаем массив от 1 до 10
             Random rand = new Random();
 
@@ -73,18 +73,18 @@ namespace MafiaProject.Application.Services
 
         public async Task DoctorHealAsync(DoctorDTO doctorDTO)
         {
-            //var player = await _unitOfWork.Players.GetByIdAsync(doctorDTO.HealId);
-            //var game = await _unitOfWork.Games.GetByIdAsync(player.GameId);
-            //if (doctorDTO.HealId != game.WhoLastHealed)
-            //{
-            //    game.WhoLastHealed = doctorDTO.HealId;
-            //}
-            //else
-            //{
-            //    game.WhoLastHealed = 0;
-            //}
-            //await _unitOfWork.Games.UpdateAsync(game);
-            //await _unitOfWork.SaveChangesAsync();
+            var player = await _unitOfWork.Players.GetByIdAsync(doctorDTO.HealId);
+            var game = await _unitOfWork.Games.GetByIdAsync((int)player.GameId);
+            if (doctorDTO.HealId != game.WhoLastHealed)
+            {
+                game.WhoLastHealed = doctorDTO.HealId;
+            }
+            else
+            {
+                game.WhoLastHealed = 0;
+            }
+            await _unitOfWork.Games.UpdateAsync(game);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Player>> GetAlivePlayersAsync(int gameId)
@@ -129,7 +129,8 @@ namespace MafiaProject.Application.Services
 
                 ans = arr[0];
 
-                for (int j = 1; j < arr.Length; j++) {
+                for (int j = 1; j < arr.Length; j++)
+                {
                     if (arr[j] != ans)
                     {
                         ans = 0;
@@ -162,12 +163,12 @@ namespace MafiaProject.Application.Services
 
         public async Task MafiaShootAsync(MafiaDTO mafiaVote)
         {
-            //var player = await _unitOfWork.Players.GetByIdAsync(mafiaVote.TargetId);
-            //var game = await _unitOfWork.Games.GetByIdAsync(player.GameId);
-            //var vote = await _mapper.Map<MafiaDTO, Vote>(mafiaVote);
-            //game.Votes.Add(vote);
-            //await _unitOfWork.Games.UpdateAsync(game);
-            //await _unitOfWork.SaveChangesAsync();
+            var player = await _unitOfWork.Players.GetByIdAsync(mafiaVote.TargetId);
+            var game = await _unitOfWork.Games.GetByIdAsync((int)player.GameId);
+            var vote = await _mapper.Map<MafiaDTO, Vote>(mafiaVote);
+            game.Votes.Add(vote);
+            await _unitOfWork.Games.UpdateAsync(game);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task NextPlayerTalk(PlayerTalkDTO playerTalkDTO)
@@ -211,8 +212,9 @@ namespace MafiaProject.Application.Services
 
         public async Task UpdateGameAsync(UpdateGameDTO updateGameDTO)
         {
-            var game = await _mapper.Map<UpdateGameDTO, Game>(updateGameDTO);
-            await _unitOfWork.Games.UpdateAsync(game);
+            Game game = await _unitOfWork.Games.GetByIdAsync(updateGameDTO.Id);
+            var ans = await _mapper.Update(updateGameDTO, game);
+            await _unitOfWork.Games.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
     }
