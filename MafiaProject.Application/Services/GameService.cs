@@ -15,11 +15,13 @@ namespace MafiaProject.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapperClass _mapper;
+        private readonly ISignalSender _signalSender;
 
-        public GameService(IUnitOfWork unitOfWork, IMapperClass mapper)
+        public GameService(IUnitOfWork unitOfWork, IMapperClass mapper, ISignalSender signalSender)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _signalSender = signalSender;
         }
 
         public async Task AssignRolesAsync(int gameId)
@@ -179,9 +181,9 @@ namespace MafiaProject.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public Task NotifyPlayersAsync(int gameId, string message)
+        public async Task NotifyPlayersAsync(int gameId, string message)
         {
-            throw new NotImplementedException();
+            await _signalSender.SendMessageAll(gameId, message);
         }
 
         public async Task<bool> PoliceCheckAsync(PoliceDTO policeDTO)
@@ -200,9 +202,9 @@ namespace MafiaProject.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task StartGame(int gameId)
+        public async Task StartGame(int gameId)
         {
-            throw new NotImplementedException();
+            await _signalSender.StartGame(gameId);
         }
 
         public Task StartNextRound(int gameId)
