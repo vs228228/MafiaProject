@@ -10,7 +10,7 @@ namespace MafiaProject.Application.interfaces
     {
         public Task StartGame(int lobbyId);
         public Task EndGame(int gameId);
-        public Task SendMessageAll(int gameId, string message);
+        public Task SendMessageAll(int gameId, string message, string name);
         public Task SendPersonalMessage(int gameId, int playerId, string message);
     }
 }

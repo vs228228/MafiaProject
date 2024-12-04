@@ -113,13 +113,14 @@ namespace MafiaProject.Application.Services
             }
         }
 
-        public async Task<bool> IsKilledAsync(int gameId)
+        private async Task<int> IsKilledAsync(int gameId)
         {
             var game = await _unitOfWork.Games.GetByIdAsync(gameId);
             int i = 0;
             int[] arr = new int[game.Votes.Count];
             int ans = 0;
             bool solver = false;
+            int result = 0;
             if (game.CountOfMafia == game.Votes.Count)
             {
 
@@ -135,11 +136,11 @@ namespace MafiaProject.Application.Services
                 {
                     if (arr[j] != ans)
                     {
-                        ans = 0;
+                        ans = -1;
                         break;
                     }
                 }
-                if (ans != 0 && ans != game.WhoLastHealed)
+                if (ans != -1 && ans != game.WhoLastHealed)
                 {
                     solver = true;
                 }
@@ -155,12 +156,14 @@ namespace MafiaProject.Application.Services
             if (solver)
             {
                 var player = await _unitOfWork.Players.GetByIdAsync(ans);
+                result = player.Id;
                 player.IsAlive = false;
+                game.Players.Remove(player);
                 await _unitOfWork.Players.UpdateAsync(player);
             }
             await _unitOfWork.Games.UpdateAsync(game);
             await _unitOfWork.SaveChangesAsync();
-            return solver;
+            return result;
         }
 
         public async Task MafiaShootAsync(MafiaDTO mafiaVote)
@@ -183,7 +186,7 @@ namespace MafiaProject.Application.Services
 
         public async Task NotifyPlayersAsync(int gameId, string message)
         {
-            await _signalSender.SendMessageAll(gameId, message);
+            await _signalSender.SendMessageAll(gameId, message, "Notify");
         }
 
         public async Task<bool> PoliceCheckAsync(PoliceDTO policeDTO)
@@ -192,24 +195,106 @@ namespace MafiaProject.Application.Services
             return player.IsMafia;
         }
 
-        public Task ProcessDayAction(int gameId)
+        public async Task ProcessDayAction(int gameId)
         {
-            throw new NotImplementedException();
+            var game = await _unitOfWork.Games.GetByIdAsync(gameId);
+            var votes = game.Votes;
+            int[] arr = new int[1000000];
+            int ans = 0;
+            int max = 1;
+            foreach (var vote in votes)
+            {
+                arr[vote.PlayerToKickId]++;
+            }
+
+            for(int i = 0; i < arr.Length; i++)
+            {
+                if(max < arr[i])
+                {
+                    max = arr[i];
+                    ans = i;
+                }
+            }
+            var player = await _unitOfWork.Players.GetByIdAsync(ans);
+            player.IsAlive = false;
+            game.Players.Remove(player);
+            await _signalSender.SendMessageAll(gameId, "The " + player.Position.ToString() + "th was voted", "Vote");
+            await _unitOfWork.Players.UpdateAsync(player);
+            await _unitOfWork.Games.UpdateAsync(game);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public Task ProcessNightAction(int gameId)
+        public async Task ProcessNightAction(int gameId)
         {
-            throw new NotImplementedException();
+            var killedPlayerId = await IsKilledAsync(gameId);
+            var game = await _unitOfWork.Games.GetByIdAsync(gameId);
+            game.Votes.Clear();
+            if (killedPlayerId != 0)
+            {
+                var player = await _unitOfWork.Players.GetByIdAsync(killedPlayerId);
+                await _signalSender.SendMessageAll(gameId, "The " + player.Position.ToString() + "th was killed at night", "MafiaKill");
+            }
+            else
+            {
+                await _signalSender.SendMessageAll(gameId, "Nobody was killed at night", "MafiaKill");
+            }
+            await _unitOfWork.Games.UpdateAsync(game);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task StartGame(int gameId)
         {
             await _signalSender.StartGame(gameId);
+            await AssignRolesAsync(gameId);
+            var game = await _unitOfWork.Games.GetByIdAsync(gameId);
+            foreach (var player in game.Players)
+            {
+                await _signalSender.SendPersonalMessage(gameId, player.Id, "Your role is " + player.Role);
+            }
+
+            foreach (var player in game.Players)
+            {
+                if (player.IsMafia)
+                {
+                    player.IsCameraOn = true;
+                }
+            }
+
+            await _signalSender.SendMessageAll(gameId, "Знакомство мафии началось. У вас есть 60 секунд.", "MafiaStart");
+            await Task.Delay(60000);
+
+            foreach (var player in game.Players)
+            {
+                if (player.IsMafia)
+                {
+                    player.IsCameraOn = false;
+                }
+            }
+
+            await _signalSender.SendMessageAll(gameId, "Время знакомства закончилось.", "MafiaStop");
         }
 
-        public Task StartNextRound(int gameId)
+        public async Task StartNextRound(int gameId)
         {
-            throw new NotImplementedException();
+            var game = await _unitOfWork.Games.GetByIdAsync(gameId);
+            game.RoundNumber++;
+            var players = game.Players;
+            int n = 0;
+            foreach (var player in players)
+            {
+                if (player.IsAlive)
+                {
+                    n++;
+                }
+                if (n == game.RoundNumber)
+                {
+                    player.IsMicrophoneOn = true;
+                    await _unitOfWork.Players.UpdateAsync(player);
+                    break;
+                }
+            }
+            await _unitOfWork.Games.UpdateAsync(game);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateGameAsync(UpdateGameDTO updateGameDTO)
@@ -219,5 +304,15 @@ namespace MafiaProject.Application.Services
             await _unitOfWork.Games.UpdateAsync(ans);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task AddVoteCandidate(int gameId, int candidateId, int WhoAddId)
+        {
+            var game = await _unitOfWork.Games.GetByIdAsync(gameId);
+            var player = await _unitOfWork.Players.GetByIdAsync(candidateId);
+            game.VoteCandidates.Add(player);
+            await _unitOfWork.Games.UpdateAsync(game);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
     }
 }

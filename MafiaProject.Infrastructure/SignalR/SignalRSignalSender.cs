@@ -25,7 +25,7 @@ namespace MafiaProject.Infrastructure.SignalR
             await _hubContext.Clients.Group($"Game_{gameId}").SendAsync("EndGame", gameId);
         }
 
-        public async Task SendMessageAll(int gameId, string message)
+        public async Task SendMessageAll(int gameId, string message, string name)
         {
             await _hubContext.Clients.Group($"Game_{gameId}").SendAsync("ReceiveMessage", message);
         }

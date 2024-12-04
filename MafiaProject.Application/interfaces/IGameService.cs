@@ -23,7 +23,7 @@ namespace MafiaProject.Application.interfaces
 
         public Task<bool> GodfatherCheckAsync(GodfatherDTO godfatherDTO);
 
-        public Task<bool> IsKilledAsync(int gameId);
+        public Task AddVoteCandidate(int gameId, int candidateId, int WhoAddId);
 
         public Task NextPlayerTalk(PlayerTalkDTO playerTalkDTO); // тут в общем в дто будет передаваться два поля - gameId и PlayerId - это тот плеер, который говорил
 
