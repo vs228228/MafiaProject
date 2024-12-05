@@ -9,6 +9,8 @@ import UserService from '../../services/UserService';
 import {toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
+
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -17,6 +19,7 @@ const SignIn = () => {
     const [forgetPasswordMode, setForgetPasswordMode] = useState(false);
     const [siteRulesAccepted, setSiteRulesAccepted] = useState(false);
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+    const { t } = useTranslation();
     
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -58,22 +61,22 @@ const SignIn = () => {
             localStorage.setItem('userId',userData.id);
             console.log(userData)
             navigate('/');
-            toast.success('Вход выполнен успешно!');
+            toast.success(t('toastSuccess.SuccessfullyEntered'));
         } catch (error) {
-            toast.error('Пользователь не найден, зарегистрируйтесь или проверьте вводимые данные');
+            toast.error(t('toastError.UserNotFound'));
         }
     };
 
     const handleRegister = async (email, password, username) => {
       
         if (!siteRulesAccepted || !privacyPolicyAccepted) {
-            toast.error('Пожалуйста, примите правила сайта и политику конфиденциальности.');
+            toast.info(t('toastInfo.PrivacyPolicy'));
             return;
         }
         try {
             const response = await UserService.tryAddUser(username, email, password);
             console.log(response);
-            toast.success('Регистрация прошла успешно! Вы можете войти в систему!');
+            toast.success(t('toastSuccess.SuccessRegistration'));
             const userData = await UserService.getUserByEmail(email);
             localStorage.setItem('userData', JSON.stringify(userData));
             
@@ -85,7 +88,7 @@ const SignIn = () => {
 
             } catch (error) {
                 console.error('Ошибка регистрации:', error);
-                toast.error('Ошибка регистрации. Проверьте введенные данные и повторите попытку.');
+                toast.error(t('toastError.RegistrationError'));
             }
         };
         const handleFormSubmit = (e) => {
@@ -108,7 +111,7 @@ const SignIn = () => {
                 />
             ) : (
                 <>
-                    <h2>{isRegistering ? 'Регистрация' : 'Войти'}</h2>
+                    <h2>{isRegistering ? t('register') : t('login')}</h2>
                     <form onSubmit={handleFormSubmit}>
                         {isRegistering ? (
                             <RegisterForm
@@ -145,7 +148,7 @@ const SignIn = () => {
                                 <Button
                                     onClick={handleRegisterClick}
                                     className="register-button"
-                                    text='Зарегистрироваться'
+                                    text={t('register')}
                                 />
                             ) : (
                                 <FaArrowLeftLong
@@ -160,7 +163,7 @@ const SignIn = () => {
                             className="forgetPassword" 
                             onClick={handleForgotPasswordClick} 
                         > 
-                            Забыли пароль?
+                            {t('forgotPassword.forgotPassword')}
                         </span>
                     )}
                 </>

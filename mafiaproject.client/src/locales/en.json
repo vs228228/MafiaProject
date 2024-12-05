@@ -1,0 +1,77 @@
+{
+    "main": "Main",
+    "aboutGame": "About Game",
+    "aboutAuthors": "About Authors",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "post":"Email",
+    "password":"password",
+    "username":"username",
+    "register":"register", 
+    "roomName":"Room name",
+    "delete":"Delete",
+    "IdRoom":"room id",
+    "roomId":"Room with id",
+    "notFound":"not found",
+    "changePhoto":"Change image",
+    "wins":"wins:",
+    "defeats":"defeats:",
+
+  "Profile":{
+      "editProfile":"Edit profile",
+      "logIn": "log in",
+      "SaveChanges":"Save Changes",
+      "ResetChanges":"Reset changes",
+      "DeleteProfile":"Delete profile"
+    },
+
+    "stateLobby":{
+      "create":"Create",
+      "createLobby":"Create lobby",
+      "entranceInLobby":"enter the lobby",
+      "deleteLobby":"delete lobby",
+      "play":"play"
+    },
+
+    "forgotPassword": {
+    "forgotPassword":"Forgot your password?",
+    "title": "Password Recovery",
+    "emailLabel": "Enter your email",
+    "submitButton": "Retrieve Password"
+  },
+    "toastError":{
+      "personIdNotFound":"User ID not found",
+      "RoomNameRequired":"Room name is required",
+      "NamAlreadyExists":"A lobby with this name already exists",
+      "errorCreating":"Error creating room",
+      "errorDelete":"Error when deleting lobby:",
+      "errorLoading":"Error loading lobby",
+      "ConnectionError":"Connection error, please try again",
+      "idPersonNotFound":"User ID not found",
+      "IdRoomIsEmpty":"Room ID cannot be empty",
+      "passwordIsNotEmpty":"Password cannot be empty",
+      "EntranceInSystem":"Please log in and try again",
+      "FailedSave":"Failed to save changes, please try again.",
+      "ErrorDeleteProfile":"There was an error deleting your profile, please try again",
+      "UserNotFound":"User not found, please register or check your entered data",
+      "RegistrationError":"Registration error. Check the entered information and try again."
+    },
+    "toastSuccess":{
+      "createdRoom":"You have created a room named",
+      "lobbyWithId":"Lobby with ID",
+      "SuccessDelete":"successfully deleted",
+      "SuccessfullyEntered":"Login successful",
+      "SuccessfullyDelete":"Profile successfully deleted!",
+      "SuccessfullySave":"Changes saved successfully!",
+      "SuccessRegistration":"Registration was successful! You can log in!"
+      
+    },
+    "toastInfo":{
+      "InputId":"Please enter room ID!",
+      "roomIsCrowded":"The room is crowded. Unable to login.",
+      "question":"Are you sure you want to delete your profile?",
+      "RemainLogged":"You remain logged in.",
+      "PrivacyPolicy":"Please accept the site rules and privacy policy."
+    }
+  }

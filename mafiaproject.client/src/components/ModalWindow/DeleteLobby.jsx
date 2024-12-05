@@ -3,21 +3,24 @@ import Input from '../../shared/Input/Input';
 import Button from '../../shared/Button/Button';
 import LobbyService from '../../services/LobbyService';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const DeleteLobby = ({ setLobbies, onClose }) => {
+
     const [roomId, setRoomId] = useState('');
+    const { t } = useTranslation();
 
     const handleDeleteLobby = async (event) => {
     
         event.preventDefault();
         if (!roomId) {
-            toast.info('Пожалуйста, введите ID комнаты!');
+            toast.info(t('toastSuccess.createdRoom'));
             return;
         }
         try {
-            
+              
             await LobbyService.deleteLobby(roomId);
-            toast.success(`Лобби с ID ${roomId} успешно удалено`);
+            toast.success(`${t('toastSuccess.lobbyWithId')} ${roomId} ${t('toastSuccess.SuccessDelete')}`);
             setRoomId('');
 
             //обновление лобби
@@ -26,8 +29,8 @@ const DeleteLobby = ({ setLobbies, onClose }) => {
 
             onClose();
         } catch (error) {
-            console.error("Ошибка при удалении лобби:", error);
-            toast.info(`Комната с id ${roomId} не найдена`)
+            console.error(t('toastError.errorDelete'), error);
+            toast.info(`${t('roomId')} ${roomId} ${t('notFound')}`)
             setRoomId('');
             onClose(); 
         }
@@ -38,13 +41,13 @@ const DeleteLobby = ({ setLobbies, onClose }) => {
             <Input 
                 type='text' 
                 name='roomId' 
-                label='ID комнаты' 
+                label={t('IdRoom')} 
                 required={true}
                 value={roomId || ''}
                 onChange={(e) => setRoomId(e.target.value)}
             />       
             <div className="button_in_lobby">
-                <Button type="submit" text='Удалить' />
+                <Button type="submit" text={t('delete')} />
             </div>
         </form>
     );

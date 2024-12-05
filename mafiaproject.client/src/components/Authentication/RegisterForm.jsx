@@ -3,6 +3,7 @@ import Input from '../../shared/Input/Input';
 import CheckBox from '../../shared/CheckBoxGroup/CheckBox';
 import Button from '../../shared/Button/Button';
 import {handleSubmit as handleFormSubmit } from '../../servicesLogic/FormUtilsEmail/FormUtilsEmail';
+import { useTranslation } from 'react-i18next';
 
 const RegisterForm = ({
     username, setUsername,
@@ -14,6 +15,7 @@ const RegisterForm = ({
     showPassword
 }) => {
 
+    const { t } = useTranslation();
     const handleSiteRulesChange = () => {
         setSiteRulesAccepted(prev => !prev);
     };
@@ -31,7 +33,7 @@ const RegisterForm = ({
             <Input 
                 type='text' 
                 name='username' 
-                label='Имя пользователя' 
+                label={t('username')} 
                 required={true} 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -39,7 +41,7 @@ const RegisterForm = ({
             <Input 
                 type={showPassword ? 'text' : 'password'} 
                 name='password' 
-                label='Пароль' 
+                label={t('password')}
                 required={true}
                 showToggleButton 
                 togglePasswordVisibility={togglePasswordVisibility}
@@ -50,7 +52,7 @@ const RegisterForm = ({
             <Input 
                 type='text'
                 name='email' 
-                label='Электронная почта' 
+                label={t('post')}
                 required={true} 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -61,7 +63,7 @@ const RegisterForm = ({
                 handleSiteRulesChange={handleSiteRulesChange}
                 handlePrivacyPolicyChange={handlePrivacyPolicyChange}
             />
-            <Button type="submit" text='Зарегистрироваться' onClick={handleSubmit} />
+            <Button type="submit" text={t('register')} onClick={handleSubmit} />
         </div>
     );
 };

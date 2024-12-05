@@ -5,6 +5,7 @@ import Input from '../../shared/Input/Input';
 import {toast } from 'react-toastify';
 import LobbyService from '../../services/LobbyService';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const EntranceLobby = ({
     showPassword,
@@ -17,6 +18,8 @@ const EntranceLobby = ({
     const [creatorId, setCreatorId] = useState(0);
     const navigate = useNavigate();
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         const userId = localStorage.getItem('userId');
         if (userId) {
@@ -24,7 +27,7 @@ const EntranceLobby = ({
             setCreatorId(parseInt(userId, 10));
 
         } else {
-            toast.error('ID пользователя не найден');
+            toast.error(t('idPersonNotFound'));
         }
     }, []);
 
@@ -39,12 +42,12 @@ const EntranceLobby = ({
         event.preventDefault();
 
         if (!lobbyId) {
-            toast.error('ID комнаты не может быть пустым');
+            toast.error(t('IdRoomIsEmpty'));
             return;
         }
 
         if (lobby.password && !RoomPassword.trim()) {
-            toast.error('Пароль не может быть пустым');
+            toast.error(t('toastError.passwordIsNotEmpty'));
             return;
         }
         console.log('Данные для подключения:', {
@@ -56,14 +59,14 @@ const EntranceLobby = ({
             
             await LobbyService.connectToLobby(lobbyId, creatorId, RoomPassword);
             localStorage.setItem('lobbyId', lobbyId);
-            toast.success('Вы успешно вошли в лобби!');
+            toast.success(t('toastSuccess.SuccessfullyEntered'));
             setTimeout(()=>{
                 navigate('/WebChat');
             }, 500)
             
         } catch (error) {
         
-            toast.error('Ошибка подключения, повторите еще раз');
+            toast.error(t('toastError.ConnectionError'));
             console.log(error.message)
         }
     }
@@ -74,7 +77,7 @@ const EntranceLobby = ({
             <Input
                 type='text'
                 name='roomId'
-                label='ID комнаты'
+                label={t('IdRoom')}
                 required={true}
                 value={lobbyId}
                 onChange={(e) => handleLobbyIdChange(e.target.value)}
@@ -83,7 +86,7 @@ const EntranceLobby = ({
                 <Input
                     type={showPassword ? 'text' : 'password'}
                     name='password'
-                    label='Пароль'
+                    label={t('password')}
                     showToggleButton
                     togglePasswordVisibility={togglePasswordVisibility}
                     value={RoomPassword}
@@ -92,7 +95,7 @@ const EntranceLobby = ({
                 />
             )}
             <div className="button_in_lobby">
-                <Button type="submit" text="Войти" />
+                <Button type="submit" text={t('login')} />
             </div>
         </form>
     );
