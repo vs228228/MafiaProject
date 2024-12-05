@@ -18,9 +18,8 @@ const LobbyWindow = () => {
   const isAuthenticated = !!Cookies.get('token');
   const navigate = useNavigate();
 
-  // const userId = localStorage.getItem('userId');
-  
-  const handleOpenModal = (type, lobby = null) => {
+
+  const handleOpenModal =async (type, lobby = null) => {
     if (!isAuthenticated) {
       toast.error('Пожалуйста, войдите в систему и повторите попытку');
       setTimeout(() => {
@@ -53,7 +52,7 @@ const LobbyWindow = () => {
     setLoading(true);
     try {
       const allLobbies = await LobbyService.getAllLobbies();
-      //  console.log(allLobbies)
+      // console.log(allLobbies)
       
       setLobbies(allLobbies);
     } catch (error) {

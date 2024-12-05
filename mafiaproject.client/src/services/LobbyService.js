@@ -40,23 +40,39 @@ class LobbyService {
     }
 
 
-    async connectToLobby( lobbyId,userId, password = "") {//+
+    async connectToLobby(lobbyId, userId, password = "") {
         const connect = {
-            lobbyId, userId, password
-        }
+            lobbyId, 
+            userId, 
+            password
+        };
+    
         const response = await fetch(`${LobbyService.baseUrl}/connectToLobby`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(connect)
         });
-        if (!response.ok) throw new Error('Failed to connect to lobby');
+    
+        if (!response.ok) {
+            const errorDetails = await response.text(); 
+            throw new Error(`Ошибка подключения: ${response.status} ${response.statusText} - ${errorDetails}`);
+        }
+    
+        const playerId = await response.json(); 
+        localStorage.setItem('playerId', playerId);
+        console.log("Player ID сохранен:", playerId);
+    
+        return playerId; 
     }
+    
 
-    async disconnectFromLobby(userId, lobbyId) {
+    async disconnectFromLobby(lobbyId, playerId) {
+        const disconnectDTO = { lobbyId, playerId }
         const response = await fetch(`${LobbyService.baseUrl}/disconnectToLobby`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ lobbyId, userId })
+            body: JSON.stringify(disconnectDTO)
+
         });
         if (!response.ok) throw new Error('Failed to disconnect from lobby');
     }
