@@ -11,7 +11,7 @@ const EntranceLobby = ({
     togglePasswordVisibility,
     lobby,
 }) => {
-    
+   
     const [lobbyId, setLobbyId] = useState(lobby?.id ? parseInt(lobby.id, 10) : '');
     const [RoomPassword, setRoomPassword] = useState('');
     const [creatorId, setCreatorId] = useState(0);
@@ -55,9 +55,10 @@ const EntranceLobby = ({
         try {
             
             await LobbyService.connectToLobby(lobbyId, creatorId, RoomPassword);
+            localStorage.setItem('lobbyId', lobbyId);
             toast.success('Вы успешно вошли в лобби!');
             setTimeout(()=>{
-                navigate('/WebChat', { state: { lobbyId, creatorId } }); // Передаем данные через state
+                navigate('/WebChat');
             }, 500)
             
         } catch (error) {
