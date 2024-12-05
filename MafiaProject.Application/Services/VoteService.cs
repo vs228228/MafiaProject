@@ -23,7 +23,10 @@ namespace MafiaProject.Application.Services
         public async Task CreateVoteAsync(VoteCreateDTO voteCreateDTO)
         {
             var ans = await _mapper.Map<VoteCreateDTO, Vote>(voteCreateDTO);
+            var game = await _unitOfWork.Games.GetByIdAsync(voteCreateDTO.GameId);
             await _unitOfWork.Votes.CreateAsync(ans);
+            game.Votes.Add(ans);
+            await _unitOfWork.Games.UpdateAsync(game);
             await _unitOfWork.SaveChangesAsync();
         }
 
