@@ -249,7 +249,7 @@ namespace MafiaProject.Application.Services
             var game = await _unitOfWork.Games.GetByIdAsync(gameId);
             foreach (var player in game.Players)
             {
-                await _signalSender.SendPersonalMessage(gameId, player.Id, "Your role is " + player.Role);
+                await _signalSender.SendPersonalMessage(gameId, player.Id, "Your role is " + player.Role, "RoleNotify");
             }
 
             foreach (var player in game.Players)

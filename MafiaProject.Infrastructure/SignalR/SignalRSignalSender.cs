@@ -27,12 +27,12 @@ namespace MafiaProject.Infrastructure.SignalR
 
         public async Task SendMessageAll(int gameId, string message, string name)
         {
-            await _hubContext.Clients.Group($"Game_{gameId}").SendAsync("ReceiveMessage", message);
+            await _hubContext.Clients.Group($"Game_{gameId}").SendAsync(name, message);
         }
 
-        public async Task SendPersonalMessage(int gameId, int playerId, string message)
+        public async Task SendPersonalMessage(int gameId, int playerId, string message, string name)
         {
-            await _hubContext.Clients.User(playerId.ToString()).SendAsync("ReceiveMessage", message);
+            await _hubContext.Clients.User(playerId.ToString()).SendAsync(name, message);
         }
     }
 }
