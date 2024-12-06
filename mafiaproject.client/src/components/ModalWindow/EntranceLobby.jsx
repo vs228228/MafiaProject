@@ -29,7 +29,7 @@ const EntranceLobby = ({
         } else {
             toast.error(t('idPersonNotFound'));
         }
-    }, []);
+    }, [t]);
 
     const handleLobbyIdChange = (value) => {
         const numericValue = value === '' ? '' : parseInt(value, 10);

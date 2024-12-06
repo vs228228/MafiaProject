@@ -25,7 +25,7 @@ const RegisterForm = ({
     };
 
     const handleSubmit = (e) => {
-        if (handleFormSubmit(e, () => handleRegister(email, password, username), email)){ }
+        if (handleFormSubmit(e, () => handleRegister(email, password, username), email,t)){ }
     };
 
     return (

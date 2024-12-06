@@ -26,7 +26,7 @@ const CreateLobby = ({
         } else {
             toast.error(t('toastError.personIdNotFound'));
         }
-    }, []);
+    }, [t]);
 
     const handleCreateClick = async (event) => {
         event.preventDefault();
