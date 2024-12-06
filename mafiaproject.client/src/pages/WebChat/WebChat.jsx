@@ -3,6 +3,8 @@ import '../WebChat/WebChat.css';
 import LobbyService from '../../services/LobbyService';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+
 
 import ButtonForChat from '../../shared/Button/ButtonForChat';
 import { CiVideoOff, CiVideoOn, CiMicrophoneOff, CiMicrophoneOn, CiFlag1 } from "react-icons/ci";
@@ -13,7 +15,8 @@ const WebChat = () => {
 
   const playerId = parseInt(localStorage.getItem('playerId'), 10); 
   const lobbyId = parseInt(localStorage.getItem('lobbyId'), 10); 
-
+  const { t } = useTranslation();
+  
   const [camera, setCamera] = useState(false);
   const [micro, setMicro] = useState(false);
   const [isReady, setIsReady] = useState(true);

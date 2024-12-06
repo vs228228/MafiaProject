@@ -7,6 +7,8 @@ import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
+
 
 const LobbyWindow = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,11 +19,12 @@ const LobbyWindow = () => {
 
   const isAuthenticated = !!Cookies.get('token');
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
 
   const handleOpenModal =async (type, lobby = null) => {
     if (!isAuthenticated) {
-      toast.error('Пожалуйста, войдите в систему и повторите попытку');
+      toast.error(t('toastError.EntranceInSystem'));
       setTimeout(() => {
         navigate('/LobbyWindow');
       }, 2000);
@@ -30,7 +33,7 @@ const LobbyWindow = () => {
 
     if (lobby && type === 'entrance') {
       if(lobby.countOfPlayers >= 10){
-        toast.info("Комната переполнена. Невозможно войти.");
+        toast.info(t('toastInfo.roomIsCrowded'));
         return;
       }
       else{
@@ -56,7 +59,7 @@ const LobbyWindow = () => {
       
       setLobbies(allLobbies);
     } catch (error) {
-      toast.error('Ошибка при загрузке лобби');
+      toast.error(t('toastError.errorLoading'));
     } finally {
       setLoading(false);
     }
@@ -70,8 +73,8 @@ const LobbyWindow = () => {
     <div className='Lobby_Win'>
       <div className="lobby_win">
         <div className="Button_entrance_or_create_lobby">
-          <Button onClick={() => handleOpenModal('create')} text='Создать новое лобби' />
-          <Button onClick={() => handleOpenModal('delete')} text='Удалить лобби' />
+          <Button onClick={() => handleOpenModal('create')} text={t('stateLobby.createLobby')} />
+          <Button onClick={() => handleOpenModal('delete')} text={t('stateLobby.deleteLobby')} />
         </div>
 
         <div className="list_of_lobby">

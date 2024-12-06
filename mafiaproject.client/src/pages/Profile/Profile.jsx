@@ -6,16 +6,18 @@ import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
 import ProfPhoto from '../../photo/mafia.jpg';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState(null);
     const [editedImage, setEditedImage] = useState(ProfPhoto);
-    const [editedUsername, setEditedUsername] = useState('Имя пользователя');
+    const { t } = useTranslation();
+    const [editedUsername, setEditedUsername] = useState(t('username'));
     const [loading, setLoading] = useState(true);
     const [editedImageFile, setEditedImageFile] = useState();
-
+    
 
     const handleSignInClick = () => {
         navigate('/SignIn');
@@ -60,14 +62,14 @@ const Profile = () => {
                 setUserData(updatedUser);
                 setEditedImage(createImagePath(updatedUser.pathToPic) || ProfPhoto);
                 setEditedUsername(updatedUser.nick || '');
-                toast.success('Изменения успешно сохранены!');
+                toast.success(t('SuccessfullySave'));
                 setIsEditing(false);
             } else {
                 throw new Error('Не удалось получить обновленные данные пользователя');
             }
         } catch (error) {
             console.error('Ошибка при сохранении изменений:', error);
-            toast.error('Не удалось сохранить изменения, попробуйте снова.');
+            toast.error(t('toastError.FailedSave'));
         }
     };
 
@@ -96,10 +98,10 @@ const Profile = () => {
     };
 
     const handleDeleteProfile = async () => {
-        if (window.confirm('Вы уверены, что хотите удалить свой профиль?')) {
+        if (window.confirm(t('toastInfo.question'))) {
             try {
                 await UserService.deleteUser(userData.id);
-                toast.success('Профиль успешно удален!');
+                toast.success(t('toastSuccess.SuccessfullyDelete'));
                 localStorage.removeItem('userData');
                 localStorage.removeItem('token');
                 setTimeout(() => {
@@ -108,10 +110,10 @@ const Profile = () => {
 
             } catch (error) {
                 console.error('Возникла ошибка при удалении профиля');
-                toast.error('Возникла ошибка при удалении профиля, попробуйте еще раз');
+                toast.error(t('toastError.ErrorDeleteProfile'));
             }
         } else {
-            toast.info("Вы остались в системе.");
+            toast.info(t('toastInfo.RemainLogged'));
         }
     };
 
@@ -127,7 +129,7 @@ const Profile = () => {
                 {isEditing ? (
                     <div className="info_about_user">
                         <img src={editedImage} alt='User profile' className='profile_photo' />
-                        <button onClick={handleButtonClick}>изменить изображение</button>
+                        <button onClick={handleButtonClick}>{t('changePhoto')}</button>
                         <input
                             type="file"
                             id="fileInput"
@@ -135,7 +137,7 @@ const Profile = () => {
                             onChange={handleChangePicture}
                         />
                         <div>
-                            Имя пользователя:
+                            {t('username')}
                             <input
                                 type="text"
                                 value={editedUsername}
@@ -146,26 +148,26 @@ const Profile = () => {
                 ) : (
                     <div className="info_about_user">
                         <img src={userData ? createImagePath(userData.pathToPic) || ProfPhoto : ProfPhoto} alt='User profile' className='profile_photo' />
-                        <div><span>Имя пользователя:</span> {userData ? userData.nick : 'Пользователь не авторизован'}</div>
-                        <div><span>Победы:</span> {userData ? userData.wins : 0}</div>
-                        <div><span>Поражения:</span> {userData ? userData.losses : 0}</div>
+                        <div><span>{t('username')}</span> {userData ? userData.nick : 'Пользователь не авторизован'}</div>
+                        <div><span>{t('wins')}</span> {userData ? userData.wins : 0}</div>
+                        <div><span>{t('defeats')}</span> {userData ? userData.losses : 0}</div>
                     </div>
                 )}
                 {!isEditing && (
                     <div className="edit_profile">
                         {userData ? (
-                            <button onClick={handleEditClick}>Редактировать профиль</button>
+                            <button onClick={handleEditClick}>{t("Profile.editProfile")}</button>
                         ) : (
-                            <button onClick={handleSignInClick}>Авторизоваться</button>
+                            <button onClick={handleSignInClick}>{t("Profile.logIn")}</button>
                         )}
                     </div>
                 )}
             </div>
             {isEditing && (
                 <div className='button_change_or_reset'>
-                    <Button text='Сохранить изменения' onClick={handleSaveChanges} />
-                    <Button text='Сбросить изменения' onClick={handleDiscardChanges} />
-                    <Button text='Удалить профиль' onClick={handleDeleteProfile} />
+                    <Button text={t('Profile.SaveChanges')} onClick={handleSaveChanges} />
+                    <Button text={t('Profile.ResetChanges')} onClick={handleDiscardChanges} />
+                    <Button text={t('Profile.DeleteProfile')} onClick={handleDeleteProfile} />
                 </div>
             )}
         </div>

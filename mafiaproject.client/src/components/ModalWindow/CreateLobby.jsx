@@ -4,6 +4,8 @@ import Button from '../../shared/Button/Button';
 import Input from '../../shared/Input/Input';
 import { toast } from 'react-toastify';
 import LobbyService from '../../services/LobbyService';
+import { useTranslation } from 'react-i18next';
+
 
 const CreateLobby = ({
     showPassword,
@@ -13,6 +15,7 @@ const CreateLobby = ({
     setLobbies
 }) => {
     const [creatorId, setCreatorId] = useState('');
+    const { t } = useTranslation();
 
     useEffect(() => {
         const userId = localStorage.getItem('userId');
@@ -21,7 +24,7 @@ const CreateLobby = ({
         if (userId) {
             setCreatorId(userId);
         } else {
-            toast.error('ID пользователя не найден');
+            toast.error(t('toastError.personIdNotFound'));
         }
     }, []);
 
@@ -29,11 +32,11 @@ const CreateLobby = ({
         event.preventDefault();
 
         if (!creatorId) {
-            toast.error('ID пользователя не найден');
+            toast.error(t('toastError.personIdNotFound'));
             return;
         }
         if (!RoomName) {
-            toast.error('Название комнаты обязательно для заполнения');
+            toast.error(t('toastError.RoomNameRequired'));
             return;
         }
 
@@ -43,7 +46,7 @@ const CreateLobby = ({
             const isLobbyExists = existingLobbies.some(lobby => lobby.name.toLowerCase() === RoomName.toLowerCase());
 
             if (isLobbyExists) {
-                toast.error('Лобби с таким названием уже существует');
+                toast.error(t('toastError.NamAlreadyExists'));
                 return;
             }
 
@@ -54,7 +57,7 @@ const CreateLobby = ({
             });
 
            
-            toast.success(`Вы создали комнату с именем "${RoomName}"`);
+            toast.success(`${t('toastSuccess.createdRoom')} "${RoomName}"`);
             localStorage.setItem('lobbyData', JSON.stringify(LobbyData));
             setRoomName('');
             setRoomPassword('');
@@ -62,7 +65,7 @@ const CreateLobby = ({
             const updatedLobbies = await LobbyService.getAllLobbies();
             setLobbies(updatedLobbies);
         } catch (error) {
-            console.error("Ошибка при создании комнаты:", error);
+            console.error(t('toastError.errorCreating'), error);
             toast.error(error.message);
             setRoomName('');
             setRoomPassword('');
@@ -74,7 +77,7 @@ const CreateLobby = ({
             <Input 
                 type='text' 
                 name='roomName' 
-                label='Название комнаты' 
+                label={t('roomName')}
                 required={true}
                 value={RoomName} 
                 onChange={(e) => setRoomName(e.target.value)}
@@ -82,7 +85,7 @@ const CreateLobby = ({
             <Input 
                 type={showPassword ? 'text' : 'password'} 
                 name='password' 
-                label='Пароль' 
+                label={t('password')}
                 showToggleButton 
                 togglePasswordVisibility={togglePasswordVisibility}
                 isPasswordVisible={showPassword}
@@ -90,7 +93,7 @@ const CreateLobby = ({
                 onChange={(e) => setRoomPassword(e.target.value)}
             />
             <div className="button_in_lobby">
-                <Button type="submit" text='Создать' />
+                <Button type="submit" text={t('stateLobby.create')} />
             </div>
         </form>
     );
