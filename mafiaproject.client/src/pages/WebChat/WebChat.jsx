@@ -24,15 +24,15 @@ const WebChat = () => {
   const handleExit = async () => {
     try {
       if (!lobbyId || !playerId) {
-        toast.error('Данные пользователя или лобби отсутствуют.');
+        toast.error(t('toastError.ErrorData'));
         return;
       }
       await LobbyService.disconnectFromLobby(lobbyId, playerId);
-      toast.success('Вы успешно вышли из лобби!');
+      toast.success(t('toastSuccess.SuccessLogOut'));
       navigate('/LobbyWindow');
     } catch (error) {
       console.error('Ошибка при выходе из лобби:', error.message);
-      toast.error('Произошла ошибка при выходе из лобби. Попробуйте снова.');
+      toast.error(t('toastError.ErrorLogOutLobby'));
     }
   };
   
@@ -52,21 +52,21 @@ const WebChat = () => {
     <div className="webChat">
       <div className="placeForCamera">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div className="camera">Ожидание игрока</div>
+          <div className="camera">{t('WebChat.WaitingPlayer')}</div>
         ))}
-        <div className="camera">Ожидание игрока</div>
-        <div className="camera-large">Подтвердите готовность   / 10 </div>
-        <div className="camera">Ожидание игрока</div>
+        <div className="camera">{t('WebChat.WaitingPlayer')}</div>
+        <div className="camera-large">{t('WebChat.ConfirmReadiness')}   / 10 </div>
+        <div className="camera">{t('WebChat.WaitingPlayer')}</div>
         {Array.from({ length: 4 }).map((_, index) => (
-          <div className="camera">Ожидание игрока</div>
+          <div className="camera">{t('WebChat.WaitingPlayer')}</div>
         ))}
       </div>
 
       <div className="logic_button">
-        <ButtonForChat icon={camera ? CiVideoOn : CiVideoOff} text={camera ? "Камера вкл." : "Камера выкл."} onClick={toggleButtonCamera} />
-        <ButtonForChat icon={micro ? CiMicrophoneOn : CiMicrophoneOff} text={micro ? "Микрофон вкл." : "Микрофон выкл."} onClick={toggleButtonMicro} />
-        <ButtonForChat icon={RxCross2} text="Выйти" onClick={handleExit} />
-        {isReady && <ButtonForChat icon={CiFlag1} text="Готов" onClick={handleReady} />}
+        <ButtonForChat icon={camera ? CiVideoOn : CiVideoOff} text={camera ? t('WebChat.CameraOn') : t('WebChat.CameraOff')} onClick={toggleButtonCamera} />
+        <ButtonForChat icon={micro ? CiMicrophoneOn : CiMicrophoneOff} text={micro ? t('WebChat.MicrophoneOn') : t('WebChat.MicrophoneOff')} onClick={toggleButtonMicro} />
+        <ButtonForChat icon={RxCross2} text={t('logout')} onClick={handleExit} />
+        {isReady && <ButtonForChat icon={CiFlag1} text={t('WebChat.ready')} onClick={handleReady} />}
       </div>
     </div>
   );

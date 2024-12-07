@@ -17,13 +17,90 @@
     "changePhoto":"Change image",
     "wins":"wins:",
     "defeats":"defeats:",
+    "open":"Open",
+    "closed":"Closed",
+    "type":"Type",
+    "status":"Status",
+    "actions":"Actions",
 
+      "gameRules": {
+        "1": {
+          "role": "Mafia",
+          "content": "Mafia is a popular psychological game. The plot is simple. The peaceful residents of the city, tired of the unruly mafia, decide to take justice into their own hands and kill the criminals. In response, the mafia declares war with the aim of eliminating all the citizens. The mafia team and the peaceful residents play against each other. Peaceful residents win if they identify and 'send to death' all the mafia members. The mafia wins if a victory for the peaceful residents becomes mathematically impossible."
+        },
+        "2": {
+          "role": "Roles you can get in the game:",
+          "content": "Civilian (Red). The player's task is to identify mafia members and vote them out of the city.",
+          "content2": "Doctor (Red). The doctor's task is to heal a chosen player to prevent their death from a mafia gunshot. Wakes up at night.",
+          "content3": "Sheriff (Red). The hero's goal is to check players to identify connections with the mafia. Wakes up at night and acts in favor of the peaceful residents.",
+          "content4": "Mafia (Black). The goal of each partner in the mafia is to eliminate the maximum number of peaceful residents during the day or shoot them at night. The mafia wins if the number of its members equals the number of peaceful residents.",
+          "content5": "Don (Black). The head of the mafia. He wakes up at night to check the identification of a player he suspects may be the Sheriff. The Don determines the order of the mafia's killings."
+        },
+        "3": {
+          "role": "Victory",
+          "content": "The mafia wins when the number of players performing the role of peaceful residents equals the number of mafia members. The peaceful residents win when all the black team members are expelled from the city.",
+          "content2": "The peaceful residents win when all the black team members are expelled from the city.",
+          "content3": "Seats at the table are assigned randomly, and players cannot choose their roles. Information about this will be displayed on the screen. Each player will have 10 seconds to familiarize themselves with their role and select their card."
+        },
+        "4": {
+          "role": "First Night",
+          "content": "The first night allows players from the black team to meet each other. They can see each other through the cameras and can openly communicate for 30 seconds. During this time, the Don must signal the other black players his role in the game and decide who to kill on the next night.",
+          "content2": "During the day, all players can see each other through the cameras, express their opinions, present arguments, and defend themselves if necessary. The fate of the chosen mafia candidate is decided by voting. Each player is given 1 minute for their defense."
+        },
+        "5": {
+          "role": "Voting",
+          "content": "This stage of voting begins after the final defense speech (defense speeches are given to all players nominated for voting). Voting lasts 10 seconds, during which each player selects one candidate for expulsion. Any player who doesn't vote will have their vote automatically counted for the last nominated candidate.",
+          "content2": "Voting may not occur only on the first day if there is only one candidate. After that, the voting procedure is mandatory. The player with the majority of votes will leave the game.",
+          "content3": "If several candidates receive the same number of votes, they will be given additional time to justify their position. If the situation repeats in the next vote, the players will decide whether to leave or expel both participants immediately.",
+          "content4": "The player leaving the game does not reveal their role until the game ends. They are given 30 seconds to deliver a farewell speech."
+        },
+        "6": {
+          "role": "After the First Night",
+          "content": "Starting from the second night, except for the first, mafia members can make a shot by pressing a button in the chosen window. To eliminate a victim from the game, the mafia must choose one candidate together. If someone picks a different player or refuses to shoot, the system will mark this as a miss, meaning no one will be eliminated that night.",
+          "content2": "After making the shots, the Don uses the function to check the selected player to identify the Sheriff or gather information about their role. Then the Sheriff performs a similar procedure, but the Don's status cannot be determined this way. The information is limited to whether the player is connected to the black team. Afterward, the Doctor proceeds with the same procedure.",
+          "content3": "If the mafia kills someone, the deceased player can leave suspicions about other players."
+        },
+        "7": {
+          "role": "Day changes to night, and players' actions repeat until the winning team is determined."
+        }
+      },
+    
+    
+    "developers": {
+    "1": {
+      "fullName": "Starovoitov Ivan Yuryevich",
+      "position": "Fullstack Developer",
+      "age": "19",
+      "text": "GitHub's main debugger. Worked on the project architecture and communication between the client and server parts, as well as communication between the team. Was involved in the integration of various system components and ensuring the reliability and performance of the application. I love cheesecakes and tea."
+    },
+    "2": {
+      "fullName": "Savelyev Ivan Pavlovich",
+      "position": "Backend Developer",
+      "age": "20",
+      "text": "Beginner developer, .NET developer. I work mainly on application business logic (in team projects). My main tasks include designing and developing server logic, database integration, and application security."
+    },
+    "3": {
+      "fullName": "Pokhodnya Denis Alexandrovich",
+      "position": "Backend Developer",
+      "age": "20",
+      "text": "I am responsible for data organization and storage, as well as the connection between the database and server part. I use technologies like Entity Framework Core, PostgreSQL."
+    },
+    "4": {
+      "fullName": " Bondar Yulia Vladimirovna",
+      "position": "Frontend Developer",
+      "age": "19",
+      "text": "I am responsible for the visual part of the project, integrating backend into the frontend. I use technologies like HTML, CSS, JavaScript, and React framework for creating interactive interfaces. I ensure cross-browser compatibility."
+    }
+  },
+  
   "Profile":{
       "editProfile":"Edit profile",
       "logIn": "log in",
       "SaveChanges":"Save Changes",
       "ResetChanges":"Reset changes",
-      "DeleteProfile":"Delete profile"
+      "DeleteProfile":"Delete profile",
+      "AcceptRules":"I accept the site rules",
+      "acceptPrivacyPolicy": "I accept the privacy policy"
     },
 
     "stateLobby":{
@@ -35,11 +112,21 @@
     },
 
     "forgotPassword": {
-    "forgotPassword":"Forgot your password?",
-    "title": "Password Recovery",
-    "emailLabel": "Enter your email",
-    "submitButton": "Retrieve Password"
+      "forgotPassword":"Forgot your password?",
+      "title": "Password Recovery",
+      "emailLabel": "Enter your email",
+      "submitButton": "Retrieve Password"
   },
+  "WebChat":{
+    "ready":"Ready",
+    "CameraOn":"Camera on",
+    "CameraOff":"Camera off",
+    "MicrophoneOn":"Microphone on",
+    "MicrophoneOff":"Microphone off",
+    "ConfirmReadiness":"Confirm readiness",
+    "WaitingPlayer":"Waiting for the player"
+  },
+
     "toastError":{
       "personIdNotFound":"User ID not found",
       "RoomNameRequired":"Room name is required",
@@ -55,7 +142,10 @@
       "FailedSave":"Failed to save changes, please try again.",
       "ErrorDeleteProfile":"There was an error deleting your profile, please try again",
       "UserNotFound":"User not found, please register or check your entered data",
-      "RegistrationError":"Registration error. Check the entered information and try again."
+      "RegistrationError":"Registration error. Check the entered information and try again.",
+      "ErrorEmail":"Please enter a correct email address.",
+      "ErrorData":"No user or lobby data available.",
+      "ErrorLogOutLobby":"An error occurred when exiting the lobby. Try again."
     },
     "toastSuccess":{
       "createdRoom":"You have created a room named",
@@ -64,7 +154,8 @@
       "SuccessfullyEntered":"Login successful",
       "SuccessfullyDelete":"Profile successfully deleted!",
       "SuccessfullySave":"Changes saved successfully!",
-      "SuccessRegistration":"Registration was successful! You can log in!"
+      "SuccessRegistration":"Registration was successful! You can log in!",
+      "SuccessLogOut":"You have successfully left the lobby!!"
       
     },
     "toastInfo":{
@@ -72,6 +163,8 @@
       "roomIsCrowded":"The room is crowded. Unable to login.",
       "question":"Are you sure you want to delete your profile?",
       "RemainLogged":"You remain logged in.",
-      "PrivacyPolicy":"Please accept the site rules and privacy policy."
+      "loggedOut":"You are logged out.",
+      "PrivacyPolicy":"Please accept the site rules and privacy policy.",
+      "GoOut":"Do you really want to go out?"
     }
   }

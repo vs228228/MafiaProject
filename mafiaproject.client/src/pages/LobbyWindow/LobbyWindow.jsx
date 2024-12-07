@@ -86,11 +86,11 @@ const LobbyWindow = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Название комнаты</th>
+                  <th>{t('roomName')}</th>
                   <th>Id</th>
-                  <th>Тип</th>
-                  <th>Статус</th>
-                  <th>Действия</th>
+                  <th>{t('type')}</th>
+                  <th>{t('status')}</th>
+                  <th>{t('actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -98,10 +98,10 @@ const LobbyWindow = () => {
                   <tr key={lobby.id}>
                     <td>{lobby.name}</td>
                     <td>{lobby.id}</td>
-                    <td>{lobby.password ? 'Закрытый' : 'Открытый'}</td>
+                    <td>{lobby.password ? t('closed') : t('open')}</td>
                     <td>{lobby.countOfPlayers}  / 10</td>
                     <td>
-                    <button onClick={() => handleOpenModal('entrance', lobby)}>ИГРАТЬ</button>
+                    <button onClick={() => handleOpenModal('entrance', lobby)}>{t('stateLobby.play')}</button>
                     </td>
                   </tr>
                 ))}

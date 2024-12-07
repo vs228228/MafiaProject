@@ -8,7 +8,7 @@ const LoginForm = ({ email, setEmail, password, setPassword, togglePasswordVisib
    
     const { t } = useTranslation();
     const handleSubmit = (e) => {
-        if (handleFormSubmit(e, () => onSubmit(email, password), email)) { }
+        if (handleFormSubmit(e, () => onSubmit(email, password), email,t)) { }
     }; 
 
     return (

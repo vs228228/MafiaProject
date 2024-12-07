@@ -5,12 +5,12 @@ export const validateEmail = (email) => {
     return emailRegex.test(email);
 };
 
-export const handleSubmit = (e, callback, email) => {
+export const handleSubmit = (e, callback, email,t) => {
     e.preventDefault();
     if (!validateEmail(email)) {
-        toast.error('Пожалуйста, введите правильный адрес электронной почты.'); 
+        toast.error(t('toastError.ErrorEmail')); 
         return false;
     }
-    callback(); // переданная функция для обработки отправки
+    callback(); 
     return true;
 };
