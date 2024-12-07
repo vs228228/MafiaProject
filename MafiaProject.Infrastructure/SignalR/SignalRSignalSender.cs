@@ -1,5 +1,4 @@
-﻿
-using MafiaProject.Application.interfaces;
+﻿using MafiaProject.Application.interfaces;
 using MafiaProject.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
@@ -15,24 +14,57 @@ namespace MafiaProject.Infrastructure.SignalR
             _hubContext = hubContext;
         }
 
-        public async Task StartGame(int lobbyId)
+        public async Task StartGame(string lobbyName)
         {
-            await _hubContext.Clients.Group($"Lobby_{lobbyId}").SendAsync("StartGame", lobbyId);
+            await _hubContext.Clients.Group(lobbyName).SendAsync("StartGame", lobbyName);
         }
 
-        public async Task EndGame(int gameId)
+        public async Task EndGame(string lobbyName)
         {
-            await _hubContext.Clients.Group($"Game_{gameId}").SendAsync("EndGame", gameId);
+            await _hubContext.Clients.Group(lobbyName).SendAsync("EndGame", lobbyName);
         }
 
-        public async Task SendMessageAll(int gameId, string message, string name)
+        public async Task SendMessageToAll(string lobbyName, string message, string name)
         {
-            await _hubContext.Clients.Group($"Game_{gameId}").SendAsync(name, message);
+            await _hubContext.Clients.Group(lobbyName).SendAsync(name, message);
         }
 
-        public async Task SendPersonalMessage(int gameId, int playerId, string message, string name)
+        public async Task SendPersonalMessage(int playerId, string message, string name)
         {
             await _hubContext.Clients.User(playerId.ToString()).SendAsync(name, message);
+        }
+
+        public async Task ToggleMicrophone(int playerId, bool enabled)
+        {
+            await _hubContext.Clients.User(playerId.ToString()).SendAsync("ToggleMicrophone", enabled);
+        }
+
+        public async Task ToggleCamera(int playerId, bool enabled)
+        {
+            await _hubContext.Clients.User(playerId.ToString()).SendAsync("ToggleCamera", enabled);
+        }
+
+        public async Task SetMafiaVisibility(string lobbyName, bool enabled)
+        {
+            await _hubContext.Clients.Group($"{lobbyName}_Mafia").SendAsync("ToggleMafiaVisibility", enabled);
+        }
+
+        public async Task NotifyPlayerDeath(string lobbyName, int playerId)
+        {
+            await _hubContext.Clients.Group(lobbyName).SendAsync("PlayerDied", playerId);
+            await _hubContext.Clients.User(playerId.ToString()).SendAsync("YouDied");
+            await ToggleMicrophone(playerId, false);
+            await ToggleCamera(playerId, false);
+        }
+
+        public async Task NotifyLobbyUpdate(string lobbyName)
+        {
+            await _hubContext.Clients.Group(lobbyName).SendAsync("LobbyUpdated");
+        }
+
+        public async Task SendWebRTCSignal(int playerId, string signal)
+        {
+            await _hubContext.Clients.User(playerId.ToString()).SendAsync("ReceiveSignal", signal);
         }
     }
 }

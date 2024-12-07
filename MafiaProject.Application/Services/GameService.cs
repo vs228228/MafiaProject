@@ -1,5 +1,6 @@
 ﻿using MafiaProject.Application.DTO;
 using MafiaProject.Application.interfaces;
+using MafiaProject.Application.Interfaces;
 using MafiaProject.Core.Entityes;
 using MafiaProject.Core.Interfaces;
 using System;

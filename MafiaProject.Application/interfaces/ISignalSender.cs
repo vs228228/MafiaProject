@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace MafiaProject.Application.interfaces
+namespace MafiaProject.Application.Interfaces
 {
     public interface ISignalSender
     {
-        public Task StartGame(int lobbyId);
-        public Task EndGame(int gameId);
-        public Task SendMessageAll(int gameId, string message, string name);
-        public Task SendPersonalMessage(int gameId, int playerId, string message, string name);
+        Task StartGame(string lobbyName);
+        Task EndGame(string lobbyName);
+        Task SendMessageToAll(string lobbyName, string message, string name);
+        Task SendPersonalMessage(int playerId, string message, string name);
+        Task ToggleMicrophone(int playerId, bool enabled);
+        Task ToggleCamera(int playerId, bool enabled);
+        Task SetMafiaVisibility(string lobbyName, bool enabled);
+        Task NotifyPlayerDeath(string lobbyName, int playerId);
+        Task NotifyLobbyUpdate(string lobbyName);
+        Task SendWebRTCSignal(int playerId, string signal);
     }
 }
