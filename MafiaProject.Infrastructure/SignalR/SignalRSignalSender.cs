@@ -1,4 +1,5 @@
 ﻿using MafiaProject.Application.interfaces;
+using MafiaProject.Application.Interfaces;
 using MafiaProject.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;

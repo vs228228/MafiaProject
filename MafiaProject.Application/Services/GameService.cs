@@ -187,7 +187,8 @@ namespace MafiaProject.Application.Services
 
         public async Task NotifyPlayersAsync(int gameId, string message)
         {
-            await _signalSender.SendMessageAll(gameId, message, "Notify");
+            var game = await _unitOfWork.Games.GetByIdAsync(gameId);
+            await _signalSender.SendMessageToAll(game.Name, message, "Notify");
         }
 
         public async Task<bool> PoliceCheckAsync(PoliceDTO policeDTO)
@@ -199,6 +200,7 @@ namespace MafiaProject.Application.Services
         public async Task ProcessDayAction(int gameId)
         {
             var game = await _unitOfWork.Games.GetByIdAsync(gameId);
+            await ChangeGamePhaseAsync(gameId, "Vote");
             var votes = game.Votes;
             int[] arr = new int[1000000];
             int ans = 0;
@@ -217,10 +219,13 @@ namespace MafiaProject.Application.Services
                 }
             }
             var player = await _unitOfWork.Players.GetByIdAsync(ans);
+            await _signalSender.ToggleMicrophone(ans, true);
+            await Task.Delay(30000);
+            await _signalSender.NotifyPlayerDeath(game.Name, ans);
             player.IsAlive = false;
             game.Players.Remove(player);
-            await _signalSender.SendMessageAll(gameId, "The " + player.Position.ToString() + "th was voted", "Vote");
             await _unitOfWork.Players.UpdateAsync(player);
+            await ChangeGamePhaseAsync(gameId, "Night");
             await _unitOfWork.Games.UpdateAsync(game);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -232,54 +237,55 @@ namespace MafiaProject.Application.Services
             game.Votes.Clear();
             if (killedPlayerId != 0)
             {
-                var player = await _unitOfWork.Players.GetByIdAsync(killedPlayerId);
-                await _signalSender.SendMessageAll(gameId, "The " + player.Position.ToString() + "th was killed at night", "MafiaKill");
+                await _signalSender.NotifyPlayerDeath(game.Name, killedPlayerId);
             }
             else
             {
-                await _signalSender.SendMessageAll(gameId, "Nobody was killed at night", "MafiaKill");
+                await _signalSender.SendMessageToAll(game.Name, "Nobody was killed at night", "MafiaKill");
             }
+            await ChangeGamePhaseAsync(gameId, "Day");
             await _unitOfWork.Games.UpdateAsync(game);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task StartGame(int gameId)
         {
-            await _signalSender.StartGame(gameId);
-            await AssignRolesAsync(gameId);
+
             var game = await _unitOfWork.Games.GetByIdAsync(gameId);
             foreach (var player in game.Players)
             {
-                await _signalSender.SendPersonalMessage(gameId, player.Id, "Your role is " + player.Role, "RoleNotify");
+                player.IsCameraOn = false;
+                player.IsMicrophoneOn = false;
+                await _signalSender.ToggleCamera(player.Id, false);
+                await _signalSender.ToggleMicrophone(player.Id, false);
             }
-
+            await _signalSender.StartGame(game.Name);
+            await AssignRolesAsync(gameId);
             foreach (var player in game.Players)
             {
-                if (player.IsMafia)
-                {
-                    player.IsCameraOn = true;
-                }
+                await _signalSender.SendPersonalMessage(player.Id, "Your role is " + player.Role, "RoleNotify");
             }
 
-            await _signalSender.SendMessageAll(gameId, "Знакомство мафии началось. У вас есть 60 секунд.", "MafiaStart");
+            await _signalSender.SetMafiaVisibility(game.Name, true);
+
+            await _signalSender.SendMessageToAll(game.Name, "Знакомство мафии началось. У вас есть 60 секунд.", "MafiaStart");
             await Task.Delay(60000);
 
-            foreach (var player in game.Players)
-            {
-                if (player.IsMafia)
-                {
-                    player.IsCameraOn = false;
-                }
-            }
+            await _signalSender.SetMafiaVisibility(game.Name, false);
 
-            await _signalSender.SendMessageAll(gameId, "Время знакомства закончилось.", "MafiaStop");
+            await _signalSender.SendMessageToAll(game.Name, "Время знакомства закончилось.", "MafiaStop");
         }
 
         public async Task StartNextRound(int gameId)
         {
             var game = await _unitOfWork.Games.GetByIdAsync(gameId);
-            game.RoundNumber++;
+            if (game.CountOfMafia == 0 || game.CountOfMafia * 2 == game.CountOfAlive)
+            {
+                game.IsGameEnded = true;
+                await _signalSender.EndGame(game.Name);
+            }
             var players = game.Players;
+            game.RoundNumber++;
             int n = 0;
             foreach (var player in players)
             {
@@ -290,6 +296,7 @@ namespace MafiaProject.Application.Services
                 if (n == game.RoundNumber)
                 {
                     player.IsMicrophoneOn = true;
+                    await _signalSender.ToggleMicrophone(player.Id, true);
                     await _unitOfWork.Players.UpdateAsync(player);
                     break;
                 }
