@@ -38,13 +38,13 @@ const LobbyWindow = () => {
       }
       else{
         setSelectedLobby(lobby); 
+        localStorage.setItem('lobbyName', lobby.name);
+       
       }
     }
 
     setModalType(type);
     setIsModalOpen(true);
-
-   
   };
 
   const handleCloseModal = () => {
@@ -55,12 +55,12 @@ const LobbyWindow = () => {
     setLoading(true);
     try {
       const allLobbies = await LobbyService.getAllLobbies();
-      // console.log(allLobbies)
-      
       setLobbies(allLobbies);
+      
     } catch (error) {
       toast.error(t('toastError.errorLoading'));
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };
