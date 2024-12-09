@@ -122,6 +122,8 @@ namespace MafiaProject.Server
                 };
             });
 
+            // signalR
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 

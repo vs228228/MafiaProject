@@ -31,7 +31,6 @@ namespace MafiaProject.Server.Controllers
             return Ok(user);
         }
 
-        [Authorize]
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAllUsersAsync()
         {
