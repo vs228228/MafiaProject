@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using MafiaProject.Infrastructure.Hubs;
 
 namespace MafiaProject.Server
 {
@@ -126,6 +127,9 @@ namespace MafiaProject.Server
 
             // Применяем политику CORS
             app.UseCors("AllowSpecificOrigin");
+
+            // хаб
+            app.MapHub<GameHub>("/hubs/GameHub");
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
