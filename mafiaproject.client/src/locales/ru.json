@@ -22,6 +22,8 @@
   "type":"Тип",
   "status":"Статус",
   "actions":"Действия",
+  "players":"Пользователи",
+
 
   "developers": {
     "1": {

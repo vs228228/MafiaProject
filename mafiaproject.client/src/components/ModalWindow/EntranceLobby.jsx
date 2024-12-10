@@ -59,6 +59,8 @@ const EntranceLobby = ({
             
             await LobbyService.connectToLobby(lobbyId, creatorId, RoomPassword);
             localStorage.setItem('lobbyId', lobbyId);
+
+            
             toast.success(t('toastSuccess.SuccessfullyEntered'));
             setTimeout(()=>{
                 navigate('/WebChat');
