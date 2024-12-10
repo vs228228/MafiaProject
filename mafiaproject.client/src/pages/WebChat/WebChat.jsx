@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../WebChat/WebChat.css';
 import LobbyService from '../../services/LobbyService';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-
+import SignalService from '../../services/SignalService.js';
+import PlayerService from '../../services/PlayerService'
 
 import ButtonForChat from '../../shared/Button/ButtonForChat';
 import { CiVideoOff, CiVideoOn, CiMicrophoneOff, CiMicrophoneOn, CiFlag1 } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
+
+
 
 const WebChat = () => {
   const navigate = useNavigate();
@@ -17,9 +20,29 @@ const WebChat = () => {
   const lobbyId = parseInt(localStorage.getItem('lobbyId'), 10); 
   const { t } = useTranslation();
   
-  const [camera, setCamera] = useState(false);
-  const [micro, setMicro] = useState(false);
+  const [camera, setCamera] = useState(true);
+  const [micro, setMicro] = useState(true);
   const [isReady, setIsReady] = useState(true);
+  const [videoStreams, setVideoStreams] = useState({});
+  const lobbyName = localStorage.getItem('lobbyName');
+
+  useEffect(() => {
+    const setupSignalR = async () => {
+      await SignalService.connectToHub('https://localhost:7081/hubs/GameHub');
+      // await SignalService.joinLobby(lobbyName);
+      await SignalService.setupLocalStream();//Запрос к камере и микрофону с сохранением локального потока
+  
+      
+    
+    };
+    setupSignalR().catch(err => {
+      console.error("Error setting up SignalR: ", err);
+    });
+    return () => {// Убираем обработчики при размонтировании компонента
+      SignalService.leaveLobby(lobbyName);
+    };
+  }, [lobbyName]);
+  
 
   const handleExit = async () => {
     try {
@@ -38,10 +61,12 @@ const WebChat = () => {
   
   const toggleButtonCamera = () => {
     setCamera(!camera);
+    SignalService.toggleCamera(!camera);
   };
 
   const toggleButtonMicro = () => {
     setMicro(!micro);
+    SignalService.toggleMicrophone(!micro);
   };
 
   const handleReady = () => {
@@ -50,17 +75,18 @@ const WebChat = () => {
 
   return (
     <div className="webChat">
-      <div className="placeForCamera">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div className="camera">{t('WebChat.WaitingPlayer')}</div>
-        ))}
-        <div className="camera">{t('WebChat.WaitingPlayer')}</div>
-        <div className="camera-large">{t('WebChat.ConfirmReadiness')}   / 10 </div>
-        <div className="camera">{t('WebChat.WaitingPlayer')}</div>
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div className="camera">{t('WebChat.WaitingPlayer')}</div>
-        ))}
-      </div>
+    <div className="placeForCamera">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index} id="videos" className="camera"></div>
+      ))}
+      <div key={4} id="videos" className="camera">{t('WebChat.WaitingPlayer')}</div>
+      <div className="camera-large">{t('WebChat.ConfirmReadiness')} / 10</div>
+      <div key={5} id="videos" className="camera">{t('WebChat.WaitingPlayer')}</div>
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index + 6} id="videos" className="camera">{t('WebChat.WaitingPlayer')}</div>
+      ))}
+    </div>
+  
 
       <div className="logic_button">
         <ButtonForChat icon={camera ? CiVideoOn : CiVideoOff} text={camera ? t('WebChat.CameraOn') : t('WebChat.CameraOff')} onClick={toggleButtonCamera} />

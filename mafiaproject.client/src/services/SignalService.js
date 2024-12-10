@@ -9,7 +9,7 @@ class SignalService {
         this.lobbyName = null;
     }
 
-    // Ïîäêëþ÷åíèå ê õàáó
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½
     async connectToHub(url) {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(url)
@@ -26,7 +26,7 @@ class SignalService {
         this.setupHandlers();
     }
 
-    // Íàñòðîéêà îáðàáîò÷èêîâ SignalR
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ SignalR
     setupHandlers() {
         if (!this.connection) return;
 
@@ -53,8 +53,8 @@ class SignalService {
         });
     }
 
-    // Ïðèñîåäèíåíèå ê ëîááè
-    async joinLobby(lobbyName) {
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+    async joinLobby(lobbyName) {//Ð¿Ð¾Ð·Ð²Ð¾Ð»ÑÐµÑ‚ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŽ Ð¿Ñ€Ð¸ÑÐ¾ÐµÐ´Ð¸Ð½Ð¸Ñ‚ÑŒÑÑ Ðº Ð»Ð¾Ð±Ð±Ð¸
         this.lobbyName = lobbyName;
 
         try {
@@ -66,8 +66,8 @@ class SignalService {
         }
     }
 
-    // Ïîêèäàíèå ëîááè
-    async leaveLobby(lobbyName) {
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+    async leaveLobby(lobbyName) {//ÑƒÐ´Ð°Ð»ÑÐµÑ‚ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ Ð¸Ð· ÑƒÐºÐ°Ð·Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð»Ð¾Ð±Ð±Ð¸
         try {
             await this.connection.invoke("LeaveLobby", lobbyName);
             console.log(`Left lobby ${lobbyName}`);
@@ -76,7 +76,7 @@ class SignalService {
         }
     }
 
-    // Íàñòðîéêà ëîêàëüíîãî ïîòîêà
+    // Ð—Ð°Ð¿Ñ€Ð¾Ñ Ðº ÐºÐ°Ð¼ÐµÑ€Ðµ Ð¸ Ð¼Ð¸ÐºÑ€Ð¾Ñ„Ð¾Ð½Ñƒ Ñ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸ÐµÐ¼ Ð»Ð¾ÐºÐ°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð¿Ð¾Ñ‚Ð¾ÐºÐ°
     async setupLocalStream() {
         try {
             this.localStream = await navigator.mediaDevices.getUserMedia({
@@ -84,19 +84,20 @@ class SignalService {
                 audio: true,
             });
 
-            // Äîáàâëåíèå âèäåî ëîêàëüíîãî ïîòîêà
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             this.addVideoStream("local", this.localStream);
         } catch (error) {
             console.error("Failed to access media devices: ", error);
         }
     }
 
-    // Ñîçäàíèå P2P ñîåäèíåíèÿ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ P2P ÑÐ¾ÐµÐ´Ð¸ÐµÐ½Ð½Ð¸Ðµ Ñ Ð´ÑƒÑ€Ð³Ð¸Ð¼Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑÐ¼Ð¸
     createPeerConnection(connectionId, initiator = false) {
         const peer = new SimplePeer({
             initiator,
             stream: this.localStream,
         });
+
 
         peer.on("signal", (signal) => {
             this.connection.invoke("RelaySignal", connectionId, signal);
@@ -113,7 +114,7 @@ class SignalService {
         this.peers[connectionId] = peer;
     }
 
-    // Îáðàáîòêà ïîëó÷åííîãî ñèãíàëà
+    // Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° ÑÐ¸Ð³Ð½Ð°Ð» webrtc
     handleSignal(fromConnectionId, signal) {
         if (!this.peers[fromConnectionId]) {
             this.createPeerConnection(fromConnectionId, false);
@@ -123,19 +124,19 @@ class SignalService {
         peer.signal(signal);
     }
 
-    // Óäàëåíèå P2P ñîåäèíåíèÿ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ P2P ÑƒÐ´Ð°Ð»ÑÐµÑ‚ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹ Ð²Ð¸Ð´ÐµÐ¾ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ ÑÐ¾ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñ‹.
     removePeer(connectionId) {
         if (this.peers[connectionId]) {
             this.peers[connectionId].destroy();
             delete this.peers[connectionId];
         }
 
-        // Óäàëèòü âèäåîýëåìåíò
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         const videoElement = document.getElementById(connectionId);
         if (videoElement) videoElement.remove();
     }
 
-    // Äîáàâëåíèå ïîòîêà âèäåî íà ñòðàíèöó
+    // Ð”Ð¾Ð±Ð°Ð²Ð»ÑÐµÑ‚ Ð¼ÐµÐ´Ð¸Ð°-Ð¿Ð¾Ñ‚Ð¾Ðº Ð½Ð° ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ, ÑÐ¾Ð·Ð´Ð°Ð²Ð°Ñ Ð²Ð¸Ð´ÐµÐ¾
     addVideoStream(connectionId, stream) {
         const videoElement = document.createElement("video");
         videoElement.id = connectionId;
@@ -144,7 +145,7 @@ class SignalService {
         document.getElementById("videos").append(videoElement);
     }
 
-    // Ïåðåêëþ÷åíèå ìèêðîôîíà
+    // Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ð¼Ð¸ÐºÑ€Ð¾Ñ„Ð¾Ð½Ð°
     toggleMicrophone(enabled) {
         if (this.localStream) {
             this.localStream.getAudioTracks().forEach(track => {
@@ -153,7 +154,7 @@ class SignalService {
         }
     }
 
-    // Ïåðåêëþ÷åíèå êàìåðû
+    // Ð²ÐºÐ» Ð²Ñ‹ÐºÐ» ÐºÐ°Ð¼ÐµÑ€Ð°
     toggleCamera(enabled) {
         if (this.localStream) {
             this.localStream.getVideoTracks().forEach(track => {
@@ -162,3 +163,6 @@ class SignalService {
         }
     }
 }
+
+const signalService = new SignalService();
+export default signalService;
