@@ -23,6 +23,7 @@
     "status":"Status",
     "actions":"Actions",
     "players":"Players",
+    "vote":"Vote",
 
       "gameRules": {
         "1": {

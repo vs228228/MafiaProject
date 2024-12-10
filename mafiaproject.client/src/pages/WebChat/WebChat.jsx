@@ -17,22 +17,35 @@ const WebChat = () => {
   const playerId = parseInt(localStorage.getItem('playerId'), 10); 
   const lobbyId = parseInt(localStorage.getItem('lobbyId'), 10); 
   const { t } = useTranslation();
+  const [players, setPlayers] = useState([]);
   
   const [camera, setCamera] = useState(true);
   const [micro, setMicro] = useState(true);
   const [isReady, setIsReady] = useState(true);
+  
   const lobbyName = localStorage.getItem('lobbyName');
+  const name =  localStorage.getItem('userName');
 
   useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const playersList = await playerService.getAllPlayers(lobbyId);
+        // console.log(playersList);
+        setPlayers(playersList);
+      } catch (error) {
+        console.error('Ошибка при загрузке игроков:', error);
+      }
+    };
+  
+    fetchPlayers();
     const setupSignalR = async () => {
       await signalService.connectToHub('https://localhost:7081/hubs/GameHub');
       await signalService.joinLobby(lobbyName);
       
-    
     };
     setupSignalR();
     return () => {
-      signalService.leaveLobby(lobbyName);
+       signalService.leaveLobby(lobbyName);
     };
   }, [lobbyName]);
   
@@ -56,16 +69,6 @@ const WebChat = () => {
     }
   };
 
-  // const getAllPlayers = async () => {
-  //   try {
-  //     const players = await playerService.getAllPlayers(lobbyId);
-  //     console.log("Players in the lobby:", players);
-  //   } catch (error) {
-      
-  //     toast.error(t('toastError.ErrorFetchingPlayers'));
-  //   }
-  // };
-  
   const toggleButtonCamera = () => {
     setCamera(!camera);
     signalService.toggleCamera(!camera);
@@ -76,28 +79,40 @@ const WebChat = () => {
     signalService.toggleMicrophone(!micro);
   };
 
-  const handleReady = () => {
-    setIsReady(false);
+  const handleReady = async  () => {
+    
+      try {
+        await playerService.changeReady(playerId, !isReady); 
+        setIsReady(!isReady); 
+        toast(`игрок ${name} готов` )
+      } catch (error) {
+        console.error('Ошибка при изменении готовности:', error);
+        toast.error(t('toastError.ErrorChangingReady'));
+      
+    };
   };
 
-  return (
-    <div className="webChat">
-    <div className="placeForCamera">
-  
-  {Array.from({ length: 10 }).map((_, index) => (
-    <div key={index} id="videos" className="camera">
-    </div>
-  ))}
-</div>
+
+    return (
+      <div className="webChat">
+      <div className="placeForCamera" id="video"> 
+        {players.map((player) => (
+          <div key={player.id} className="camera" id="videos">
+            <span className="player-name">{player.id || `Player ${name}`}</span>
+           
+          </div>
+        ))}
+      </div>
+
   
 
       <div className="logic_button">
         <ButtonForChat icon={camera ? CiVideoOn : CiVideoOff} text={camera ? t('WebChat.CameraOn') : t('WebChat.CameraOff')} onClick={toggleButtonCamera} />
         <ButtonForChat icon={micro ? CiMicrophoneOn : CiMicrophoneOff} text={micro ? t('WebChat.MicrophoneOn') : t('WebChat.MicrophoneOff')} onClick={toggleButtonMicro} />
         <ButtonForChat icon={RxCross2} text={t('logout')} onClick={handleExit} />
-        {/* <ButtonForChat icon={FaRegUser} text={t('players')}  onClick={getAllPlayers} /> */}
+        <ButtonForChat icon={FaRegUser} text={t('vote')}  />
         {isReady && <ButtonForChat icon={CiFlag1} text={t('WebChat.ready')} onClick={handleReady} />}
-        <div className="camera-large">{t('WebChat.ConfirmReadiness')} / 10</div>
+       
       </div>
     </div>
   );
