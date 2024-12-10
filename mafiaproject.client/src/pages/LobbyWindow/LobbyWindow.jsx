@@ -46,6 +46,7 @@ const LobbyWindow = () => {
     setModalType(type);
     setIsModalOpen(true);
   };
+  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

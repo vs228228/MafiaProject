@@ -22,6 +22,7 @@
     "type":"Type",
     "status":"Status",
     "actions":"Actions",
+    "players":"Players",
 
       "gameRules": {
         "1": {

@@ -4,14 +4,12 @@ import LobbyService from '../../services/LobbyService';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import SignalService from '../../services/SignalService.js';
-import PlayerService from '../../services/PlayerService'
-
+import signalService from '../../services/SignalService.js';
+import { FaRegUser } from "react-icons/fa";
 import ButtonForChat from '../../shared/Button/ButtonForChat';
 import { CiVideoOff, CiVideoOn, CiMicrophoneOff, CiMicrophoneOn, CiFlag1 } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
-
-
+import playerService from '../../services/PlayerService.js';
 
 const WebChat = () => {
   const navigate = useNavigate();
@@ -23,23 +21,18 @@ const WebChat = () => {
   const [camera, setCamera] = useState(true);
   const [micro, setMicro] = useState(true);
   const [isReady, setIsReady] = useState(true);
-  const [videoStreams, setVideoStreams] = useState({});
   const lobbyName = localStorage.getItem('lobbyName');
 
   useEffect(() => {
     const setupSignalR = async () => {
-      await SignalService.connectToHub('https://localhost:7081/hubs/GameHub');
-      // await SignalService.joinLobby(lobbyName);
-      await SignalService.setupLocalStream();//Запрос к камере и микрофону с сохранением локального потока
-  
+      await signalService.connectToHub('https://localhost:7081/hubs/GameHub');
+      await signalService.joinLobby(lobbyName);
       
     
     };
-    setupSignalR().catch(err => {
-      console.error("Error setting up SignalR: ", err);
-    });
-    return () => {// Убираем обработчики при размонтировании компонента
-      SignalService.leaveLobby(lobbyName);
+    setupSignalR();
+    return () => {
+      signalService.leaveLobby(lobbyName);
     };
   }, [lobbyName]);
   
@@ -50,6 +43,10 @@ const WebChat = () => {
         toast.error(t('toastError.ErrorData'));
         return;
       }
+  
+      setCamera(false);
+      setMicro(false);
+    
       await LobbyService.disconnectFromLobby(lobbyId, playerId);
       toast.success(t('toastSuccess.SuccessLogOut'));
       navigate('/LobbyWindow');
@@ -58,15 +55,25 @@ const WebChat = () => {
       toast.error(t('toastError.ErrorLogOutLobby'));
     }
   };
+
+  // const getAllPlayers = async () => {
+  //   try {
+  //     const players = await playerService.getAllPlayers(lobbyId);
+  //     console.log("Players in the lobby:", players);
+  //   } catch (error) {
+      
+  //     toast.error(t('toastError.ErrorFetchingPlayers'));
+  //   }
+  // };
   
   const toggleButtonCamera = () => {
     setCamera(!camera);
-    SignalService.toggleCamera(!camera);
+    signalService.toggleCamera(!camera);
   };
 
   const toggleButtonMicro = () => {
     setMicro(!micro);
-    SignalService.toggleMicrophone(!micro);
+    signalService.toggleMicrophone(!micro);
   };
 
   const handleReady = () => {
@@ -76,23 +83,21 @@ const WebChat = () => {
   return (
     <div className="webChat">
     <div className="placeForCamera">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} id="videos" className="camera"></div>
-      ))}
-      <div key={4} id="videos" className="camera">{t('WebChat.WaitingPlayer')}</div>
-      <div className="camera-large">{t('WebChat.ConfirmReadiness')} / 10</div>
-      <div key={5} id="videos" className="camera">{t('WebChat.WaitingPlayer')}</div>
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index + 6} id="videos" className="camera">{t('WebChat.WaitingPlayer')}</div>
-      ))}
+  
+  {Array.from({ length: 10 }).map((_, index) => (
+    <div key={index} id="videos" className="camera">
     </div>
+  ))}
+</div>
   
 
       <div className="logic_button">
         <ButtonForChat icon={camera ? CiVideoOn : CiVideoOff} text={camera ? t('WebChat.CameraOn') : t('WebChat.CameraOff')} onClick={toggleButtonCamera} />
         <ButtonForChat icon={micro ? CiMicrophoneOn : CiMicrophoneOff} text={micro ? t('WebChat.MicrophoneOn') : t('WebChat.MicrophoneOff')} onClick={toggleButtonMicro} />
         <ButtonForChat icon={RxCross2} text={t('logout')} onClick={handleExit} />
+        {/* <ButtonForChat icon={FaRegUser} text={t('players')}  onClick={getAllPlayers} /> */}
         {isReady && <ButtonForChat icon={CiFlag1} text={t('WebChat.ready')} onClick={handleReady} />}
+        <div className="camera-large">{t('WebChat.ConfirmReadiness')} / 10</div>
       </div>
     </div>
   );
