@@ -145,6 +145,7 @@ class SignalService {
         videoElement.srcObject = stream;
         videoElement.autoplay = true;
          document.getElementById("videos").append(videoElement);
+         
     }
 
     // включение и выключение микрофона
