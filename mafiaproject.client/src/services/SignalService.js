@@ -37,6 +37,7 @@ class SignalService {
         this.connection.on("UserJoined", (newConnectionId) => {
             console.log("New user joined: ", newConnectionId);
             this.createPeerConnection(newConnectionId, true);
+            
         });
 
         this.connection.on("UserLeft", (connectionId) => {
@@ -138,11 +139,12 @@ class SignalService {
 
     // Добавляет медиа-поток на страницу, создавая видео
     addVideoStream(connectionId, stream) {
+        
         const videoElement = document.createElement("video");
         videoElement.id = connectionId;
         videoElement.srcObject = stream;
         videoElement.autoplay = true;
-        document.getElementById("videos").append(videoElement);
+         document.getElementById("videos").append(videoElement);
     }
 
     // включение и выключение микрофона

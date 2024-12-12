@@ -22,6 +22,7 @@ const SignIn = () => {
     const { t } = useTranslation();
     
     const [username, setUsername] = useState('');
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -59,6 +60,9 @@ const SignIn = () => {
             const userData = await UserService.getUserByEmail(email);
             localStorage.setItem('userData', JSON.stringify(userData));
             localStorage.setItem('userId',userData.id);
+            localStorage.setItem('userName',userData.nick);
+            // const name =  localStorage.getItem('userName');
+            // console.log(name);
             console.log(userData)
             navigate('/');
             toast.success(t('toastSuccess.SuccessfullyEntered'));
