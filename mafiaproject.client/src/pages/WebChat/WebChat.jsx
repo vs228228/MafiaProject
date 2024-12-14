@@ -30,24 +30,33 @@ const WebChat = () => {
     const fetchPlayers = async () => {
       try {
         const playersList = await playerService.getAllPlayers(lobbyId);
-        // console.log(playersList);
+        console.log(playersList);
         setPlayers(playersList);
       } catch (error) {
         console.error('Ошибка при загрузке игроков:', error);
       }
     };
   
-    fetchPlayers();
     const setupSignalR = async () => {
       await signalService.connectToHub('https://localhost:7081/hubs/GameHub');
       await signalService.joinLobby(lobbyName);
-      
     };
+
+    const blockBackNavigation = () => {
+      window.history.pushState(null, '', window.location.href);
+    };
+
     setupSignalR();
+    fetchPlayers();
+
+    blockBackNavigation();
+    window.addEventListener('popstate', blockBackNavigation);
+
     return () => {
-       signalService.leaveLobby(lobbyName);
+      signalService.leaveLobby(lobbyName);
+      window.removeEventListener('popstate', blockBackNavigation);
     };
-  }, [lobbyName]);
+  }, [lobbyName, lobbyId]);
   
 
   const handleExit = async () => {
@@ -92,19 +101,16 @@ const WebChat = () => {
     };
   };
 
-
     return (
       <div className="webChat">
       <div className="placeForCamera" id="video"> 
         {players.map((player) => (
           <div key={player.id} className="camera" id="videos">
-            <span className="player-name">{player.id || `Player ${name}`}</span>
-           
+            <span className="player-name">{player.position || `Player ${name}`}</span>
+            
           </div>
         ))}
       </div>
-
-  
 
       <div className="logic_button">
         <ButtonForChat icon={camera ? CiVideoOn : CiVideoOff} text={camera ? t('WebChat.CameraOn') : t('WebChat.CameraOff')} onClick={toggleButtonCamera} />
