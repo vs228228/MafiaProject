@@ -1,43 +1,67 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MafiaProject.Infrastructure.Hubs
 {
     public class GameHub : Hub
     {
-        // Метод для присоединения пользователя к лобби по имени
-        public async Task JoinLobby(string lobbyName)
+        public static readonly ConcurrentDictionary<string, string> PlayerConnectionMap = new();
+
+        public async Task JoinLobby(string lobbyName, int playerId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
-            await Clients.Group(lobbyName).SendAsync("UserJoined", Context.ConnectionId);
+            string connectionId = Context.ConnectionId;
+            PlayerConnectionMap[connectionId] = playerId.ToString();
+
+            await Clients.Group(lobbyName).SendAsync("UserJoined", playerId);
+            await Groups.AddToGroupAsync(connectionId, lobbyName);
+
+            // Notify the new user about all existing users in the lobby
+            var existingPlayerIds = PlayerConnectionMap
+                .Where(kvp => kvp.Value != playerId.ToString())
+                .Select(kvp => kvp.Value);
+
+            await Clients.Caller.SendAsync("ExistingUsers", existingPlayerIds);
         }
 
-        // Метод для выхода пользователя из лобби по имени
         public async Task LeaveLobby(string lobbyName)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobbyName);
-            await Clients.Group(lobbyName).SendAsync("UserLeft", Context.ConnectionId);
+            string connectionId = Context.ConnectionId;
+
+            if (PlayerConnectionMap.TryRemove(connectionId, out string? playerId))
+            {
+                await Groups.RemoveFromGroupAsync(connectionId, lobbyName);
+                await Clients.Group(lobbyName).SendAsync("UserLeft", int.Parse(playerId));
+            }
         }
 
-        // При подключении выводим connectionId
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
             await Clients.Caller.SendAsync("Connected", Context.ConnectionId);
         }
 
-        // При отключении уведомляем всех о disconnect
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
+            string connectionId = Context.ConnectionId;
+
+            if (PlayerConnectionMap.TryRemove(connectionId, out string? playerId))
+            {
+                await Clients.All.SendAsync("Disconnected", int.Parse(playerId));
+            }
+
             await base.OnDisconnectedAsync(exception);
-            await Clients.All.SendAsync("Disconnected", Context.ConnectionId);
         }
 
-        // Новый метод для обработки сигналов WebRTC
-        public async Task RelaySignal(string connectionId, string signal)
+        public async Task RelaySignal(int targetPlayerId, string signal)
         {
-            await Clients.Client(connectionId).SendAsync("ReceiveSignal", signal);
+            var targetConnectionId = PlayerConnectionMap.FirstOrDefault(kvp => kvp.Value == targetPlayerId.ToString()).Key;
+            if (targetConnectionId != null)
+            {
+                await Clients.Client(targetConnectionId).SendAsync("ReceiveSignal", signal);
+            }
         }
     }
 }

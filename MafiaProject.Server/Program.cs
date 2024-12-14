@@ -96,7 +96,10 @@ namespace MafiaProject.Server
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     policy => policy
-                        .WithOrigins("http://localhost:5173")
+                        .WithOrigins(
+                         "https://192.168.56.205:5173", // Локальный IP
+                         "http://localhost:5173"    // Для разработки
+                            )
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials()

@@ -38,7 +38,7 @@ const WebChat = () => {
     };
   
     const setupSignalR = async () => {
-      await signalService.connectToHub('https://localhost:7081/hubs/GameHub');
+        await signalService.connectToHub('https://localhost:7081/hubs/GameHub', playerId);
       await signalService.joinLobby(lobbyName);
     };
 
@@ -80,12 +80,12 @@ const WebChat = () => {
 
   const toggleButtonCamera = () => {
     setCamera(!camera);
-    signalService.toggleCamera(!camera);
+    signalService.toggleLocalCamera(!camera);
   };
 
   const toggleButtonMicro = () => {
     setMicro(!micro);
-    signalService.toggleMicrophone(!micro);
+    signalService.toggleLocalMicrophone(!micro);
   };
 
   const handleReady = async  () => {
