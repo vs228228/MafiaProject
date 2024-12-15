@@ -93,7 +93,7 @@ const WebChat = () => {
       try {
         await playerService.changeReady(playerId, !isReady); 
         setIsReady(!isReady); 
-        toast(`игрок ${name} готов` )
+        toast(`игрок '${name}' готов` )
       } catch (error) {
         console.error('Ошибка при изменении готовности:', error);
         toast.error(t('toastError.ErrorChangingReady'));

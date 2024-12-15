@@ -73,7 +73,6 @@ const EntranceLobby = ({
         }
     }
 
-
     return (
         <form onSubmit={handleEnterClick}>
             <Input
