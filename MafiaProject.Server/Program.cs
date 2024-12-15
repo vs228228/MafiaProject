@@ -57,7 +57,7 @@ namespace MafiaProject.Server
 
 
 
-            // репозитории
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IVoteRepository, VoteRepository>();
@@ -66,7 +66,7 @@ namespace MafiaProject.Server
             builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
 
 
-            // маппер
+            // пїЅпїЅпїЅпїЅпїЅпїЅ
             builder.Services.AddScoped<IMapperClass, Mapper>();
             builder.Services.AddAutoMapper(typeof(UserMappingProfile));
             builder.Services.AddAutoMapper(typeof(LobbyMappingProfile));
@@ -80,14 +80,14 @@ namespace MafiaProject.Server
             // TokenManager
             builder.Services.AddScoped<ITokenManager, TokenManager>();
 
-            // инъекция зависимостей
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ILobbyService, LobbyService>();
             builder.Services.AddScoped<IPlayerService, PlayerService>();
             builder.Services.AddScoped<IVoteService, VoteService>();
 
 
-            // настраивание бд
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
             builder.Services.AddDbContext<ApplicationDbContext>(
                 o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -97,8 +97,8 @@ namespace MafiaProject.Server
                 options.AddPolicy("AllowSpecificOrigin",
                     policy => policy
                         .WithOrigins(
-                         "https://192.168.56.205:5173", // Локальный IP
-                         "http://localhost:5173"    // Для разработки
+                         "https://192.168.56.205:5173", 
+                         "https://localhost:5173"    
                             )
                         .AllowAnyHeader()
                         .AllowAnyMethod()
@@ -130,10 +130,10 @@ namespace MafiaProject.Server
 
             var app = builder.Build();
 
-            // Применяем политику CORS
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ CORS
             app.UseCors("AllowSpecificOrigin");
 
-            // хаб
+            // пїЅпїЅпїЅ
             app.MapHub<GameHub>("/hubs/GameHub");
 
             app.UseDefaultFiles();
