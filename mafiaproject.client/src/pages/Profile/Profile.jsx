@@ -62,6 +62,9 @@ const Profile = () => {
                 setUserData(updatedUser);
                 setEditedImage(createImagePath(updatedUser.pathToPic) || ProfPhoto);
                 setEditedUsername(updatedUser.nick || '');
+
+                localStorage.setItem('userName', updatedUser.nick || '');
+
                 toast.success(t('toastSuccess.SuccessfullySave'));
                 setIsEditing(false);
             } else {
