@@ -5,52 +5,25 @@ import Button from '../../shared/Button/Button.jsx';
 import ModalWin from '../../components/ModalWindow/ModalWindow.jsx';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
-
+import UseModalWin from '../../servicesLogic/UseModalWin/UseModalWin.jsx';
 
 const LobbyWindow = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState('');
+  
   const [lobbies, setLobbies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedLobby, setSelectedLobby] = useState(null);
-
   const isAuthenticated = !!Cookies.get('token');
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
-
-  const handleOpenModal =async (type, lobby = null) => {
-    if (!isAuthenticated) {
-      toast.error(t('toastError.EntranceInSystem'));
-      setTimeout(() => {
-        navigate('/LobbyWindow');
-      }, 2000);
-      return;
-    }
-
-    if (lobby && type === 'entrance') {
-      if(lobby.countOfPlayers >= 10){
-        toast.info(t('toastInfo.roomIsCrowded'));
-        return;
-      }
-      else{
-        setSelectedLobby(lobby); 
-        localStorage.setItem('lobbyName', lobby.name);
-       
-      }
-    }
-
-    setModalType(type);
-    setIsModalOpen(true);
-  };
-  
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const {
+    isModalOpen,
+        modalType,
+        selectedLobby,
+        handleOpenModal,
+        handleCloseModal,
+  } = UseModalWin({ isAuthenticated, t })
 
   const fetchLobbies = async () => {
     setLoading(true);

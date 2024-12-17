@@ -83,6 +83,8 @@ const WebChat = () => {
       }));
 
       await LobbyService.disconnectFromLobby(lobbyId, playerId);
+      // signalService.toggleLocalCamera(!camera);
+      // signalService.toggleLocalMicrophone(!micro);
       toast.success(t('toastSuccess.SuccessLogOut'));
       navigate('/LobbyWindow');
     } catch (error) {

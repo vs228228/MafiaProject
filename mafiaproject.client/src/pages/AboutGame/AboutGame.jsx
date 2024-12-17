@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './AboutGame.css';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import gameRules from './GameRules.js';
-import cardCitizen from '../../photo/photoOfRoleInGame/card_citizen.png';
-import cardDoctor from '../../photo/photoOfRoleInGame/card_doctor.png';
-import cardMafia from '../../photo/photoOfRoleInGame/card_mafia.png';
-import cardPolice from '../../photo/photoOfRoleInGame/card_police.png';
-import cardSpy from '../../photo/photoOfRoleInGame/card_spy.png';
-import cardBulletproof from '../../photo/photoOfRoleInGame/card_bulletproof.png';
+import cardCitizen from '../../assets/photo/photoOfRoleInGame/card_citizen.png';
+import cardDoctor from '../../assets/photo/photoOfRoleInGame/card_doctor.png';
+import cardMafia from '../../assets/photo/photoOfRoleInGame/card_mafia.png';
+import cardPolice from '../../assets/photo/photoOfRoleInGame/card_police.png';
+import cardSpy from '../../assets/photo/photoOfRoleInGame/card_spy.png';
+import cardBulletproof from '../../assets/photo/photoOfRoleInGame/card_bulletproof.png';
 import { useTranslation } from 'react-i18next';
 
 const AboutGame = () => {

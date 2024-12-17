@@ -1,6 +1,6 @@
 import React from 'react';
 import './Button.css';
-import Hole from '../../photo/bullet_hole.png';
+import Hole from '../../assets/photo/bullet_hole.png';
 
 
 const Button = ({ text, onClick, colorClass }) => {

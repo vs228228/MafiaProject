@@ -1,5 +1,5 @@
 import React from 'react';
-import MafiaPicture from '../../photo/person.png';
+import MafiaPicture from '../../assets/photo/person.png';
 import './HomePage.css';
 import Button from '../../shared/Button/Button.jsx';
 import { useNavigate } from 'react-router-dom';

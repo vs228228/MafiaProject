@@ -11,7 +11,7 @@
     height: 500px;     
     display: flex;    
     align-items: center;    
-    background: url("../../photo/list.jpg");    
+    background: url("../../assets/photo/list.jpg");    
     background-size: cover;     
     background-position: center;     
     border-radius: 5px;     

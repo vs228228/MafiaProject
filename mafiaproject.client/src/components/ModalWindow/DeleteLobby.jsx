@@ -18,7 +18,6 @@ const DeleteLobby = ({ setLobbies, onClose }) => {
             return;
         }
         try {
-              
             await LobbyService.deleteLobby(roomId);
             toast.success(`${t('toastSuccess.lobbyWithId')} ${roomId} ${t('toastSuccess.SuccessDelete')}`);
             setRoomId('');

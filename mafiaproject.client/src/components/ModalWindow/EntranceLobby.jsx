@@ -12,7 +12,8 @@ const EntranceLobby = ({
     togglePasswordVisibility,
     lobby,
 }) => {
-   
+
+    const userId = localStorage.getItem('userId');
     const [lobbyId, setLobbyId] = useState(lobby?.id ? parseInt(lobby.id, 10) : '');
     const [RoomPassword, setRoomPassword] = useState('');
     const [creatorId, setCreatorId] = useState(0);
@@ -21,15 +22,12 @@ const EntranceLobby = ({
     const { t } = useTranslation();
 
     useEffect(() => {
-        const userId = localStorage.getItem('userId');
         if (userId) {
-
             setCreatorId(parseInt(userId, 10));
-
         } else {
             toast.error(t('idPersonNotFound'));
         }
-    }, [t]);
+    }, [t, userId]);
 
     const handleLobbyIdChange = (value) => {
         const numericValue = value === '' ? '' : parseInt(value, 10);
@@ -56,10 +54,8 @@ const EntranceLobby = ({
             RoomPassword
         });
         try {
-            
             await LobbyService.connectToLobby(lobbyId, creatorId, RoomPassword);
             localStorage.setItem('lobbyId', lobbyId);
-
             
             toast.success(t('toastSuccess.SuccessfullyEntered'));
             setTimeout(()=>{
@@ -67,7 +63,6 @@ const EntranceLobby = ({
             }, 500)
             
         } catch (error) {
-        
             toast.error(t('toastError.ConnectionError'));
             console.log(error.message)
         }

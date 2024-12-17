@@ -4,7 +4,7 @@ import Button from '../../shared/Button/Button';
 import UserService from '../../services/UserService';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
-import ProfPhoto from '../../photo/mafia.jpg';
+import ProfPhoto from '../../assets/photo/mafia.jpg';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

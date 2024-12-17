@@ -1,4 +1,4 @@
-import  page from'../../photo/mafia.jpg'
+import  page from'../../assets/photo/mafia.jpg'
 
 const developers = [
     { 
