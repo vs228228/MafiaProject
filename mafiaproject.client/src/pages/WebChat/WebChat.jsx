@@ -13,32 +13,40 @@ import playerService from '../../services/PlayerService.js';
 
 const WebChat = () => {
   const navigate = useNavigate();
-
   const playerId = parseInt(localStorage.getItem('playerId'), 10); 
   const lobbyId = parseInt(localStorage.getItem('lobbyId'), 10); 
   const { t } = useTranslation();
+
   const [players, setPlayers] = useState([]);
+  const [playerStatus, setPlayerStatus] = useState({}); // Статус игроков
   
   const [camera, setCamera] = useState(true);
   const [micro, setMicro] = useState(true);
   const [isReady, setIsReady] = useState(true);
   
   const lobbyName = localStorage.getItem('lobbyName');
-  const name =  localStorage.getItem('userName');
+  const name = localStorage.getItem('userName');
 
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
         const playersList = await playerService.getAllPlayers(lobbyId);
         console.log(playersList);
+
+        // Инициализация статуса игроков
+        const initialStatus = {};
+        playersList.forEach(player => {
+          initialStatus[player.id] = { active: true };
+        });
         setPlayers(playersList);
+        setPlayerStatus(initialStatus);
       } catch (error) {
         console.error('Ошибка при загрузке игроков:', error);
       }
     };
   
     const setupSignalR = async () => {
-        await signalService.connectToHub('https://localhost:7081/hubs/GameHub', playerId);
+      await signalService.connectToHub('https://localhost:7081/hubs/GameHub', playerId);
       await signalService.joinLobby(lobbyName);
     };
 
@@ -57,7 +65,6 @@ const WebChat = () => {
       window.removeEventListener('popstate', blockBackNavigation);
     };
   }, [lobbyName, lobbyId]);
-  
 
   const handleExit = async () => {
     try {
@@ -69,6 +76,12 @@ const WebChat = () => {
       setCamera(false);
       setMicro(false);
     
+      // Обновляем статус игрока на "неактивен"
+      setPlayerStatus(prevStatus => ({
+        ...prevStatus,
+        [playerId]: { active: false }
+      }));
+
       await LobbyService.disconnectFromLobby(lobbyId, playerId);
       toast.success(t('toastSuccess.SuccessLogOut'));
       navigate('/LobbyWindow');
@@ -88,27 +101,28 @@ const WebChat = () => {
     signalService.toggleLocalMicrophone(!micro);
   };
 
-  const handleReady = async  () => {
-    
-      try {
-        await playerService.changeReady(playerId, !isReady); 
-        setIsReady(!isReady); 
-        toast(`игрок '${name}' готов` )
-      } catch (error) {
-        console.error('Ошибка при изменении готовности:', error);
-        toast.error(t('toastError.ErrorChangingReady'));
-      
-    };
+  const handleReady = async () => {
+    try {
+      await playerService.changeReady(playerId, !isReady); 
+      setIsReady(!isReady); 
+      toast(`игрок '${name}' готов`);
+    } catch (error) {
+      console.error('Ошибка при изменении готовности:', error);
+      toast.error(t('toastError.ErrorChangingReady'));
+    }
   };
 
-    return (
-      <div className="webChat">
+  return (
+    <div className="webChat">
       <div className="placeForCamera" id="video"> 
         {players.map((player) => (
-          <div key={player.id} className="camera" id="videos">
-            <span className="player-name">{player.position || `Player ${name}`}</span>
-            
-          </div>
+         <div key={player.id} className="camera" id="videos" style={!playerStatus[player.id]?.active ? { backgroundColor: 'black' } : {}}>
+         {playerStatus[player.id]?.active ? (
+           <span className="player-name">{player.position || `Player ${name}`}</span>
+         ) : (
+           <span className="player-name" style={{ color: 'gray' }}>{player.position || `Player ${name}`} (вышел)</span>
+         )}
+       </div>
         ))}
       </div>
 
@@ -116,9 +130,8 @@ const WebChat = () => {
         <ButtonForChat icon={camera ? CiVideoOn : CiVideoOff} text={camera ? t('WebChat.CameraOn') : t('WebChat.CameraOff')} onClick={toggleButtonCamera} />
         <ButtonForChat icon={micro ? CiMicrophoneOn : CiMicrophoneOff} text={micro ? t('WebChat.MicrophoneOn') : t('WebChat.MicrophoneOff')} onClick={toggleButtonMicro} />
         <ButtonForChat icon={RxCross2} text={t('logout')} onClick={handleExit} />
-        <ButtonForChat icon={FaRegUser} text={t('vote')}  />
+        <ButtonForChat icon={FaRegUser} text={t('vote')} />
         {isReady && <ButtonForChat icon={CiFlag1} text={t('WebChat.ready')} onClick={handleReady} />}
-       
       </div>
     </div>
   );
