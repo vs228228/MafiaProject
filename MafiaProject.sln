@@ -12,18 +12,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MafiaProject.Server", "Mafi
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "mafiaproject.client", "mafiaproject.client\mafiaproject.client.esproj", "{69E27C4A-B80D-4264-B917-D022043E48FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaProject.Core", "MafiaProject.Core\MafiaProject.Core.csproj", "{C86D285B-8547-4049-9AAA-99ABE4139673}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MafiaProject.Core", "MafiaProject.Core\MafiaProject.Core.csproj", "{C86D285B-8547-4049-9AAA-99ABE4139673}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaProject.Application", "MafiaProject.Application\MafiaProject.Application.csproj", "{74DB6CF6-088F-476A-943D-A34FB4DE5690}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MafiaProject.Application", "MafiaProject.Application\MafiaProject.Application.csproj", "{74DB6CF6-088F-476A-943D-A34FB4DE5690}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C86D285B-8547-4049-9AAA-99ABE4139673} = {C86D285B-8547-4049-9AAA-99ABE4139673}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaProject.Infrastructure", "MafiaProject.Infrastructure\MafiaProject.Infrastructure.csproj", "{775239E9-0D19-418C-BF00-A4115BD46824}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MafiaProject.Infrastructure", "MafiaProject.Infrastructure\MafiaProject.Infrastructure.csproj", "{775239E9-0D19-418C-BF00-A4115BD46824}"
 	ProjectSection(ProjectDependencies) = postProject
 		{74DB6CF6-088F-476A-943D-A34FB4DE5690} = {74DB6CF6-088F-476A-943D-A34FB4DE5690}
 		{C86D285B-8547-4049-9AAA-99ABE4139673} = {C86D285B-8547-4049-9AAA-99ABE4139673}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{E074DA7D-6C8C-4087-9D46-A6EED5F017E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{775239E9-0D19-418C-BF00-A4115BD46824}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{775239E9-0D19-418C-BF00-A4115BD46824}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{775239E9-0D19-418C-BF00-A4115BD46824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E074DA7D-6C8C-4087-9D46-A6EED5F017E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E074DA7D-6C8C-4087-9D46-A6EED5F017E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E074DA7D-6C8C-4087-9D46-A6EED5F017E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E074DA7D-6C8C-4087-9D46-A6EED5F017E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
