@@ -28,7 +28,12 @@ namespace MafiaProject.Application.Services
             _passwordHasher = passwordHasher;
             _tokenManager = tokenManager;
         }
-
+        /// <summary>
+        /// Метод для удаления пользователя.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException"></exception>
         public async Task DeleteUserAsync(int id)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(id);
