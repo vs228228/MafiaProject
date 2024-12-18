@@ -6,15 +6,16 @@ class SignalService {
         this.connection = null;
         this.localStream = null;
         this.peers = {};
-        this.lobbyName = null;
+        this.playerId = null;
     }
 
-    // ����������� � ����
-    async connectToHub(url) {
+    async connectToHub(url, playerId) {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(url)
             .withAutomaticReconnect()
             .build();
+
+        this.playerId = playerId;
 
         try {
             await this.connection.start();
@@ -26,40 +27,42 @@ class SignalService {
         this.setupHandlers();
     }
 
-    // ��������� ������������ SignalR
     setupHandlers() {
         if (!this.connection) return;
 
-        this.connection.on("ReceiveSignal", (fromConnectionId, signal) => {
-            this.handleSignal(fromConnectionId, signal);
+        this.connection.on("ReceiveSignal", (fromPlayerId, signal) => {
+            this.handleSignal(fromPlayerId, signal);
         });
 
-        this.connection.on("UserJoined", (newConnectionId) => {
-            console.log("New user joined: ", newConnectionId);
-            this.createPeerConnection(newConnectionId, true);
-            
+        this.connection.on("UserJoined", (newPlayerId) => {
+            console.log("New user joined: ", newPlayerId);
+            this.createPeerConnection(newPlayerId, true);
         });
 
-        this.connection.on("UserLeft", (connectionId) => {
-            console.log("User left: ", connectionId);
-            this.removePeer(connectionId);
+        this.connection.on("ExistingUsers", (existingPlayerIds) => {
+            existingPlayerIds.forEach(playerId => {
+                console.log("Connecting to existing user: ", playerId);
+                this.createPeerConnection(playerId, true);
+            });
+        });
+
+        this.connection.on("UserLeft", (playerId) => {
+            console.log("User left: ", playerId);
+            this.removePeer(playerId);
         });
 
         this.connection.on("ToggleMicrophone", (enabled) => {
-            this.toggleMicrophone(enabled);
+            this.toggleLocalMicrophone(enabled);
         });
 
         this.connection.on("ToggleCamera", (enabled) => {
-            this.toggleCamera(enabled);
+            this.toggleLocalCamera(enabled);
         });
     }
 
-    // ������������� � �����
-    async joinLobby(lobbyName) {//позволяет пользователю присоединиться к лобби
-        this.lobbyName = lobbyName;
-
+    async joinLobby(lobbyName) {
         try {
-            await this.connection.invoke("JoinLobby", lobbyName);
+            await this.connection.invoke("JoinLobby", lobbyName, this.playerId);
             console.log(`Joined lobby ${lobbyName}`);
             await this.setupLocalStream();
         } catch (error) {
@@ -67,8 +70,7 @@ class SignalService {
         }
     }
 
-    // ��������� �����
-    async leaveLobby(lobbyName) {//удаляет пользователя из указанного лобби
+    async leaveLobby(lobbyName) {
         try {
             await this.connection.invoke("LeaveLobby", lobbyName);
             console.log(`Left lobby ${lobbyName}`);
@@ -77,91 +79,104 @@ class SignalService {
         }
     }
 
-    // Запрос к камере и микрофону с сохранением локального потока
     async setupLocalStream() {
         try {
-            this.localStream = await navigator.mediaDevices.getUserMedia({
+            const localStream = await navigator.mediaDevices.getUserMedia({
                 video: true,
                 audio: true,
             });
 
-            // ���������� ����� ���������� ������
-            this.addVideoStream("local", this.localStream);
+            // Отключаем локальный аудиотрек для предотвращения самослышимости
+            this.localStream = localStream;
+            const audioTracks = this.localStream.getAudioTracks();
+            audioTracks.forEach(track => track.enabled = false);
+
+            // Добавляем своё видео в интерфейс
+            this.addVideoStream("local", this.localStream, true);
         } catch (error) {
             console.error("Failed to access media devices: ", error);
         }
     }
 
-    // �������� P2P соедиенние с дургими пользователями
-    createPeerConnection(connectionId, initiator = false) {
+    createPeerConnection(playerId, initiator = false) {
         const peer = new SimplePeer({
             initiator,
             stream: this.localStream,
         });
 
-
         peer.on("signal", (signal) => {
-            this.connection.invoke("RelaySignal", connectionId, signal);
+            this.connection.invoke("RelaySignal", playerId, signal);
         });
 
         peer.on("stream", (stream) => {
-            this.addVideoStream(connectionId, stream);
+            this.addVideoStream(playerId, stream);
         });
 
         peer.on("close", () => {
-            this.removePeer(connectionId);
+            this.removePeer(playerId);
         });
 
-        this.peers[connectionId] = peer;
+        this.peers[playerId] = peer;
     }
 
-    // обработка сигнал webrtc
-    handleSignal(fromConnectionId, signal) {
-        if (!this.peers[fromConnectionId]) {
-            this.createPeerConnection(fromConnectionId, false);
+    handleSignal(fromPlayerId, signal) {
+        if (!this.peers[fromPlayerId]) {
+            this.createPeerConnection(fromPlayerId, false);
         }
 
-        const peer = this.peers[fromConnectionId];
+        const peer = this.peers[fromPlayerId];
         peer.signal(signal);
     }
 
-    // �������� P2P удаляет соответствующий видеоэлемент со страницы.
-    removePeer(connectionId) {
-        if (this.peers[connectionId]) {
-            this.peers[connectionId].destroy();
-            delete this.peers[connectionId];
+    removePeer(playerId) {
+        if (this.peers[playerId]) {
+            this.peers[playerId].destroy();
+            delete this.peers[playerId];
         }
 
-        // ������� ������������
-        const videoElement = document.getElementById(connectionId);
+        const videoElement = document.getElementById(playerId);
         if (videoElement) videoElement.remove();
     }
 
-    // Добавляет медиа-поток на страницу, создавая видео
-    addVideoStream(connectionId, stream) {
-        
-        const videoElement = document.createElement("video");
-        videoElement.id = connectionId;
+    addVideoStream(playerId, stream, isLocal = false) {
+        let videoElement = document.getElementById(playerId);
+
+        if (!videoElement) {
+            videoElement = document.createElement("video");
+            videoElement.id = playerId;
+            document.getElementById("videos").append(videoElement);
+        }
+
         videoElement.srcObject = stream;
         videoElement.autoplay = true;
-         document.getElementById("videos").append(videoElement);
-    }
 
-    // включение и выключение микрофона
-    toggleMicrophone(enabled) {
-        if (this.localStream) {
-            this.localStream.getAudioTracks().forEach(track => {
-                track.enabled = enabled;
-            });
+        // Добавляем локальное видео, если передан isLocal
+        if (isLocal) {
+            videoElement.muted = true; // Выключаем звук для локального видео
         }
     }
 
-    // вкл выкл камера
-    toggleCamera(enabled) {
+    toggleLocalMicrophone(enabled) {
         if (this.localStream) {
-            this.localStream.getVideoTracks().forEach(track => {
+            const audioTracks = this.localStream.getAudioTracks();
+            audioTracks.forEach(track => {
                 track.enabled = enabled;
+                console.log(`Microphone ${enabled ? "enabled" : "disabled"}`);
             });
+        } else {
+            console.warn("Local stream is not set up, cannot toggle microphone.");
+        }
+    }
+
+    toggleLocalCamera(enabled) {
+        if (this.localStream) {
+            const videoTracks = this.localStream.getVideoTracks();
+            videoTracks.forEach(track => {
+                track.enabled = enabled;
+                console.log(`Camera ${enabled ? "enabled" : "disabled"}`);
+            });
+        } else {
+            console.warn("Local stream is not set up, cannot toggle camera.");
         }
     }
 }

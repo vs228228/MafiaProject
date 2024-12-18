@@ -62,7 +62,10 @@ const Profile = () => {
                 setUserData(updatedUser);
                 setEditedImage(createImagePath(updatedUser.pathToPic) || ProfPhoto);
                 setEditedUsername(updatedUser.nick || '');
-                toast.success(t('SuccessfullySave'));
+
+                localStorage.setItem('userName', updatedUser.nick || '');
+
+                toast.success(t('toastSuccess.SuccessfullySave'));
                 setIsEditing(false);
             } else {
                 throw new Error('Не удалось получить обновленные данные пользователя');

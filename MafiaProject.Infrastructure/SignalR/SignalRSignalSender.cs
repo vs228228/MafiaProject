@@ -1,7 +1,7 @@
-﻿using MafiaProject.Application.interfaces;
-using MafiaProject.Application.Interfaces;
+﻿using MafiaProject.Application.Interfaces;
 using MafiaProject.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MafiaProject.Infrastructure.SignalR
@@ -32,17 +32,21 @@ namespace MafiaProject.Infrastructure.SignalR
 
         public async Task SendPersonalMessage(int playerId, string message, string name)
         {
-            await _hubContext.Clients.User(playerId.ToString()).SendAsync(name, message);
+            var connectionId = GameHub.PlayerConnectionMap.FirstOrDefault(kvp => kvp.Value == playerId.ToString()).Key;
+            if (connectionId != null)
+            {
+                await _hubContext.Clients.Client(connectionId).SendAsync(name, message);
+            }
         }
 
         public async Task ToggleMicrophone(int playerId, bool enabled)
         {
-            await _hubContext.Clients.User(playerId.ToString()).SendAsync("ToggleMicrophone", enabled);
+            await SendPersonalMessage(playerId, enabled.ToString(), "ToggleMicrophone");
         }
 
         public async Task ToggleCamera(int playerId, bool enabled)
         {
-            await _hubContext.Clients.User(playerId.ToString()).SendAsync("ToggleCamera", enabled);
+            await SendPersonalMessage(playerId, enabled.ToString(), "ToggleCamera");
         }
 
         public async Task SetMafiaVisibility(string lobbyName, bool enabled)
@@ -53,7 +57,7 @@ namespace MafiaProject.Infrastructure.SignalR
         public async Task NotifyPlayerDeath(string lobbyName, int playerId)
         {
             await _hubContext.Clients.Group(lobbyName).SendAsync("PlayerDied", playerId);
-            await _hubContext.Clients.User(playerId.ToString()).SendAsync("YouDied");
+            await SendPersonalMessage(playerId, "YouDied", "Notification");
             await ToggleMicrophone(playerId, false);
             await ToggleCamera(playerId, false);
         }
@@ -65,7 +69,11 @@ namespace MafiaProject.Infrastructure.SignalR
 
         public async Task SendWebRTCSignal(int playerId, string signal)
         {
-            await _hubContext.Clients.User(playerId.ToString()).SendAsync("ReceiveSignal", signal);
+            var connectionId = GameHub.PlayerConnectionMap.FirstOrDefault(kvp => kvp.Value == playerId.ToString()).Key;
+            if (connectionId != null)
+            {
+                await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveSignal", signal);
+            }
         }
     }
 }
