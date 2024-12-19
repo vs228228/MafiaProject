@@ -11,6 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using MafiaProject.Infrastructure.Hubs;
+using Serilog.Events;
+using Serilog;
+using Serilog.Formatting.Compact;
 
 namespace MafiaProject.Server
 {
@@ -18,9 +21,18 @@ namespace MafiaProject.Server
     {
         public static void Main(string[] args)
         {
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .WriteTo.Console(new CompactJsonFormatter())
+                .CreateLogger();
+
+            Log.Logger.Information("Logging is working fine");
+
             var builder = WebApplication.CreateBuilder(args);
 
-            
+            builder.Host.UseSerilog();
 
             // Add services to the container.
 
