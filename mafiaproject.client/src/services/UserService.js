@@ -10,7 +10,7 @@ class UserService {
             return await response.json();
         } catch (error) {
             console.error(error);
-            throw error; // Рекомендуется пробросить ошибку дальше
+            throw error; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         }
     }
 
@@ -29,7 +29,15 @@ class UserService {
 
     async getUserByEmail(email) {
         try {
-            const response = await fetch(`${UserService.baseUrl}/getByEmail/${email}`);
+            const response = await fetch(`${UserService.baseUrl}/getByEmail/${email}`,
+                {
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }, 
+                }
+            );
             if (!response.ok) {
                 throw new Error('Failed to fetch user by email');
             }
@@ -48,8 +56,8 @@ class UserService {
         return await response.json();
     }
 
-    async tryAddUser(username, email, password) {
-        const user = { username, email, password };
+    async tryAddUser(nick, email, password) {//+
+        const user = { nick, email, password };
         try {
             const response = await fetch(UserService.baseUrl, {
                 method: 'POST',
@@ -61,7 +69,7 @@ class UserService {
             if (!response.ok) {
                 throw new Error('Failed to add user');
             }
-            return await response.json();
+            return await "Ok";
         } catch (error) {
             console.error(error);
             throw error;
@@ -78,10 +86,19 @@ class UserService {
                 },
                 body: JSON.stringify(authDTO),
             });
+
             if (!response.ok) {
                 throw new Error('Failed to authenticate user');
             }
-            return await response.json();
+
+            const data = await response.json();
+
+
+            document.cookie = `access_token=${data.accessToken};Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
+            document.cookie = `refresh_token=${data.refreshToken}; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60000).toUTCString()}`;
+            
+
+            return "Ok";
         } catch (error) {
             console.error(error);
             throw error;
@@ -98,23 +115,34 @@ class UserService {
                 },
                 body: JSON.stringify(refreshTokenDTO),
             });
+
             if (!response.ok) {
                 throw new Error('Failed to refresh token');
             }
-            return await response.json();
+
+            const data = await response.json();
+            localStorage.setItem('accessToken', data.accessToken);
+
+            // РЎРѕС…СЂР°РЅСЏРµРј РЅРѕРІС‹Р№ access_token РёР· Р·Р°РіРѕР»РѕРІРєРѕРІ РІ РєСѓРєРё
+            const newAccessToken = response.headers.get('access_token');
+            if (newAccessToken) {
+                document.cookie = `access_token=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Expires=${new Date(Date.now() + 30 * 60000).toUTCString()}`;
+            }
+
+            return "Ok";
         } catch (error) {
             console.error(error);
             throw error;
         }
     }
 
-    async updateUser(id, username, email, photo = null) {
-        const userUpdate = { id, username, email };
-
+    async updateUser(id, nick, photo ) { // РїСЂРё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРЅРёРё
         const formData = new FormData();
-        formData.append('userUpdate', JSON.stringify(userUpdate));
-        if (photo) {
+        formData.append('Id', id);
+        formData.append('Nick', nick);
+        if (photo instanceof File) {
             formData.append('photo', photo);
+           
         }
 
         try {
@@ -125,13 +153,14 @@ class UserService {
             if (!response.ok) {
                 throw new Error('Failed to update user');
             }
+            
         } catch (error) {
             console.error(error);
             throw error;
         }
     }
 
-    async deleteUser(id) {
+    async deleteUser(id) {//+
         try {
             const response = await fetch(`${UserService.baseUrl}?id=${id}`, {
                 method: 'DELETE',
@@ -146,4 +175,5 @@ class UserService {
     }
 }
 
-export default new UserService();
+const userServiceInstance = new UserService();
+export default userServiceInstance;

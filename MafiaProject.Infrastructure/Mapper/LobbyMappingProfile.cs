@@ -12,8 +12,7 @@ namespace MafiaProject.Infrastructure.Mapper
     public class LobbyMappingProfile : Profile
     {
         public LobbyMappingProfile() {
-            CreateMap<Lobby, LobbyDTO>().ReverseMap();
-            CreateMap<IEnumerable<Lobby>, IEnumerable<LobbyDTO>>();
+            CreateMap<Lobby, LobbyDTO>();
             CreateMap<LobbyCreateDTO, Lobby>();
             CreateMap<LobbyUpdateDTO, Lobby>();
         }

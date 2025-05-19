@@ -3,17 +3,24 @@ import MafiaPicture from '../../photo/person.png';
 import './HomePage.css';
 import Button from '../../shared/Button/Button.jsx';
 import { useNavigate } from 'react-router-dom';
+import LogOutLogic from '../../servicesLogic/LogOutLogic/LogOutLogic.jsx';
+import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
+
 
 const HomePage = () => {
     const navigate = useNavigate();
+    const isAuthenticated = !!Cookies.get('token');
+    const { t } = useTranslation();
 
     const handleSignInClick = () => {
         navigate('/SignIn');
     };
-
+    
     const handlePlayClick = () => {
-        navigate('/LobbyWin');
+        navigate('/LobbyWindow');
     };
+    const { handleLogout } = LogOutLogic();
 
     return (
         <div className='home_page'>
@@ -23,8 +30,12 @@ const HomePage = () => {
                     <div className="text_mafia">MAFIA</div>
                 </div>
                 <div className="buttons">
-                    <Button text="Играть" colorClass="red" onClick={handlePlayClick} />
-                    <Button text="Войти" colorClass="white" onClick={handleSignInClick} />
+                    <Button text={t('stateLobby.play')} colorClass="red" onClick={handlePlayClick} />
+                    {isAuthenticated ? (
+                        <Button text={t('logout')} colorClass="white" onClick={handleLogout} />
+                    ) : (
+                        <Button text={t('login')} colorClass="white" onClick={handleSignInClick} />
+                    )}
                 </div>
             </div>
         </div>

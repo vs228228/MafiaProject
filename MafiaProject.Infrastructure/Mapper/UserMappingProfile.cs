@@ -16,8 +16,7 @@ namespace MafiaProject.Infrastructure.Mapper
             CreateMap<UserCreateDTO, User>();
             CreateMap<UserUpdateDto, User>();
             CreateMap<User, StatisticDTO>();
-            CreateMap<Lobby, LobbyDTO>().ReverseMap();
-            CreateMap<IEnumerable<Lobby>, IEnumerable<LobbyDTO>>();
+            CreateMap<AuthDTO, User>();
         }
     }
 }

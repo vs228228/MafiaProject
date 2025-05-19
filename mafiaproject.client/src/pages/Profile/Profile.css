@@ -34,7 +34,12 @@
     justify-content: flex-end;
 }
 
-.edit_profile button:hover{
+.edit_profile a {
+    color: rgb(151, 151, 151);   
+}
+
+.edit_profile button:hover,
+a:hover{
     font-size: 1.1vw;
     color: red;
 }
@@ -67,3 +72,10 @@
     font-family: 'MYfont_for_logo';
     color:rgb(145, 145, 145);
 }
+
+.loading-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 60vh;
+ }

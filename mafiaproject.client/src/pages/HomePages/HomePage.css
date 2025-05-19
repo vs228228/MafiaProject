@@ -1,39 +1,42 @@
 .home_page {
     display: inline;
-    align-items: center;
+    align-items: center; 
 }
 
 .page_mafia {
     position: relative; 
 }
 
-.text_mafia {
-    position: absolute; 
-    bottom: 65px; 
-    right: -6vw; 
+   .text_mafia {
+    position: absolute;
+    bottom: 65px;
+    right: -6vw;
     font-size: 8vw;
+    /* font-size: 100px; */
     color: rgb(253, 0, 0);
     font-weight: 900;
     font-family: 'MYfont_for_logo', sans-serif;
-}
+    }
 
 .emblem_page_text {
     display: flex;
-    align-items: center;
-    justify-content: space-around; 
-    
+    justify-content: space-around;
+    align-items: center;    
 }
 
 .buttons {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    margin-top: 200px;
-    gap:20px;
+    align-items: start; 
+    margin-top: 200px; 
+    gap: 20px;
     justify-content: flex-end;
 }
 
 /* фото */
-.page_mafia img{
-    width: 550px;
+.page_mafia img {
+    width: 80vw; 
+    height: auto; 
+    max-width: 550px; 
+    max-height: 80vh; 
 }

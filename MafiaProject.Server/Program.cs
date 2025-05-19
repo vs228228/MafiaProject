@@ -1,8 +1,16 @@
 using MafiaProject.Application.interfaces;
 using MafiaProject.Application.Services;
-using MafiaProject.Core.Interfaces;
 using MafiaProject.Infrastructure.Mapper;
 using MafiaProject.Server.middleware;
+using MafiaProject.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using MafiaProject.Core.Interfaces;
+using MafiaProject.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
+using MafiaProject.Infrastructure.Hubs;
 
 namespace MafiaProject.Server
 {
@@ -12,41 +20,121 @@ namespace MafiaProject.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            
+
             // Add services to the container.
 
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT Bearer token"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+            });
 
 
 
-            // репозитории
-            //   builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IVoteRepository, VoteRepository>();
+            builder.Services.AddScoped<IGameRepository, GameRepository>();
+            builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+            builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
 
-            // маппер
+
+            // пїЅпїЅпїЅпїЅпїЅпїЅ
             builder.Services.AddScoped<IMapperClass, Mapper>();
             builder.Services.AddAutoMapper(typeof(UserMappingProfile));
             builder.Services.AddAutoMapper(typeof(LobbyMappingProfile));
+            builder.Services.AddAutoMapper(typeof(PlayerMappingProfile));
+            builder.Services.AddAutoMapper(typeof(VoteMappingProfile));
+            builder.Services.AddAutoMapper(typeof(GameMappingProfile));
 
-            // инъекция зависимостей
+            // PasswordHasher
+            builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+            // TokenManager
+            builder.Services.AddScoped<ITokenManager, TokenManager>();
+
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ILobbyService, LobbyService>();
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+            builder.Services.AddScoped<IVoteService, VoteService>();
+
+
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+            builder.Services.AddDbContext<ApplicationDbContext>(
+                o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     policy => policy
-                        .WithOrigins("http://localhost:5173") // Укажите домен фронтенда
+                        .WithOrigins(
+                         "https://192.168.56.205:5173", 
+                         "https://localhost:5173"    
+                            )
                         .AllowAnyHeader()
                         .AllowAnyMethod()
+                        .AllowCredentials()
                 );
+                options.AddPolicy("AllowAnyOrigin", policy =>
+                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
+
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]))
+                };
+            });
+
+            // signalR
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
-            // Применяем политику CORS
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ CORS
             app.UseCors("AllowSpecificOrigin");
+
+            // пїЅпїЅпїЅ
+            app.MapHub<GameHub>("/hubs/GameHub");
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -55,6 +143,8 @@ namespace MafiaProject.Server
 
             app.UseHttpsRedirection();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

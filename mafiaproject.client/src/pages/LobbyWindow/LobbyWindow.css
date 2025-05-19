@@ -1,0 +1,83 @@
+.lobby_win{
+    margin: 1vw 5vw 2vw 5vw;
+    font-family: MyFont;
+    font-size:1.6vw;
+}
+
+.Button_entrance_or_create_lobby{
+    display: flex;
+    justify-content: end;
+}
+
+.list_of_lobby {
+    margin-top: 2vw;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    background: rgba(91, 91, 91, 0.5);
+    overflow-y: auto; 
+    max-height: 64vh; 
+}
+
+.list_of_lobby::-webkit-scrollbar {
+    width: 12px; 
+}
+
+.list_of_lobby::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2); 
+    border-radius: 10px; 
+}
+.list_of_lobby::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.7); 
+    border-radius: 10px; 
+}
+
+.list_of_lobby::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.9); 
+}
+.list_of_lobby table {
+    border-collapse: collapse; 
+    width: 100%; 
+}
+
+.list_of_lobby th, .list_of_lobby td {
+    padding: 1vw; 
+    text-align: left;
+}
+.list_of_lobby table {
+    border-collapse: collapse; 
+    width: 100%; 
+}
+
+.list_of_lobby th {
+    position: sticky; 
+    top: 0;
+    background: rgba(91, 91, 91, 0.7);
+    z-index: 1; 
+    font-family: MyFont;
+    font-size: 1.8vw;
+    color: rgb(167, 42, 42);
+}
+
+.list_of_lobby th::after {
+    content: '';
+    display: block;
+    height: 2px; 
+    background-color: rgb(5, 5, 5); 
+    width: 100%; 
+    position: absolute;
+    bottom: -5px; 
+    left: 0;
+}
+
+
+.list_of_lobby th:not(:last-child) {
+    padding-right: 12vw; 
+}
+
+.list_of_lobby button{
+    border-radius:5px;
+    height: 30px;
+    border:2px solid rgb(192, 45, 45, 0.6);
+    font-family: MyFont;
+    font-size:1.5vw;
+}

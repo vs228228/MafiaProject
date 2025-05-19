@@ -1,6 +1,7 @@
 ﻿using MafiaProject.Application.DTO;
 using MafiaProject.Application.interfaces;
 using MafiaProject.Application.Pagination;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MafiaProject.Server.Controllers
@@ -15,7 +16,6 @@ namespace MafiaProject.Server.Controllers
         {
             _userService = userService;
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserByIdAsync(int id)
@@ -49,6 +49,23 @@ namespace MafiaProject.Server.Controllers
         public async Task<IActionResult> TryAuthUserAsync(AuthDTO authDTO)
         {
             var tokens =  await _userService.TryAuthUserAsync(authDTO);
+
+            Response.Cookies.Append("access_token", tokens.AccessToken, new CookieOptions
+            {
+                HttpOnly = true, 
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(30)
+            });
+
+            Response.Cookies.Append("refresh_token", tokens.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.UtcNow.AddDays(7)
+            });
+
             return Ok(tokens);
         }
 
@@ -56,11 +73,20 @@ namespace MafiaProject.Server.Controllers
         public async Task<IActionResult> RefreshTokenAsync(RefreshTokenDTO refreshToken)
         {
             var token =  await _userService.RefreshTokenAsync(refreshToken);
+
+            Response.Cookies.Append("access_token", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(30)
+            });
+
             return Ok(token);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UserUpdateDto userUpdate, IFormFile photo = null)
+        public async Task<IActionResult> UpdateUser([FromForm] UserUpdateDto userUpdate, IFormFile photo = null)
         {
             await _userService.UpdateUserAsync(userUpdate, photo);
             return Ok();

@@ -1,9 +1,11 @@
 import React from 'react'
 import './AboutAuthor.css'
 import developers from './developer.js';
-
+import { useTranslation } from 'react-i18next';
 
 const AboutAuthor = () => {
+  const { t } = useTranslation();
+
   return (
     <div className='developer_page'>
       {developers.map((developer) => (
@@ -12,10 +14,10 @@ const AboutAuthor = () => {
             <img src={developer.photo} alt={developer.fullName} />
           </div>
           <div className="about_developer">
-            <h3>{developer.fullName}</h3>
-            <p>{developer.position}</p>
-            <p>{developer.age}</p>
-            <p>{developer.text}</p>
+          <h3>{t(`developers.${developer.id}.fullName`)}</h3>
+            <p>{t(`developers.${developer.id}.position`)}</p>
+            <p>{t(`developers.${developer.id}.age`)}</p>
+            <p>{t(`developers.${developer.id}.text`)}</p>
           </div>
         </div>
       ))}

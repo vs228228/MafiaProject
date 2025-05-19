@@ -2,20 +2,20 @@
     position: relative;
     margin-bottom: 30px;
     font-size: 1.1vw;
-    font-family: 'MYfont_for_logo', sans-serif;  
+    /* font-family: 'MYfont_for_logo', sans-serif;   */
 }
 
 .user-box input {
     width: 100%;
     padding: 10px 0;
-    font-size: 20px;
+    font-size: 16px;
     color: #fff;
     margin-bottom: 30px;
     border: none;
     border-bottom: 1px solid  rgb(93, 7, 7);
     outline: none;
     background: rgb(8, 14, 20);
-    font-family: 'MYfont_for_logo';
+    /* font-family: 'MYfont_for_logo'; */
 }
 
 .user-box label {

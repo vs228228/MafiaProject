@@ -1,12 +1,12 @@
 .developer_page{
     margin:5vw;
-    
     font-family: 'MyFont', sans-serif;
 }
 
 .developer_block_text-img{
     display:flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    gap: 4vw;
     margin-bottom: 5vw;
     border:2px solid rgb(177, 58, 58);
 }

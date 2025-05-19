@@ -14,7 +14,7 @@ namespace MafiaProject.Application.interfaces
         public Task DeleteLobbyAsync(int id);
         public Task StartGameAsync(int lobbyId);
         public Task<IEnumerable<PlayerDTO>> GetAllPlayersAsync(int lobbyId);
-        public Task ConnectToLobbyAsync(int lobbyId, int userId);
+        public Task<int> ConnectToLobbyAsync(int lobbyId, int userId, string password);
         public Task DisconnectToLobbyAsync(int lobbyId, int playerId);
     }
 }

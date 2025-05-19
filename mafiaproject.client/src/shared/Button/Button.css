@@ -2,13 +2,16 @@
     color:rgb(0, 0, 0);
     border: 3px solid black;
     border-radius: 10px;
-    font-size: 1.6vw;
+    font-size: 1.5vw;
     width: 240px;
     height: 50px;
     margin-left: 40px;
     font-family: 'MyFont';
 }
 
+.redd{
+  background-color: #8f1c1c;
+}
 .red {
   background-color: #946c6c;
 }
@@ -16,6 +19,9 @@
   background-color: #FFFFFF;
 }
 
+.green{
+  background-color: #346435;
+}
 .button-image {
   width: 20px; 
   height: 20px;
@@ -35,4 +41,33 @@ button:disabled {
 }
 button:hover {
   background-color: rgb(104, 28, 28);
+}
+/* для кнопки в чате */
+.button-icon { margin-bottom: 1px; } 
+.button-text {
+   margin-top: 1px; 
+   margin-bottom: 1px;
+   display: block;
+}
+
+.textAndImage { 
+  display: flex; 
+  flex-direction:column; 
+  align-items: center;
+} 
+
+.contact-button-chat { 
+  color: rgb(0, 0, 0); 
+  border: 3px solid black; 
+  border-radius: 10px; 
+  font-size: 1.3vw; 
+  padding: 1.5vw 5vw 1.5vw 5vw; 
+  font-family: 'MyFont'; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center;  
+  min-width: 100px; 
+  max-width: 100%; 
+  white-space: nowrap;
+
 }

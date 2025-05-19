@@ -1,6 +1,9 @@
 body {
   background: linear-gradient(rgba(26, 26, 26, 0.5), rgba(26, 26, 26, 0.5)), url('./photo/image.jpg') no-repeat center center fixed;
-  background-size: 100% auto;
+  background-size: cover; 
+  height: 100vh; 
+  margin: 0;
+
 }
 @font-face {
   font-family: 'MyFont';
@@ -11,3 +14,4 @@ body {
   font-family: 'MYfont_for_logo';
   src: url('../src/assets/fonts/DischargePro.ttf') format('truetype');
 } 
+

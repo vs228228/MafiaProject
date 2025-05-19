@@ -5,14 +5,18 @@
     margin:1vw 5vw 0vw 5vw;
 }
 
-.emblem_logo_link li a{
+.emblem_logo_link li a,
+.logout-button{
     font-size: 8vw;
     font-weight: 1000;
     color:red;
     text-decoration: none;
     font-family: 'MYfont_for_logo', sans-serif;
 }
-
+.logout-button:active{
+    color: red;
+    text-decoration:underline;
+}
 .pages_link nav{
     margin-top: 4vw;
     display:flex;
@@ -20,8 +24,6 @@
     font-family: 'MyFont', sans-serif;
 }
 
-
-/* для активации ссылки */
 .header_links nav li a.active {
     color: red;
     text-decoration:underline;
@@ -32,3 +34,24 @@
     color:rgb(158, 158, 158);
     font-size: 1.8vw;
 }
+
+.world_element{
+    color:rgb(158, 158, 158);
+    font-size: 2vw;
+}
+
+.language_menu {
+    position: absolute; 
+    top: 30px; 
+    right: 0;
+    background: rgba(71, 71, 71, 0.2); 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    z-index: 1000; 
+  }
+  
+  .world_element {
+    cursor: pointer; 
+    display: inline-flex; 
+    align-items: center; 
+  }

@@ -4,34 +4,34 @@ const developers = [
     { 
         id: 1,
         photo: page,
-        fullName: 'Иванов Иван Иванович',
-        age: 32,
-        position: 'Frontend Developer',
-        text: 'Опытный frontend разработчик с уверенными знаниями в React и JavaScript.' 
+        fullName: 'Старовойтов Иван Юрьевич',
+        age: 19,
+        position: 'Fullstack Developer',
+        text: 'Главный дебаггер гитхаба. Работал над архитектурой проекта и связью между клиентской и серверной части, а так же связью между командой. Люблю сырки и чай' 
     },
     { 
         id: 2,
         photo: page,
-        fullName: 'Петров Петр Петрович',
-        age: 28,
+        fullName: 'Савельев Иван Павлович',
+        age: 20,
         position: 'Backend Developer',
-        text: 'Результативный backend разработчик с опытом работы на Node.js и MongoDB.' 
+        text: 'Начинающий разработчик, .NET  developer. Работаю преимущественно над бизнес логикой приложений( в командных проектах)' 
     },
     { 
         id: 3,
         photo: page,
-        fullName: 'Петров Петр Петрович',
-        age: 25,
-        position: 'Fullstack Developer',
-        text: 'Молодой fullstack разработчик, который специализируется на React и Node.js.' 
+        fullName: 'Походня Денис Александрович',
+        age: 20,
+        position: 'Backend Developer',
+        text: 'Отвечаю за организацию и хранение данных, а также за связь между базой данных и серверной частью.Использую такие технологии, как Entity framework Core, Postgresql' 
     },
     { 
         id: 4,
         photo: page,
-        fullName: 'Иванов Иван Иванович',
-        age: 18,
-        position: 'Fullstack Developer',
-        text: 'Молодой fullstack разработчик, который специализируется на React и Node.js.' 
+        fullName: 'Бондарь Юлия Владимировна',
+        age: 19,
+        position: 'Frontend Developer',
+        text: 'Отвечаю за визуальную часть проекта, внедрение backend в frontend. Использую такие технологии, как HTML, CSS, JavaScript,фреймворк React для создания интерактивных интерфейсов. Обеспечиваю кросс-браузерную совместимость.' 
     }
     
 ];
